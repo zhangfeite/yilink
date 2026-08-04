@@ -104,7 +104,7 @@ describe('/api/v1/pages/:id/publish', () => {
       bio: '页面简介',
       blocks: [{ title: '官网', url: 'https://example.com' }],
     });
-    expect(revalidateTagMock).toHaveBeenCalledWith('page:approved-page', 'max');
+    expect(revalidateTagMock).toHaveBeenCalledWith('page:approved-page', { expire: 0 });
     await expect(db.page.findUnique({ where: { id: page.id } })).resolves.toMatchObject({
       status: 'PUBLISHED',
       publishedAt: expect.any(Date),
@@ -138,7 +138,7 @@ describe('/api/v1/pages/:id/publish', () => {
       detail: { labels: ['需要复核'] },
       reviewedBy: null,
     });
-    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-page', 'max');
+    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-page', { expire: 0 });
   });
 
   it('returns 404 before calling moderation for a page the user does not own', async () => {

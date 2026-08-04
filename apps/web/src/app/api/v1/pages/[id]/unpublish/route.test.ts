@@ -50,7 +50,7 @@ describe('/api/v1/pages/:id/unpublish', () => {
     await expect(response.json()).resolves.toMatchObject({
       page: { id: page.id, status: 'DRAFT' },
     });
-    expect(revalidateTagMock).toHaveBeenCalledWith('page:published-page', 'max');
+    expect(revalidateTagMock).toHaveBeenCalledWith('page:published-page', { expire: 0 });
   });
 
   it('returns 404 and does not invalidate cache for another user page', async () => {

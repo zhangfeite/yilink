@@ -49,7 +49,7 @@ export async function POST(
 
     return updatedPage;
   });
-  revalidateTag(pageCacheTag(page.slug), 'max');
+  revalidateTag(pageCacheTag(page.slug), { expire: 0 });
 
   return NextResponse.json({ page: restoredPage });
 }

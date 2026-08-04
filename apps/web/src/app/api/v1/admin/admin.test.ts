@@ -154,7 +154,7 @@ describe('/api/v1/admin', () => {
     await expect(db.moderationRecord.findUnique({ where: { id: pendingReview.id } })).resolves.toMatchObject({
       reviewedBy: adminId,
     });
-    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-target', 'max');
+    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-target', { expire: 0 });
   });
 
   it('restores a hidden page, clears its private reason, and writes an audit record', async () => {
@@ -178,7 +178,7 @@ describe('/api/v1/admin', () => {
         where: { targetType: 'page', targetId: page.id, provider: 'manual', verdict: 'pass' },
       }),
     ).resolves.toMatchObject({ detail: { action: 'restore' }, reviewedBy: adminId });
-    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-target', 'max');
+    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-target', { expire: 0 });
   });
 
   it('marks a review record as handled by the current admin', async () => {

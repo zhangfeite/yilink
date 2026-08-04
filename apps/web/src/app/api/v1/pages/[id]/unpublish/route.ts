@@ -37,7 +37,7 @@ export async function POST(
     where: { id: page.id },
     data: { status: 'DRAFT' },
   });
-  revalidateTag(pageCacheTag(page.slug), 'max');
+  revalidateTag(pageCacheTag(page.slug), { expire: 0 });
 
   return NextResponse.json({ page: unpublishedPage });
 }
