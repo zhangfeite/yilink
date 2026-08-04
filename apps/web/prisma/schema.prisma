@@ -165,6 +165,8 @@ model Page {
   seoDesc      String?
   status       PageStatus @default(DRAFT)     // DRAFT | PUBLISHED | HIDDEN
   hiddenReason String?                        // 违规先隐藏不羞辱（PRD §5）
+  ctaConfig    Json?                          // 吸底转化条：{type:'wechat'|'link', label, value}；null=不启用（转化唯一性联动见 design-direction 法则八）
+  templateId   String?                        // 建页来源的场景模板 id（选用率统计用）
   publishedAt  DateTime?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
