@@ -14,7 +14,9 @@
     "e2e": "playwright test",
     "db:generate": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} prisma generate",
     "db:migrate": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} prisma migrate dev",
-    "db:deploy": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} prisma migrate deploy"
+    "db:deploy": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} prisma migrate deploy",
+    "db:seed": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} node prisma/seed.mjs",
+    "test": "vitest run"
   },
   "dependencies": {
     "@prisma/client": "6.19.2",
