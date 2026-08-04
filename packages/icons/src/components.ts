@@ -59,6 +59,7 @@ function glyphLayer(
   platform: PlatformIconDefinition,
   fill: string,
   transform?: string,
+  key?: string,
 ) {
   if (!platform.glyphPath) {
     return null;
@@ -67,6 +68,7 @@ function glyphLayer(
   return createElement(
     'svg',
     {
+      key,
       'aria-hidden': true,
       height: 18,
       transform,
@@ -107,9 +109,9 @@ export function PlatformSticker({ id, size = 52, ...svgProps }: PlatformStickerP
     ? pendingFallback(platform.nameZh)
     : platform.id === 'douyin'
       ? [
-          glyphLayer(platform, '#25F4EE', 'translate(-0.55 0.35)'),
-          glyphLayer(platform, '#FE2C55', 'translate(0.55 -0.35)'),
-          glyphLayer(platform, WHITE),
+          glyphLayer(platform, '#25F4EE', 'translate(-0.55 0.35)', 'douyin-cyan'),
+          glyphLayer(platform, '#FE2C55', 'translate(0.55 -0.35)', 'douyin-red'),
+          glyphLayer(platform, WHITE, undefined, 'douyin-main'),
         ]
       : glyphLayer(platform, WHITE);
 
