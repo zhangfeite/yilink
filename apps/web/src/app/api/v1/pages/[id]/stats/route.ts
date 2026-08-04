@@ -8,6 +8,7 @@ import {
 } from '../../../../../../lib/api';
 import { db } from '../../../../../../lib/db';
 import { pageIdSchema } from '../../../../../../lib/pages-api-schemas';
+import { getRecentPageStats } from '../../../../../../lib/stats';
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const userId = await currentUserId();
@@ -28,5 +29,5 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
     return notFoundResponse();
   }
 
-  return NextResponse.json({ views: 0, uniques: 0, clicks: 0, daily: [] });
+  return NextResponse.json(await getRecentPageStats(page.id));
 }

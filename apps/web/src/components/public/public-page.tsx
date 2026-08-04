@@ -31,6 +31,7 @@ export interface PublicPageData {
 
 interface PublicPageRendererProps {
   page: PublicPageData;
+  preview?: boolean;
   uaClass: UaClass;
 }
 
@@ -175,6 +176,7 @@ function LinkBlock({
       className={className}
       data-copy={url}
       data-toast="链接已复制，请在浏览器中打开"
+      data-block-id={block.id}
       data-track={block.id}
       type="button"
     >
@@ -183,6 +185,7 @@ function LinkBlock({
   ) : (
     <a
       className={className}
+      data-block-id={block.id}
       data-track={block.id}
       href={url}
       rel="noreferrer noopener"
@@ -256,6 +259,7 @@ function SocialBlock({ block }: { block: PublicBlockData }) {
             <a
               aria-label={`前往${info.label}`}
               className={styles.sticker}
+              data-block-id={block.id}
               data-track={`${block.id}:${item.platform}`}
               href={item.url}
               key={`${item.platform}-${index}`}
@@ -300,7 +304,7 @@ function ImageBlock({ block }: { block: PublicBlockData }) {
   return (
     <figure className={classNames(styles.card, styles.imageCard)}>
       {href ? (
-        <a data-track={block.id} href={href} rel="noreferrer noopener" target="_blank">
+        <a data-block-id={block.id} data-track={block.id} href={href} rel="noreferrer noopener" target="_blank">
           {image}
         </a>
       ) : (
@@ -331,6 +335,7 @@ function WechatBlock({ block }: { block: PublicBlockData }) {
         <button
           aria-label={`复制微信号 ${wechatId}`}
           className={styles.copyButton}
+          data-block-id={block.id}
           data-copy={wechatId}
           data-toast={`已复制微信号 ${wechatId}`}
           data-track={block.id}
@@ -446,7 +451,7 @@ function ConversionBar({ cta, totalViews }: { cta: CtaConfig; totalViews: number
   );
 }
 
-export function PublicPageRenderer({ page, uaClass }: PublicPageRendererProps) {
+export function PublicPageRenderer({ page, preview = false, uaClass }: PublicPageRendererProps) {
   const theme = getTheme(page.themeId);
   const cta = parseCta(page.ctaConfig);
   const role = textValue(asRecord(page.themeConfig), 'role');
@@ -455,7 +460,8 @@ export function PublicPageRenderer({ page, uaClass }: PublicPageRendererProps) {
 
   return (
     <main
-      className={styles.shell}
+      className={classNames(styles.shell, preview && styles.previewShell)}
+      data-page-id={(page as PublicPageData & { id: string }).id}
       data-texture={theme.texture}
       data-theme={theme.id}
       style={themeStyle(theme)}

@@ -18,6 +18,10 @@ export default auth((request) => {
   const requestHost = normalizedHostname(request.headers.get('host'));
 
   if (pagesHost && requestHost === pagesHost) {
+    if (pathname === '/api/e' && request.method === 'POST') {
+      return NextResponse.next();
+    }
+
     if (pathname === '/') {
       return NextResponse.rewrite(new URL('/p/_home', request.url));
     }
