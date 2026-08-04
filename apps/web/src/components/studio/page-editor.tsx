@@ -26,6 +26,7 @@ import { PublicPageRenderer } from '@/components/public/public-page';
 
 import { SortableBlockEditor } from './block-editor';
 import { studioApiRequest, StudioApiError } from './create-from-template';
+import { SharePanel } from './share-panel';
 import { studioThemes } from './theme-options';
 import type { StudioBlock, StudioBlockType, StudioPageDraft } from './types';
 
@@ -95,14 +96,13 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
   const [pageAction, setPageAction] = useState<'publish' | 'unpublish' | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
   const [mobileTab, setMobileTab] = useState<'edit' | 'preview'>('edit');
-  const [qrAvailable, setQrAvailable] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
-  const currentTheme = studioThemes.find((theme) => theme.id === meta.themeId) ?? studioThemes[0];
+  const currentTheme = studioThemes.find((theme) => theme.id === meta.themeId) ?? studioThemes[0]!;
   const blockTypes: StudioBlockType[] = [
     'LINK',
     'SOCIAL',
@@ -144,17 +144,6 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
     window.addEventListener('beforeunload', warnBeforeLeave);
     return () => window.removeEventListener('beforeunload', warnBeforeLeave);
   }, [isDirty]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    void fetch(`/api/v1/pages/${initialPage.id}/qr?format=png`, { signal: controller.signal })
-      .then((response) => {
-        setQrAvailable(response.ok && response.status !== 404);
-        void response.body?.cancel();
-      })
-      .catch(() => undefined);
-    return () => controller.abort();
-  }, [initialPage.id]);
 
   function updateMeta(patch: Partial<EditorMeta>) {
     setMeta((current) => ({ ...current, ...patch }));
@@ -318,15 +307,6 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
       setNotice({ kind: 'error', text: t('errors.unpublishFailed') });
     } finally {
       setPageAction(null);
-    }
-  }
-
-  async function copyPublicLink() {
-    try {
-      await navigator.clipboard.writeText(`${window.location.origin}/p/${initialPage.slug}`);
-      setNotice({ kind: 'success', text: t('linkCopied') });
-    } catch {
-      setNotice({ kind: 'error', text: t('errors.copyFailed') });
     }
   }
 
@@ -523,22 +503,15 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
             </div>
           </details>
 
-          <button
-            className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-blue-300 hover:text-blue-700"
-            onClick={() => void copyPublicLink()}
-            type="button"
-          >
-            {t('copyLink')}
-          </button>
-          {qrAvailable ? (
-            <a
-              className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-blue-300 hover:text-blue-700"
-              download
-              href={`/api/v1/pages/${initialPage.id}/qr?format=png`}
-            >
-              {t('downloadQr')}
-            </a>
-          ) : null}
+          <SharePanel
+            avatarUrl={meta.avatarUrl}
+            bio={meta.bio}
+            pageId={initialPage.id}
+            role={meta.role}
+            slug={initialPage.slug}
+            theme={currentTheme}
+            title={meta.title || t('defaults.untitled')}
+          />
           <button
             className="rounded-full bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-sm disabled:cursor-wait disabled:opacity-50"
             disabled={isSaving || pageAction !== null}
