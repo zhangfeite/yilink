@@ -19,24 +19,26 @@ export default async function StudioLayout({ children }: Readonly<{ children: Re
   ];
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-6xl">
-      <aside className="w-56 border-r border-slate-200 bg-white p-5">
-        <Link className="text-lg font-semibold" href="/">
-          一链 YiLink
-        </Link>
-        <nav className="mt-8 flex flex-col gap-2">
-          {navigation.map((item) => (
-            <Link
-              className="rounded-md px-3 py-2 text-sm font-medium hover:bg-slate-100"
-              href={item.href}
-              key={item.href}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+    <div className="mx-auto min-h-screen max-w-[1440px] bg-slate-50 lg:flex">
+      <aside className="border-b border-slate-200 bg-white px-4 py-4 lg:sticky lg:top-0 lg:h-screen lg:w-56 lg:flex-none lg:border-b-0 lg:border-r lg:p-5">
+        <div className="flex items-center justify-between gap-4 lg:block">
+          <Link className="text-lg font-extrabold tracking-tight text-slate-950" href="/">
+            一链 <span className="text-blue-700">YiLink</span>
+          </Link>
+          <nav className="flex gap-1 lg:mt-8 lg:flex-col lg:gap-2">
+            {navigation.map((item) => (
+              <Link
+                className="rounded-full px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-950 lg:rounded-xl"
+                href={item.href}
+                key={item.href}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </aside>
-      <main className="flex-1 p-8">{children}</main>
+      <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:p-8">{children}</main>
     </div>
   );
 }
