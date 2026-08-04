@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一链 YiLink · 主题预览（8 主题 × 2 布局）</title>
+<style>
+  /* ============ 预览页外壳（不随主题变化） ============ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #ECECEE;
+    color: #222;
+    min-height: 100vh;
+  }
+  .chrome {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #DDDDE2;
+    padding: 12px 16px;
+  }
+  .chrome-inner { max-width: 480px; margin: 0 auto; }
+  .chrome h2 { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 10px; }
+  .theme-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .theme-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1.5px solid #D4D4DA; border-radius: 999px;
+    background: #fff; padding: 5px 12px 5px 6px;
+    font-size: 12px; cursor: pointer; color: #333;
+  }
+  .theme-pill .swatches { display: inline-flex; }
+  .theme-pill .swatches i {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.12); display: inline-block;
+  }
+  .theme-pill .swatches i + i { margin-left: -5px; }
+  .theme-pill.active { border-color: #222; font-weight: 600; }
+  .layout-bar { display: flex; gap: 8px; }
+  .layout-btn {
+    border: 1.5px solid #D4D4DA; background: #fff; border-radius: 8px;
+    padding: 6px 18px; font-size: 13px; cursor: pointer; color: #333;
+  }
+  .layout-btn.active { background: #222; color: #fff; border-color: #222; }
+  .hint { font-size: 11px; color: #999; margin-top: 8px; }
+
+  /* ============ 主题作用域：.page 以下全部走 CSS 变量 ============ */
+  .stage { display: flex; justify-content: center; padding: 24px 12px 48px; }
+  .page {
+    --bg: #fff; --surface: #f6f6f4; --text: #161616; --subtext: #6e6e6e;
+    --accent: #161616; --btn-bg: #161616; --btn-text: #fff; --border: #e6e6e2;
+    --radius-card: 14px; --radius-btn: 10px; --radius-avatar: 50%;
+    --gap: 12px; --font: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --heading-weight: 600;
+    width: 100%; max-width: 480px; min-height: 720px;
+    font-family: var(--font);
+    color: var(--text);
+    padding: 32px 16px 40px;
+    transition: background .25s ease;
+  }
+
+  /* ---- 资料区 ---- */
+  .profile { text-align: center; margin-bottom: 24px; }
+  .avatar {
+    width: 88px; height: 88px; margin: 0 auto 14px;
+    border-radius: var(--radius-avatar);
+    background: var(--accent); color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; font-weight: var(--heading-weight);
+    border: 2px solid var(--border);
+  }
+  .profile h1 { font-size: 22px; font-weight: var(--heading-weight); letter-spacing: .02em; }
+  .bio { font-size: 14px; color: var(--subtext); margin-top: 6px; line-height: 1.6; }
+
+  /* ---- 区块通用 ---- */
+  .blocks { display: flex; flex-direction: column; gap: var(--gap); }
+  .block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  /* ---- 链接卡（吃 buttonStyle） ---- */
+  .link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 18px; text-decoration: none; cursor: pointer;
+    border-radius: var(--radius-btn);
+    transition: transform .12s ease;
+  }
+  .link:active { transform: scale(.985); }
+  .link strong { font-size: 15px; font-weight: var(--heading-weight); display: block; }
+  .link small { font-size: 12px; opacity: .72; display: block; margin-top: 3px; }
+  .link .thumb {
+    flex: none; width: 44px; height: 44px; border-radius: 8px;
+    background: rgba(127,127,127,.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .page[data-variant="solid"] .link { background: var(--btn-bg); color: var(--btn-text); border: 1px solid transparent; }
+  .page[data-variant="outline"] .link { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+  .page[data-variant="outline"] .link .thumb { background: rgba(127,127,127,.14); }
+  .page[data-variant="soft"] .link { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); color: var(--accent); border: 1px solid transparent; }
+  .page[data-shadow="sm"] .link { box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+  .page[data-shadow="md"] .link { box-shadow: 0 6px 16px rgba(0,0,0,.24); }
+
+  /* ---- 社交图标行 ---- */
+  .social { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px; }
+  .dot {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1.5px solid var(--border); background: var(--surface);
+    color: var(--subtext);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; cursor: pointer;
+  }
+  .dot:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---- 微信号复制块 ---- */
+  .wechat { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; }
+  .wechat .wx-label { font-size: 12px; color: var(--subtext); }
+  .wechat .wx-id { font-size: 14px; font-weight: 600; letter-spacing: .02em; }
+  .copy-btn {
+    flex: none; border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    border-radius: var(--radius-btn); padding: 6px 12px; font-size: 12px; cursor: pointer;
+    font-family: var(--font);
+  }
+  .copy-btn.copied { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+  /* ---- 图片占位 ---- */
+  .image { position: relative; min-height: 150px; }
+  .image .ph {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--subtext); font-size: 12px; letter-spacing: .06em;
+  }
+
+  /* ---- 文本块 ---- */
+  .text-block { padding: 14px 16px; font-size: 14px; line-height: 1.8; }
+  .text-block strong { font-weight: var(--heading-weight); }
+  .text-block a { color: var(--accent); }
+
+  /* ============ 网格布局（375px 基准 2 列；SM=1×1，MD=1×2，LG=跨2列×2行） ============ */
+  .page[data-layout="grid"] .blocks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 84px;
+    grid-auto-flow: dense;
+    gap: var(--gap);
+  }
+  .page[data-layout="grid"] .size-sm { grid-column: span 1; grid-row: span 1; }
+  .page[data-layout="grid"] .size-md { grid-column: span 1; grid-row: span 2; }
+  .page[data-layout="grid"] .size-lg { grid-column: span 2; grid-row: span 2; }
+  .page[data-layout="grid"] .link { flex-direction: column; justify-content: center; text-align: center; padding: 12px; }
+  .page[data-layout="grid"] .link.size-lg { flex-direction: row; text-align: left; padding: 18px; }
+  .page[data-layout="grid"] .link.size-lg .thumb { width: 56px; height: 56px; }
+  .page[data-layout="grid"] .social { flex-wrap: wrap; gap: 8px; padding: 8px; }
+  .page[data-layout="grid"] .dot { width: 28px; height: 28px; font-size: 10px; }
+  .page[data-layout="grid"] .wechat { flex-direction: column; justify-content: center; gap: 4px; padding: 8px; text-align: center; }
+  .page[data-layout="grid"] .image { min-height: 0; height: 100%; }
+  .page[data-layout="grid"] .text-block { font-size: 12.5px; line-height: 1.7; padding: 12px; overflow: hidden; }
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="chrome-inner">
+    <h2>一链 YiLink · 主题预览（示例数据：林小满）</h2>
+    <div class="theme-bar" id="themeBar"></div>
+    <div class="layout-bar">
+      <button class="layout-btn active" data-layout="list">列表布局</button>
+      <button class="layout-btn" data-layout="grid">网格布局</button>
+    </div>
+    <div class="hint">网格布局含 SM（社交/微信）· MD（约稿须知/图片/文本）· LG（作品集）三种尺寸，桌面端限宽 480px。</div>
+  </div>
+</header>
+
+<div class="stage">
+  <main class="page" id="page" data-layout="list" data-variant="solid" data-shadow="none">
+    <section class="profile">
+      <div class="avatar">林</div>
+      <h1>林小满</h1>
+      <p class="bio">插画师 / 约稿开放 / 全网同名</p>
+    </section>
+
+    <section class="blocks">
+      <!-- LINK · LG -->
+      <a class="block link size-lg" href="#" onclick="return false">
+        <span class="thumb">🎨</span>
+        <span class="link-text">
+          <strong>作品集 · Portfolio</strong>
+          <small>插画与商业案例精选（持续更新）</small>
+        </span>
+      </a>
+      <!-- LINK · MD -->
+      <a class="block link size-md" href="#" onclick="return false">
+        <span class="thumb">📋</span>
+        <span class="link-text">
+          <strong>约稿须知</strong>
+          <small>档期 / 报价 / 合作流程</small>
+        </span>
+      </a>
+      <!-- SOCIAL · SM -->
+      <div class="block social size-sm" aria-label="社交账号">
+        <span class="dot" title="微博">微</span>
+        <span class="dot" title="小红书">薯</span>
+        <span class="dot" title="B站">B</span>
+        <span class="dot" title="抖音">抖</span>
+        <span class="dot" title="X">X</span>
+      </div>
+      <!-- WECHAT · SM -->
+      <div class="block wechat size-sm">
+        <span>
+          <span class="wx-label">微信号</span><br>
+          <span class="wx-id">linxiaoman</span>
+        </span>
+        <button class="copy-btn" id="copyBtn" type="button">复制</button>
+      </div>
+      <!-- IMAGE · MD -->
+      <div class="block image size-md">
+        <div class="ph">图片占位 · 建议 4:3 裁剪</div>
+      </div>
+      <!-- TEXT · MD -->
+      <div class="block text-block size-md">
+        接稿范围：<strong>商业插画</strong>、<em>头像约稿</em>、绘本内页。
+        报价与排期见置顶「约稿须知」，急单请备注截止日期。
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ============ 主题数据（与 docs/design/themes.json 保持一致） ============ */
+var THEMES = [
+  {
+    "id": "minimal-light", "nameZh": "极简浅色", "nameEn": "Minimal Light",
+    "palette": { "bg": "#FFFFFF", "surface": "#F6F6F4", "text": "#161616", "subtext": "#6E6E6E", "accent": "#161616", "buttonBg": "#161616", "buttonText": "#FFFFFF", "border": "#E6E6E2" },
+    "background": { "type": "solid", "value": "#FFFFFF" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "none" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "ink-dark", "nameZh": "墨夜暗色", "nameEn": "Ink Dark",
+    "palette": { "bg": "#0E0E11", "surface": "#1A1A1F", "text": "#F4F4F2", "subtext": "#A0A0A8", "accent": "#E5C15C", "buttonBg": "#E5C15C", "buttonText": "#151310", "border": "#2C2C33" },
+    "background": { "type": "solid", "value": "#0E0E11" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "cream-paper", "nameZh": "奶油纸感", "nameEn": "Cream Paper",
+    "palette": { "bg": "#FAF5EC", "surface": "#F2EBDD", "text": "#3A332B", "subtext": "#6E6455", "accent": "#8C5A2E", "buttonBg": "#3A332B", "buttonText": "#FAF5EC", "border": "#E4D9C4" },
+    "background": { "type": "solid", "value": "#FAF5EC" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
+    "radius": { "card": "16px", "button": "12px", "avatar": "50%" },
+    "buttonStyle": { "variant": "soft", "shadow": "none" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "neon-gradient", "nameZh": "霓虹渐变", "nameEn": "Neon Gradient",
+    "palette": { "bg": "#0B0A1F", "surface": "#191736", "text": "#F3F1FF", "subtext": "#A6A0D8", "accent": "#36E4FF", "buttonBg": "#36E4FF", "buttonText": "#071022", "border": "#322C66" },
+    "background": { "type": "gradient", "value": "linear-gradient(160deg, #0B0A1F 0%, #17123B 55%, #0E1B4D 100%)" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 700 },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "bamboo-green", "nameZh": "竹青森系", "nameEn": "Bamboo Green",
+    "palette": { "bg": "#F2F6F0", "surface": "#FFFFFF", "text": "#1D3327", "subtext": "#57705F", "accent": "#2E7D52", "buttonBg": "#2E7D52", "buttonText": "#FFFFFF", "border": "#D7E2D4" },
+    "background": { "type": "solid", "value": "#F2F6F0" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "outline", "shadow": "none" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "vermilion", "nameZh": "朱砂中式", "nameEn": "Vermilion",
+    "palette": { "bg": "#F6F1E7", "surface": "#FDFAF3", "text": "#2B2420", "subtext": "#6E6253", "accent": "#B23B2E", "buttonBg": "#B23B2E", "buttonText": "#FDF6E9", "border": "#E2D6C0" },
+    "background": { "type": "solid", "value": "#F6F1E7" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Songti SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", serif", "headingWeight": 700 },
+    "radius": { "card": "8px", "button": "6px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "business-blue", "nameZh": "商务蓝", "nameEn": "Business Blue",
+    "palette": { "bg": "#F4F7FB", "surface": "#FFFFFF", "text": "#182230", "subtext": "#52647A", "accent": "#1F5EFF", "buttonBg": "#1F5EFF", "buttonText": "#FFFFFF", "border": "#D9E2EE" },
+    "background": { "type": "solid", "value": "#F4F7FB" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
+    "radius": { "card": "10px", "button": "8px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "dopamine", "nameZh": "多巴胺撞色", "nameEn": "Dopamine",
+    "palette": { "bg": "#FFF6E3", "surface": "#FFFFFF", "text": "#211A12", "subtext": "#6B5C42", "accent": "#FF4D8D", "buttonBg": "#7C3AED", "buttonText": "#FFFFFF", "border": "#F0DFC0" },
+    "background": { "type": "solid", "value": "#FFF6E3" },
+    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 700 },
+    "radius": { "card": "18px", "button": "20px", "avatar": "18px" },
+    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "grid": { "gap": "14px" }
+  }
+];
+
+var page = document.getElementById('page');
+var themeBar = document.getElementById('themeBar');
+
+function applyTheme(t) {
+  var p = t.palette, s = page.style;
+  s.setProperty('--bg', p.bg);
+  s.setProperty('--surface', p.surface);
+  s.setProperty('--text', p.text);
+  s.setProperty('--subtext', p.subtext);
+  s.setProperty('--accent', p.accent);
+  s.setProperty('--btn-bg', p.buttonBg);
+  s.setProperty('--btn-text', p.buttonText);
+  s.setProperty('--border', p.border);
+  s.setProperty('--radius-card', t.radius.card);
+  s.setProperty('--radius-btn', t.radius.button);
+  s.setProperty('--radius-avatar', t.radius.avatar);
+  s.setProperty('--gap', t.grid.gap);
+  s.setProperty('--font', t.font.family);
+  s.setProperty('--heading-weight', t.font.headingWeight);
+  s.background = t.background.value;
+  page.dataset.variant = t.buttonStyle.variant;
+  page.dataset.shadow = t.buttonStyle.shadow;
+  var pills = themeBar.querySelectorAll('.theme-pill');
+  for (var i = 0; i < pills.length; i++) {
+    pills[i].classList.toggle('active', pills[i].dataset.id === t.id);
+  }
+}
+
+THEMES.forEach(function (t) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'theme-pill';
+  b.dataset.id = t.id;
+  b.innerHTML = '<span class="swatches">' +
+    '<i style="background:' + t.palette.bg + '"></i>' +
+    '<i style="background:' + t.palette.accent + '"></i>' +
+    '<i style="background:' + t.palette.buttonBg + '"></i></span>' +
+    '<span>' + t.nameZh + '</span>';
+  b.addEventListener('click', function () { applyTheme(t); });
+  themeBar.appendChild(b);
+});
+
+var layoutBtns = document.querySelectorAll('.layout-btn');
+layoutBtns.forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    page.dataset.layout = btn.dataset.layout;
+    layoutBtns.forEach(function (b) { b.classList.toggle('active', b === btn); });
+  });
+});
+
+/* 微信号复制（含降级路径，file:// 下也可用） */
+var copyBtn = document.getElementById('copyBtn');
+copyBtn.addEventListener('click', function () {
+  var text = 'linxiaoman';
+  function done() {
+    copyBtn.textContent = '已复制';
+    copyBtn.classList.add('copied');
+    setTimeout(function () {
+      copyBtn.textContent = '复制';
+      copyBtn.classList.remove('copied');
+    }, 1500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(function () { fallback(); });
+  } else { fallback(); }
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    done();
+  }
+});
+
+/* 支持 ?theme=<id>&layout=list|grid 直达（便于验收截图），默认 minimal-light + 列表 */
+var params = new URLSearchParams(location.search);
+var initial = THEMES[0];
+for (var i = 0; i < THEMES.length; i++) {
+  if (THEMES[i].id === params.get('theme')) { initial = THEMES[i]; break; }
+}
+applyTheme(initial);
+if (params.get('layout') === 'grid') {
+  page.dataset.layout = 'grid';
+  layoutBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.layout === 'grid'); });
+}
+</script>
+</body>
+</html>

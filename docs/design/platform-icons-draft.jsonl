@@ -1,0 +1,42 @@
+{"id":"wechat","nameZh":"微信","nameEn":"WeChat","category":"social","brandColorHex":"#07C160","aliases":["微信","WeChat"],"hasSimpleIcon":true}
+{"id":"wechat-official-account","nameZh":"微信公众号","nameEn":"WeChat Official Account","category":"content","brandColorHex":null,"aliases":["微信公众号","公众号"],"hasSimpleIcon":null}
+{"id":"wechat-channels","nameZh":"微信视频号","nameEn":"WeChat Channels","category":"video","brandColorHex":null,"aliases":["微信视频号","视频号"],"hasSimpleIcon":null}
+{"id":"wecom","nameZh":"企业微信","nameEn":"WeCom","category":"contact","brandColorHex":"#07C160","aliases":["企业微信","WeCom"],"hasSimpleIcon":true}
+{"id":"qq","nameZh":"QQ","nameEn":"QQ","category":"social","brandColorHex":"#12B7F5","aliases":["QQ","腾讯QQ"],"hasSimpleIcon":true}
+{"id":"douyin","nameZh":"抖音","nameEn":"Douyin","category":"video","brandColorHex":"#000000","aliases":["抖音","TikTok中国"],"hasSimpleIcon":true}
+{"id":"xiaohongshu","nameZh":"小红书","nameEn":"Xiaohongshu","category":"social","brandColorHex":"#FF2442","aliases":["小红书","RED"],"hasSimpleIcon":true}
+{"id":"bilibili","nameZh":"哔哩哔哩","nameEn":"Bilibili","category":"video","brandColorHex":"#FB7299","aliases":["哔哩哔哩","B站"],"hasSimpleIcon":true}
+{"id":"kuaishou","nameZh":"快手","nameEn":"Kuaishou","category":"video","brandColorHex":"#FF4906","aliases":["快手"],"hasSimpleIcon":true}
+{"id":"weibo","nameZh":"微博","nameEn":"Weibo","category":"social","brandColorHex":"#E6162D","aliases":["微博","新浪微博"],"hasSimpleIcon":true}
+{"id":"zhihu","nameZh":"知乎","nameEn":"Zhihu","category":"content","brandColorHex":"#0084FF","aliases":["知乎"],"hasSimpleIcon":true}
+{"id":"jike","nameZh":"即刻","nameEn":"Jike","category":"social","brandColorHex":"#FFE411","aliases":["即刻","Jike"],"hasSimpleIcon":true}
+{"id":"douban","nameZh":"豆瓣","nameEn":"Douban","category":"social","brandColorHex":"#007722","aliases":["豆瓣"],"hasSimpleIcon":true}
+{"id":"dewu","nameZh":"得物","nameEn":"Dewu","category":"shopping","brandColorHex":"#FE2C55","aliases":["得物","毒App"],"hasSimpleIcon":true}
+{"id":"taobao","nameZh":"淘宝","nameEn":"Taobao","category":"shopping","brandColorHex":"#FF5000","aliases":["淘宝","淘宝网"],"hasSimpleIcon":true}
+{"id":"jd","nameZh":"京东","nameEn":"JD.com","category":"shopping","brandColorHex":"#E60012","aliases":["京东","JD"],"hasSimpleIcon":true}
+{"id":"pinduoduo","nameZh":"拼多多","nameEn":"Pinduoduo","category":"shopping","brandColorHex":"#E02E24","aliases":["拼多多","PDD"],"hasSimpleIcon":true}
+{"id":"goofish","nameZh":"闲鱼","nameEn":"Goofish","category":"shopping","brandColorHex":"#FFE411","aliases":["闲鱼","Goofish"],"hasSimpleIcon":true}
+{"id":"netease-cloud-music","nameZh":"网易云音乐","nameEn":"Netease Cloud Music","category":"music","brandColorHex":"#C20C0C","aliases":["网易云音乐","网易云"],"hasSimpleIcon":true}
+{"id":"qq-music","nameZh":"QQ音乐","nameEn":"QQ Music","category":"music","brandColorHex":"#31C27C","aliases":["QQ音乐","QQMusic"],"hasSimpleIcon":true}
+{"id":"xiaoyuzhou","nameZh":"小宇宙","nameEn":"Xiaoyuzhou","category":"content","brandColorHex":"#3B3B3B","aliases":["小宇宙","小宇宙FM"],"hasSimpleIcon":true}
+{"id":"ximalaya","nameZh":"喜马拉雅","nameEn":"Ximalaya","category":"content","brandColorHex":"#FF4906","aliases":["喜马拉雅","喜马拉雅FM"],"hasSimpleIcon":true}
+{"id":"github","nameZh":"GitHub","nameEn":"GitHub","category":"dev","brandColorHex":"#181717","aliases":["GitHub","Github"],"hasSimpleIcon":true}
+{"id":"juejin","nameZh":"掘金","nameEn":"Juejin","category":"dev","brandColorHex":"#1E80FF","aliases":["掘金","掘金社区"],"hasSimpleIcon":true}
+{"id":"csdn","nameZh":"CSDN","nameEn":"CSDN","category":"dev","brandColorHex":"#FC4C02","aliases":["CSDN","CSDN社区"],"hasSimpleIcon":true}
+{"id":"sspai","nameZh":"少数派","nameEn":"SSPAI","category":"content","brandColorHex":"#D6001B","aliases":["少数派","SSPai"],"hasSimpleIcon":true}
+{"id":"v2ex","nameZh":"V2EX","nameEn":"V2EX","category":"dev","brandColorHex":"#1C1C1C","aliases":["V2EX"],"hasSimpleIcon":true}
+{"id":"email","nameZh":"电子邮件","nameEn":"Email","category":"contact","brandColorHex":null,"aliases":["电子邮件","邮箱"],"hasSimpleIcon":false}
+{"id":"phone","nameZh":"电话","nameEn":"Phone","category":"contact","brandColorHex":null,"aliases":["电话","手机号"],"hasSimpleIcon":false}
+{"id":"website","nameZh":"个人网站","nameEn":"Personal Website","category":"other","brandColorHex":null,"aliases":["个人网站","网站"],"hasSimpleIcon":false}
+{"id":"tiktok","nameZh":"TikTok","nameEn":"TikTok","category":"video","brandColorHex":"#000000","aliases":["TikTok","抖音国际版"],"hasSimpleIcon":true}
+{"id":"instagram","nameZh":"Instagram","nameEn":"Instagram","category":"social","brandColorHex":"#E4405F","aliases":["Instagram","Ins"],"hasSimpleIcon":true}
+{"id":"youtube","nameZh":"YouTube","nameEn":"YouTube","category":"video","brandColorHex":"#FF0000","aliases":["YouTube","Youtube"],"hasSimpleIcon":true}
+{"id":"x","nameZh":"X","nameEn":"X (Twitter)","category":"social","brandColorHex":"#000000","aliases":["X","Twitter","推特"],"hasSimpleIcon":true}
+{"id":"facebook","nameZh":"Facebook","nameEn":"Facebook","category":"social","brandColorHex":"#1877F2","aliases":["Facebook","脸书"],"hasSimpleIcon":true}
+{"id":"linkedin","nameZh":"LinkedIn","nameEn":"LinkedIn","category":"social","brandColorHex":"#0A66C2","aliases":["LinkedIn","领英"],"hasSimpleIcon":true}
+{"id":"telegram","nameZh":"Telegram","nameEn":"Telegram","category":"contact","brandColorHex":"#26A5E4","aliases":["Telegram","电报"],"hasSimpleIcon":true}
+{"id":"whatsapp","nameZh":"WhatsApp","nameEn":"WhatsApp","category":"contact","brandColorHex":"#25D366","aliases":["WhatsApp","Whatsapp"],"hasSimpleIcon":true}
+{"id":"discord","nameZh":"Discord","nameEn":"Discord","category":"contact","brandColorHex":"#5865F2","aliases":["Discord"],"hasSimpleIcon":true}
+{"id":"spotify","nameZh":"Spotify","nameEn":"Spotify","category":"music","brandColorHex":"#1DB954","aliases":["Spotify"],"hasSimpleIcon":true}
+{"id":"twitch","nameZh":"Twitch","nameEn":"Twitch","category":"video","brandColorHex":"#9146FF","aliases":["Twitch"],"hasSimpleIcon":true}
+{"id":"threads","nameZh":"Threads","nameEn":"Threads","category":"social","brandColorHex":"#000000","aliases":["Threads"],"hasSimpleIcon":true}

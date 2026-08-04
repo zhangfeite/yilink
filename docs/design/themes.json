@@ -1,0 +1,189 @@
+[
+  {
+    "id": "minimal-light",
+    "nameZh": "极简浅色",
+    "nameEn": "Minimal Light",
+    "palette": {
+      "bg": "#FFFFFF",
+      "surface": "#F6F6F4",
+      "text": "#161616",
+      "subtext": "#6E6E6E",
+      "accent": "#161616",
+      "buttonBg": "#161616",
+      "buttonText": "#FFFFFF",
+      "border": "#E6E6E2"
+    },
+    "background": { "type": "solid", "value": "#FFFFFF" },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+      "headingWeight": 600
+    },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "none" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "ink-dark",
+    "nameZh": "墨夜暗色",
+    "nameEn": "Ink Dark",
+    "palette": {
+      "bg": "#0E0E11",
+      "surface": "#1A1A1F",
+      "text": "#F4F4F2",
+      "subtext": "#A0A0A8",
+      "accent": "#E5C15C",
+      "buttonBg": "#E5C15C",
+      "buttonText": "#151310",
+      "border": "#2C2C33"
+    },
+    "background": { "type": "solid", "value": "#0E0E11" },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+      "headingWeight": 600
+    },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "cream-paper",
+    "nameZh": "奶油纸感",
+    "nameEn": "Cream Paper",
+    "palette": {
+      "bg": "#FAF5EC",
+      "surface": "#F2EBDD",
+      "text": "#3A332B",
+      "subtext": "#6E6455",
+      "accent": "#8C5A2E",
+      "buttonBg": "#3A332B",
+      "buttonText": "#FAF5EC",
+      "border": "#E4D9C4"
+    },
+    "background": { "type": "solid", "value": "#FAF5EC" },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+      "headingWeight": 600
+    },
+    "radius": { "card": "16px", "button": "12px", "avatar": "50%" },
+    "buttonStyle": { "variant": "soft", "shadow": "none" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "neon-gradient",
+    "nameZh": "霓虹渐变",
+    "nameEn": "Neon Gradient",
+    "palette": {
+      "bg": "#0B0A1F",
+      "surface": "#191736",
+      "text": "#F3F1FF",
+      "subtext": "#A6A0D8",
+      "accent": "#36E4FF",
+      "buttonBg": "#36E4FF",
+      "buttonText": "#071022",
+      "border": "#322C66"
+    },
+    "background": {
+      "type": "gradient",
+      "value": "linear-gradient(160deg, #0B0A1F 0%, #17123B 55%, #0E1B4D 100%)"
+    },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+      "headingWeight": 700
+    },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "bamboo-green",
+    "nameZh": "竹青森系",
+    "nameEn": "Bamboo Green",
+    "palette": {
+      "bg": "#F2F6F0",
+      "surface": "#FFFFFF",
+      "text": "#1D3327",
+      "subtext": "#57705F",
+      "accent": "#2E7D52",
+      "buttonBg": "#2E7D52",
+      "buttonText": "#FFFFFF",
+      "border": "#D7E2D4"
+    },
+    "background": { "type": "solid", "value": "#F2F6F0" },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+      "headingWeight": 600
+    },
+    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
+    "buttonStyle": { "variant": "outline", "shadow": "none" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "vermilion",
+    "nameZh": "朱砂中式",
+    "nameEn": "Vermilion",
+    "palette": {
+      "bg": "#F6F1E7",
+      "surface": "#FDFAF3",
+      "text": "#2B2420",
+      "subtext": "#6E6253",
+      "accent": "#B23B2E",
+      "buttonBg": "#B23B2E",
+      "buttonText": "#FDF6E9",
+      "border": "#E2D6C0"
+    },
+    "background": { "type": "solid", "value": "#F6F1E7" },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Songti SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", serif",
+      "headingWeight": 700
+    },
+    "radius": { "card": "8px", "button": "6px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "business-blue",
+    "nameZh": "商务蓝",
+    "nameEn": "Business Blue",
+    "palette": {
+      "bg": "#F4F7FB",
+      "surface": "#FFFFFF",
+      "text": "#182230",
+      "subtext": "#52647A",
+      "accent": "#1F5EFF",
+      "buttonBg": "#1F5EFF",
+      "buttonText": "#FFFFFF",
+      "border": "#D9E2EE"
+    },
+    "background": { "type": "solid", "value": "#F4F7FB" },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+      "headingWeight": 600
+    },
+    "radius": { "card": "10px", "button": "8px", "avatar": "50%" },
+    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "grid": { "gap": "12px" }
+  },
+  {
+    "id": "dopamine",
+    "nameZh": "多巴胺撞色",
+    "nameEn": "Dopamine",
+    "palette": {
+      "bg": "#FFF6E3",
+      "surface": "#FFFFFF",
+      "text": "#211A12",
+      "subtext": "#6B5C42",
+      "accent": "#FF4D8D",
+      "buttonBg": "#7C3AED",
+      "buttonText": "#FFFFFF",
+      "border": "#F0DFC0"
+    },
+    "background": { "type": "solid", "value": "#FFF6E3" },
+    "font": {
+      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+      "headingWeight": 700
+    },
+    "radius": { "card": "18px", "button": "20px", "avatar": "18px" },
+    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "grid": { "gap": "14px" }
+  }
+]
