@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>一链 YiLink · 主题预览 v2（8 主题 × 2 布局）</title>
+<title>一链 YiLink · 主题预览 v2（3 场景模板 × 8 主题 × 2 布局）</title>
 <style>
   /* ============ 预览页外壳（不随主题变化） ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,6 +37,7 @@
   }
   .theme-pill .swatches i + i { margin-left: -5px; }
   .theme-pill.active { border-color: #222; font-weight: 600; }
+  .tpl-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
   .layout-bar { display: flex; gap: 8px; }
   .layout-btn {
     border: 1.5px solid #D4D4DA; background: #fff; border-radius: 8px;
@@ -96,6 +97,7 @@
   }
   .identity .role {
     margin-top: 8px; font-size: 14px; color: var(--subtext);
+    word-break: keep-all;
   }
   .identity .avatar {
     position: absolute; top: -18px; right: 20px;
@@ -223,34 +225,35 @@
 
 <header class="chrome">
   <div class="chrome-inner">
-    <h2>一链 YiLink · 主题预览 v2（示例数据：林小满）</h2>
+    <h2>一链 YiLink · 主题预览 v2（场景模板：<span id="tplName">插画师 · 约稿</span>）</h2>
+    <div class="tpl-bar" id="tplBar" role="group" aria-label="场景模板切换"></div>
     <div class="theme-bar" id="themeBar"></div>
     <div class="layout-bar">
       <button class="layout-btn active" data-layout="list" type="button" aria-label="切换到列表布局">列表布局</button>
       <button class="layout-btn" data-layout="grid" type="button" aria-label="切换到网格布局">网格布局</button>
       <button class="layout-btn active" id="ctaToggle" type="button" aria-pressed="true" aria-label="开关吸底转化条">转化条 开</button>
     </div>
-    <div class="hint">网格模式仅作用于主链接组（MD/LG 磁贴）；桌面端限宽 480px 居中。转化条开启时微信卡自动收起（转化唯一性：同一动作全页只出现一次），CTA 点击即复制微信号。</div>
+    <div class="hint">场景模板 = 主题 × 布局 × 预置区块 × 文案骨架 × 默认 CTA，切换只设默认值，之后仍可自由改主题/布局。转化条开启时微信卡自动收起（转化唯一性：同一动作全页只出现一次），CTA 点击即完成动作。</div>
   </div>
 </header>
 
 <div class="stage">
   <main class="page flow" id="page" data-layout="list">
 
-    <!-- 1. 身份卡 · 不对称构图 -->
+    <!-- 1. 身份卡 · 不对称构图（内容由场景模板数据驱动） -->
     <section class="card identity">
-      <div class="avatar" aria-hidden="true">林</div>
+      <div class="avatar" id="pfAvatar" aria-hidden="true">林</div>
       <div class="name-zone">
-        <h1>林小满</h1>
-        <p class="role">插画师 · 自由职业</p>
+        <h1 id="pfName">林小满</h1>
+        <p class="role" id="pfRole">插画师 · 自由职业</p>
       </div>
-      <p class="bio">画商业插画，也画绘本和头像。约稿开放中，档期与报价见下方「约稿须知」，全网同名，欢迎来聊。</p>
+      <p class="bio" id="pfBio">画商业插画，也画绘本和头像。约稿开放中，档期与报价见下方「约稿须知」，全网同名，欢迎来聊。</p>
     </section>
 
     <!-- 2. 主链接组 -->
-    <section class="group" aria-label="作品与约稿">
-      <h2 class="sec-title">作品与约稿</h2>
-      <div class="link-cards">
+    <section class="group" aria-label="主链接">
+      <h2 class="sec-title" id="linkSecTitle">作品与约稿</h2>
+      <div class="link-cards" id="linkCards">
         <a class="link-card lg" href="#" onclick="return false">
           <span class="thumb" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 3 3 4-4 4 4"/></svg>
@@ -274,10 +277,10 @@
       </div>
     </section>
 
-    <!-- 3. 平台贴纸卡 -->
-    <section class="card stickers group" aria-label="全网同名">
-      <h2 class="sec-title">全网同名</h2>
-      <div class="sticker-grid">
+    <!-- 3. 平台贴纸卡（阵列成员由场景模板的 SOCIAL 区块决定） -->
+    <section class="card stickers group" aria-label="平台贴纸">
+      <h2 class="sec-title" id="socialTitle">全网同名</h2>
+      <div class="sticker-grid" id="stickerGrid">
         <span class="sticker" role="img" aria-label="微信" title="微信">
           <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#07C160"/><g transform="translate(14,14) scale(1.1667)"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z" fill="#fff"/></g></svg>
         </span>
@@ -309,7 +312,7 @@
         <span class="wx-icon" aria-hidden="true">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4.9A2.5 2.5 0 0 1 4 13.5v-8z"/></svg>
         </span>
-        <span class="wx-id">linxiaoman<small>合作与约稿请加微信</small></span>
+        <span class="wx-id" id="wxId">linxiaoman<small>合作与约稿请加微信</small></span>
         <button class="copy-btn" id="copyBtn" type="button" aria-label="复制微信号 linxiaoman">复制</button>
       </div>
       <p class="caption">点击复制微信号</p>
@@ -322,7 +325,7 @@
     <div class="toast" id="ctaToast" role="status">已复制微信号 linxiaoman，去微信添加</div>
     <div class="cta-bar">
       <div class="cta-proof">累计访问 12,408</div>
-      <div class="cta-action" role="button" aria-label="加微信合作">+ 加微信合作</div>
+      <div class="cta-action" id="ctaAction" role="button" aria-label="加微信合作">+ 加微信合作</div>
     </div>
 
     <!-- 6. 页脚 -->
@@ -477,18 +480,173 @@ THEMES.forEach(function (t) {
   themeBar.appendChild(b);
 });
 
-var layoutBtns = document.querySelectorAll('.layout-btn');
+var layoutBtns = document.querySelectorAll('.layout-btn[data-layout]');
+function setLayout(name) {
+  page.dataset.layout = name;
+  layoutBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.layout === name); });
+}
 layoutBtns.forEach(function (btn) {
-  btn.addEventListener('click', function () {
-    page.dataset.layout = btn.dataset.layout;
-    layoutBtns.forEach(function (b) { b.classList.toggle('active', b === btn); });
+  btn.addEventListener('click', function () { setLayout(btn.dataset.layout); });
+});
+
+function themeById(id) {
+  for (var i = 0; i < THEMES.length; i++) { if (THEMES[i].id === id) return THEMES[i]; }
+  return null;
+}
+
+/* ============ 场景模板（schema 照 docs/design/template-system.md §二，演示层与产品数据结构一致） ============ */
+/* 链接卡缩略图：细描边线性图标，色彩由内容供给（法则五） */
+var THUMB_ICONS = {
+  image: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 3 3 4-4 4 4"/></svg>',
+  doc: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>',
+  tag: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3 12V4h8l9 9-8 8-9-9z"/><circle cx="7.5" cy="8.5" r="1.3"/></svg>',
+  calendar: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg>',
+  cube: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12L4 7.5M12 12v9"/></svg>',
+  list: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8.5 6h12M8.5 12h12M8.5 18h12"/><circle cx="4" cy="6" r="1.2"/><circle cx="4" cy="12" r="1.2"/><circle cx="4" cy="18" r="1.2"/></svg>'
+};
+
+var TEMPLATES = [
+  {
+    id: 'illustrator-commission',
+    nameZh: '插画师 · 约稿',
+    persona: '创作者',
+    scene: ['约稿', '作品展示'],
+    defaultTheme: 'cream-paper',
+    layout: 'grid',
+    cta: { type: 'wechat', label: '+ 加微信合作', copy: 'linxiaoman', toast: '已复制微信号 linxiaoman，去微信添加' },
+    profile: { name: '林小满', avatar: '林', role: '插画师 · 自由职业', bio: '画商业插画，也画绘本和头像。约稿开放中，档期与报价见下方「约稿须知」，全网同名，欢迎来聊。' },
+    linkSecTitle: '作品与约稿',
+    socialTitle: '全网同名',
+    blocks: [
+      { type: 'LINK', size: 'LG', config: { title: '作品集 · Portfolio', desc: '插画与商业案例精选（持续更新）', icon: 'image' } },
+      { type: 'LINK', size: 'MD', config: { title: '约稿须知', desc: '档期 / 报价 / 合作流程', icon: 'doc' } },
+      { type: 'SOCIAL', size: 'SM', config: { items: ['wechat', 'bilibili', 'douyin', 'xiaohongshu', 'weibo', 'github', 'zhihu'] } },
+      { type: 'WECHAT', config: { id: 'linxiaoman', note: '合作与约稿请加微信' } }
+    ]
+  },
+  {
+    id: 'photographer-booking',
+    nameZh: '摄影师 · 约拍',
+    persona: '创作者',
+    scene: ['约拍', '作品展示'],
+    defaultTheme: 'ink-dark',
+    layout: 'grid',
+    cta: { type: 'wechat', label: '+ 加微信约拍', copy: 'chenye-photo', toast: '已复制微信号 chenye-photo，去微信添加' },
+    profile: { name: '陈野', avatar: '陈', role: '人像·活动摄影师 · 约拍开放', bio: '拍人像，也拍活动与婚礼纪实。常驻杭州，全国可飞。客片即水准，价目与档期见下方，加微信聊具体需求。' },
+    linkSecTitle: '约拍与作品',
+    socialTitle: '全网同名',
+    blocks: [
+      { type: 'LINK', size: 'LG', config: { title: '约拍套餐与价目', desc: '人像 / 活动 / 婚礼，明码标价不套路', icon: 'tag' } },
+      { type: 'LINK', size: 'MD', config: { title: '客片精选', desc: '近半年真实客片，盗图必究', icon: 'image' } },
+      { type: 'LINK', size: 'MD', config: { title: '近期档期', desc: '每月更新，定金锁档', icon: 'calendar' } },
+      { type: 'SOCIAL', size: 'SM', config: { items: ['wechat', 'xiaohongshu', 'weibo', 'bilibili'] } },
+      { type: 'WECHAT', config: { id: 'chenye-photo', note: '约拍与咨询请加微信' } }
+    ]
+  },
+  {
+    id: 'indie-maker-product',
+    nameZh: '独立开发者 · 产品页',
+    persona: '开发者',
+    scene: ['产品展示'],
+    defaultTheme: 'minimal-light',
+    layout: 'list',
+    cta: { type: 'link', label: '☆ GitHub 上 Star', copy: 'https://github.com/afeng/yilink', toast: '已复制仓库地址（演示）' },
+    profile: { name: '阿枫', avatar: '枫', role: '独立开发者 · 正在做「一链」', bio: '白天写代码，晚上也写代码。正在做「一链」——给中文创作者用的链接名片。开发日志公开，欢迎围观、提 Issue 和 Star。' },
+    linkSecTitle: '产品与动态',
+    socialTitle: '在这些地方找到我',
+    blocks: [
+      { type: 'LINK', size: 'LG', config: { title: '产品主页 · 一链 YiLink', desc: '三分钟搭出你的链接名片', icon: 'cube' } },
+      { type: 'LINK', size: 'MD', config: { title: '更新日志 Changelog', desc: '每周更新，路线图公开', icon: 'list' } },
+      { type: 'SOCIAL', size: 'SM', config: { items: ['github', 'zhihu', 'bilibili'] } },
+      { type: 'WECHAT', config: { id: 'afeng-dev', note: '交流合作请加微信' } }
+    ]
+  }
+];
+
+function tplById(id) {
+  for (var i = 0; i < TEMPLATES.length; i++) { if (TEMPLATES[i].id === id) return TEMPLATES[i]; }
+  return null;
+}
+
+/* 贴纸阵列：图标节点常驻 DOM，按模板 SOCIAL 区块重排/显隐（复用现有真实品牌图标） */
+var STICKER_TITLE2KEY = { '微信': 'wechat', 'B站': 'bilibili', '抖音': 'douyin', '小红书': 'xiaohongshu', '微博': 'weibo', 'GitHub': 'github', '知乎': 'zhihu' };
+var stickerGrid = document.getElementById('stickerGrid');
+var stickerEls = {};
+Array.prototype.forEach.call(stickerGrid.querySelectorAll('.sticker'), function (s) {
+  stickerEls[STICKER_TITLE2KEY[s.getAttribute('title')]] = s;
+});
+
+/* 当前页主的复制内容（微信卡复制微信号 / CTA 按模板类型复制） */
+var state = { wechatId: 'linxiaoman', ctaCopy: 'linxiaoman' };
+
+var copyBtn = document.getElementById('copyBtn');
+var ctaAction = document.getElementById('ctaAction');
+var ctaToast = document.getElementById('ctaToast');
+var tplBar = document.getElementById('tplBar');
+
+/* 切换预设 = 身份区 + 区块组合 + 默认主题 + 默认布局 + CTA 文案与复制内容（只设默认值，不锁定） */
+function applyTemplate(tpl) {
+  document.getElementById('tplName').textContent = tpl.nameZh;
+  document.getElementById('pfName').textContent = tpl.profile.name;
+  document.getElementById('pfRole').textContent = tpl.profile.role;
+  document.getElementById('pfBio').textContent = tpl.profile.bio;
+  document.getElementById('pfAvatar').textContent = tpl.profile.avatar;
+  document.getElementById('linkSecTitle').textContent = tpl.linkSecTitle;
+  document.getElementById('socialTitle').textContent = tpl.socialTitle;
+
+  var linkHtml = '', socialItems = [], wechatCfg = { id: '', note: '' };
+  tpl.blocks.forEach(function (b) {
+    if (b.type === 'LINK') {
+      var c = b.config;
+      linkHtml += '<a class="link-card ' + b.size.toLowerCase() + '" href="#" onclick="return false">' +
+        '<span class="thumb" aria-hidden="true">' + THUMB_ICONS[c.icon] + '</span>' +
+        '<span class="link-text"><strong>' + c.title + '</strong><small>' + c.desc + '</small></span>' +
+        '<span class="arrow" aria-hidden="true">→</span></a>';
+    } else if (b.type === 'SOCIAL') {
+      socialItems = b.config.items;
+    } else if (b.type === 'WECHAT') {
+      wechatCfg = b.config;
+    }
   });
+  document.getElementById('linkCards').innerHTML = linkHtml;
+
+  for (var k in stickerEls) { stickerEls[k].style.display = 'none'; }
+  socialItems.forEach(function (k) {
+    var el = stickerEls[k];
+    if (el) { el.style.display = ''; stickerGrid.appendChild(el); }
+  });
+
+  state.wechatId = wechatCfg.id;
+  state.ctaCopy = tpl.cta.copy;
+  document.getElementById('wxId').innerHTML = wechatCfg.id + '<small>' + wechatCfg.note + '</small>';
+  copyBtn.setAttribute('aria-label', '复制微信号 ' + wechatCfg.id);
+  ctaAction.textContent = tpl.cta.label;
+  ctaAction.setAttribute('aria-label', tpl.cta.label);
+  ctaToast.textContent = tpl.cta.toast;
+
+  applyTheme(themeById(tpl.defaultTheme) || THEMES[0]);
+  setLayout(tpl.layout);
+
+  var tplBtns = tplBar.querySelectorAll('.layout-btn');
+  for (var i = 0; i < tplBtns.length; i++) {
+    tplBtns[i].classList.toggle('active', tplBtns[i].dataset.tpl === tpl.id);
+  }
+}
+
+TEMPLATES.forEach(function (tpl) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'layout-btn';
+  b.dataset.tpl = tpl.id;
+  b.setAttribute('aria-label', '切换场景模板：' + tpl.nameZh);
+  b.textContent = tpl.nameZh;
+  b.addEventListener('click', function () { applyTemplate(tpl); });
+  tplBar.appendChild(b);
 });
 
 /* 微信号复制（含降级路径，file:// 下也可用） */
-var copyBtn = document.getElementById('copyBtn');
 copyBtn.addEventListener('click', function () {
-  var text = 'linxiaoman';
+  var text = state.wechatId;
   function done() {
     copyBtn.textContent = '已复制';
     copyBtn.classList.add('copied');
@@ -511,19 +669,7 @@ copyBtn.addEventListener('click', function () {
   } else { fallback(); }
 });
 
-/* 支持 ?theme=<id>&layout=list|grid 直达（便于验收截图），默认 minimal-light + 列表 */
-var params = new URLSearchParams(location.search);
-var initial = THEMES[0];
-for (var i = 0; i < THEMES.length; i++) {
-  if (THEMES[i].id === params.get('theme')) { initial = THEMES[i]; break; }
-}
-applyTheme(initial);
-if (params.get('layout') === 'grid') {
-  page.dataset.layout = 'grid';
-  layoutBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.layout === 'grid'); });
-}
-
-/* ============ 转化唯一性：吸底条 ↔ 微信卡联动（design-direction 法则八） ============ */
+/* ============ 转化唯一性：吸底条 ↔ 微信卡联动（design-direction 法则八，3 个预设一致成立） ============ */
 var ctaToggle = document.getElementById('ctaToggle');
 var ctaBar = document.querySelector('.cta-bar');
 var wechatCard = document.querySelector('.wechat');
@@ -538,8 +684,6 @@ var ctaOn = true;
 syncCta(ctaOn);
 ctaToggle.addEventListener('click', function () { ctaOn = !ctaOn; syncCta(ctaOn); });
 
-var ctaAction = document.querySelector('.cta-action');
-var ctaToast = document.getElementById('ctaToast');
 var toastTimer = null;
 ctaAction.addEventListener('click', function () {
   var done = function () {
@@ -548,9 +692,16 @@ ctaAction.addEventListener('click', function () {
     toastTimer = setTimeout(function () { ctaToast.style.opacity = '0'; }, 1800);
   };
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText('linxiaoman').then(done, done);
+    navigator.clipboard.writeText(state.ctaCopy).then(done, done);
   } else { done(); }
 });
+
+/* 支持 ?preset=<id>&theme=<id>&layout=list|grid 直达（便于验收截图）；预设只设默认值，URL 参数可覆盖 */
+var params = new URLSearchParams(location.search);
+applyTemplate(tplById(params.get('preset')) || TEMPLATES[0]);
+var themeParam = themeById(params.get('theme'));
+if (themeParam) applyTheme(themeParam);
+if (params.get('layout') === 'list' || params.get('layout') === 'grid') setLayout(params.get('layout'));
 </script>
 </body>
 </html>
