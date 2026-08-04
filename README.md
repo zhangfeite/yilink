@@ -61,7 +61,7 @@ pnpm dev
 | <code>LEMONSQUEEZY_CHECKOUT_URL_MINI</code> / <code>LEMONSQUEEZY_CHECKOUT_URL_PRO</code> | 否         | 两个套餐的 HTTPS 结账链接；两个都有效时，设置页才展示升级入口。                                           |
 | <code>NEXT_PUBLIC_PRICE_MINI</code> / <code>NEXT_PUBLIC_PRICE_PRO</code>                 | 否         | 设置页显示的套餐价格文案，默认分别为 <code>$12</code> 与 <code>$25</code>。                               |
 
-当前 Prisma datasource 是 SQLite。若计划使用 PostgreSQL 或部署到 Vercel，请先阅读 [海外托管说明](docs/deploy/vercel.md)；该路径需要先完成 PostgreSQL 兼容改造，不能只替换连接字符串。
+当前 Prisma datasource 是 SQLite。海外托管的官方路径是 [Cloudflare Workers + D1](docs/deploy/cloudflare.md)（D1 与 SQLite 同方言，迁移零改造，本地已验证全链路）。Vercel 路径见 [说明](docs/deploy/vercel.md)，需先完成 PostgreSQL 兼容改造。
 
 ## 境内部署合规提示
 

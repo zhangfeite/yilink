@@ -39,9 +39,10 @@ export async function PUT(
     return notFoundResponse();
   }
 
-  await db.$transaction(async (transaction) => {
-    await transaction.block.deleteMany({ where: { pageId } });
-    await transaction.block.createMany({
+  // 批量事务形态（D1 不支持交互式事务，数组形式两端通用）
+  await db.$transaction([
+    db.block.deleteMany({ where: { pageId } }),
+    db.block.createMany({
       data: parsed.data.map((block, position) => ({
         pageId,
         type: block.type,
@@ -50,8 +51,8 @@ export async function PUT(
         position,
         config: block.config as Prisma.InputJsonValue,
       })),
-    });
-  });
+    }),
+  ]);
 
   const blocks = await db.block.findMany({
     where: { pageId },

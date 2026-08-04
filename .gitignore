@@ -23,3 +23,8 @@ apps/web/prisma/data/
 apps/web/data/
 *.db
 *.db-journal
+.dev.vars
+
+apps/web/src/generated/
+.open-next/
+.wrangler/

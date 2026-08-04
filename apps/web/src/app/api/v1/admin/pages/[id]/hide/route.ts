@@ -33,15 +33,16 @@ export async function POST(
     return notFoundResponse();
   }
 
-  const hiddenPage = await db.$transaction(async (transaction) => {
-    const updatedPage = await transaction.page.update({
+  // 批量事务形态（D1 不支持交互式事务）
+  const [hiddenPage] = await db.$transaction([
+    db.page.update({
       where: { id: page.id },
       data: {
         status: 'HIDDEN',
         hiddenReason: parsedBody.data.reason,
       },
-    });
-    await transaction.moderationRecord.create({
+    }),
+    db.moderationRecord.create({
       data: {
         targetType: 'page',
         targetId: page.id,
@@ -50,9 +51,9 @@ export async function POST(
         detail: { reason: parsedBody.data.reason },
         reviewedBy: adminId,
       },
-    });
+    }),
     // 隐藏是人工已作出的审核结论，队列中的同页待审项无需继续占用审核席位。
-    await transaction.moderationRecord.updateMany({
+    db.moderationRecord.updateMany({
       where: {
         targetType: 'page',
         targetId: page.id,
@@ -60,10 +61,8 @@ export async function POST(
         reviewedBy: null,
       },
       data: { reviewedBy: adminId },
-    });
-
-    return updatedPage;
-  });
+    }),
+  ]);
   revalidateTag(pageCacheTag(page.slug), { expire: 0 });
 
   return NextResponse.json({ page: hiddenPage });

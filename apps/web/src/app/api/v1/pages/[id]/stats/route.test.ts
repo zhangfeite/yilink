@@ -47,9 +47,9 @@ describe('/api/v1/pages/:id/stats', () => {
     });
     await db.clickEvent.createMany({
       data: [
-        { id: 1n, pageId: page.id, kind: 'VIEW', tsBucket: today, ipHash: 'today-a' },
-        { id: 2n, pageId: page.id, kind: 'VIEW', tsBucket: today, ipHash: 'today-a' },
-        { id: 3n, pageId: page.id, kind: 'CLICK', tsBucket: today, ipHash: 'today-b' },
+        { pageId: page.id, kind: 'VIEW', tsBucket: today, ipHash: 'today-a' },
+        { pageId: page.id, kind: 'VIEW', tsBucket: today, ipHash: 'today-a' },
+        { pageId: page.id, kind: 'CLICK', tsBucket: today, ipHash: 'today-b' },
       ],
     });
 

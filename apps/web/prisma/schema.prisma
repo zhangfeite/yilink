@@ -1,5 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  // Cloudflare Workers：官方路径——默认输出位置 + driverAdapters，
+  // OpenNext 构建期会 patch 该 client 适配 workerd（勿自定义 output）
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -67,7 +70,7 @@ enum BlockType { LINK SOCIAL TEXT IMAGE WECHAT QR DIVIDER }
 enum BlockSize { SM MD LG }
 
 model ClickEvent {
-  id        BigInt   @id @default(autoincrement())
+  id        String   @id @default(cuid())
   pageId    String
   blockId   String?
   kind      EventKind // VIEW | CLICK
@@ -212,7 +215,7 @@ enum BlockSize {
 }
 
 model ClickEvent {
-  id        BigInt   @id @default(autoincrement())
+  id        String   @id @default(cuid())
   pageId    String
   blockId   String?
   kind      EventKind // VIEW | CLICK

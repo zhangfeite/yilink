@@ -35,5 +35,15 @@
     "prettier": "^3.8.0",
     "typescript": "^5.9.3",
     "vitest": "4.1.10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "@swc/core",
+      "@parcel/watcher"
+    ]
   }
 }

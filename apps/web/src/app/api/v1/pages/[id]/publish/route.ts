@@ -59,18 +59,17 @@ export async function POST(
     return apiError(422, 'MODERATION_BLOCKED', '内容未通过审核');
   }
 
-  const publishedPage = await db.$transaction(async (transaction) => {
-    const updatedPage = await transaction.page.update({
+  // 批量事务形态（D1 不支持交互式事务）
+  const [publishedPage] = await db.$transaction([
+    db.page.update({
       where: { id: page.id },
       data: {
         status: 'PUBLISHED',
         publishedAt: new Date(),
       },
-    });
-    await transaction.moderationRecord.create({ data: moderationRecord });
-
-    return updatedPage;
-  });
+    }),
+    db.moderationRecord.create({ data: moderationRecord }),
+  ]);
   revalidateTag(pageCacheTag(page.slug), { expire: 0 });
 
   return NextResponse.json({ page: publishedPage });

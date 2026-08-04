@@ -1,0 +1,38 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "yilink",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      // 业务库：schema 与 prisma/migrations 完全复用（D1 即 SQLite 方言）
+      "binding": "DB",
+      "database_name": "yilink-db",
+      "database_id": "local-placeholder-main"
+    },
+    {
+      // OpenNext tag cache（revalidateTag 跨隔离即时失效）
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "yilink-tag-cache",
+      "database_id": "local-placeholder-tagcache"
+    }
+  ],
+  "r2_buckets": [
+    {
+      // OpenNext incremental cache（unstable_cache 持久层）
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "yilink-inc-cache"
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_APP_URL": "https://yilink.app"
+  }
+  // 机密用 wrangler secret put 配置：AUTH_SECRET、AUTH_URL、
+  // LEMONSQUEEZY_*、WECHAT_JSSDK_*（见 docs/deploy/cloudflare.md）
+  // 自定义域名：Cloudflare 控制台 Workers → yilink → Domains 绑定 yilink.app
+}

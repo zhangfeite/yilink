@@ -37,7 +37,6 @@ describe('daily stats rollup', () => {
     await db.clickEvent.createMany({
       data: [
         {
-          id: 101n,
           pageId: page.id,
           kind: 'VIEW',
           tsBucket: yesterday,
@@ -46,7 +45,6 @@ describe('daily stats rollup', () => {
           ipHash: 'visitor-a',
         },
         {
-          id: 102n,
           pageId: page.id,
           kind: 'VIEW',
           tsBucket: yesterday,
@@ -55,7 +53,6 @@ describe('daily stats rollup', () => {
           ipHash: 'visitor-a',
         },
         {
-          id: 103n,
           pageId: page.id,
           blockId: 'link-a',
           kind: 'CLICK',
@@ -65,7 +62,6 @@ describe('daily stats rollup', () => {
           ipHash: 'visitor-a',
         },
         {
-          id: 104n,
           pageId: page.id,
           blockId: 'social-a',
           kind: 'CLICK',
@@ -75,7 +71,6 @@ describe('daily stats rollup', () => {
           ipHash: 'visitor-b',
         },
         {
-          id: 105n,
           pageId: page.id,
           kind: 'VIEW',
           tsBucket: oldDay,

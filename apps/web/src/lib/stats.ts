@@ -1,4 +1,4 @@
-import { createHash, randomInt } from 'node:crypto';
+import { createHash } from 'node:crypto';
 
 import { z } from 'zod';
 
@@ -44,8 +44,6 @@ interface RateLimitBucket {
 }
 
 const eventRateLimitBuckets = new Map<string, RateLimitBucket>();
-const clickEventInstanceOffset = BigInt(randomInt(1_000_000));
-let lastClickEventId = 0n;
 
 function isHostOrSubdomain(host: string, domain: string): boolean {
   return host === domain || host.endsWith(`.${domain}`);
@@ -118,14 +116,6 @@ export function clientIp(headers: Headers): string {
 export function hashIp(ip: string, at: Date, secret = process.env.AUTH_SECRET ?? ''): string {
   const utcDate = startOfUtcDay(at).toISOString().slice(0, 10);
   return createHash('sha256').update(`${ip}${secret}${utcDate}`).digest('hex');
-}
-
-export function nextClickEventId(now = Date.now()): bigint {
-  // SQLite BIGINT primary keys need an explicit value; this is monotonic per process and collision-resistant
-  // across instances without persisting any visitor data in the identifier.
-  const candidate = BigInt(now) * 1_000_000n + clickEventInstanceOffset;
-  lastClickEventId = candidate > lastClickEventId ? candidate : lastClickEventId + 1n;
-  return lastClickEventId;
 }
 
 export function allowEventForIp(ipHash: string, now = Date.now()): boolean {

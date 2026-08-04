@@ -6,7 +6,6 @@ import {
   eventPayloadSchema,
   hashIp,
   startOfUtcHour,
-  nextClickEventId,
 } from '../../../lib/stats';
 import { classifyUserAgent } from '../../../lib/ua';
 
@@ -38,7 +37,6 @@ export async function POST(request: Request): Promise<Response> {
 
     await db.clickEvent.create({
       data: {
-        id: nextClickEventId(now.getTime()),
         pageId: parsed.data.pageId,
         blockId: parsed.data.blockId,
         kind: parsed.data.kind,

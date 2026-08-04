@@ -1,7 +1,13 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 // API handler 测试直连 SQLite：独立 test.db + 串行执行（用例含全表清空，并行会互踩）。
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   test: {
     include: ['src/**/*.test.ts'],
     fileParallelism: false,

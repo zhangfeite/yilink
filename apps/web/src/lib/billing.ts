@@ -150,24 +150,29 @@ function toPrismaJson(payload: JsonRecord): Prisma.InputJsonObject {
   return payload as unknown as Prisma.InputJsonObject;
 }
 
+/**
+ * D1 不支持交互式事务：读在事务外完成，写用批量事务 `$transaction([])`。
+ * 幂等仍由 providerOrderId 唯一键兜底（读-判-写竞态时 P2002 走 catch 回收）。
+ */
 async function persistPaidOrder(order: BillableOrder, userId: string, payload: JsonRecord) {
   try {
-    await db.$transaction(async (transaction) => {
-      const existingOrder = await transaction.order.findUnique({
-        where: { providerOrderId: order.providerOrderId },
-        select: { id: true },
-      });
-      if (existingOrder) return;
+    const existingOrder = await db.order.findUnique({
+      where: { providerOrderId: order.providerOrderId },
+      select: { id: true },
+    });
+    if (existingOrder) return;
 
-      const user = await transaction.user.findUnique({
-        where: { id: userId },
-        select: { plan: true },
-      });
-      if (!user) {
-        throw new Error('LemonSqueezy order user disappeared before it could be persisted');
-      }
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      select: { plan: true },
+    });
+    if (!user) {
+      throw new Error('LemonSqueezy order user disappeared before it could be persisted');
+    }
 
-      await transaction.order.create({
+    const purchasedPlan = planForProduct(order.product);
+    const writes: Prisma.PrismaPromise<unknown>[] = [
+      db.order.create({
         data: {
           userId,
           provider: 'lemonsqueezy',
@@ -177,19 +182,20 @@ async function persistPaidOrder(order: BillableOrder, userId: string, payload: J
           status: 'paid',
           raw: toPrismaJson(payload),
         },
-      });
-
-      const purchasedPlan = planForProduct(order.product);
-      if (PLAN_RANK[purchasedPlan] > PLAN_RANK[user.plan]) {
-        await transaction.user.update({
+      }),
+    ];
+    if (PLAN_RANK[purchasedPlan] > PLAN_RANK[user.plan]) {
+      writes.push(
+        db.user.update({
           where: { id: userId },
           data: { plan: purchasedPlan },
-        });
-      }
-    });
+        }),
+      );
+    }
+    await db.$transaction(writes);
   } catch (error) {
-    // A concurrent delivery can lose the unique-key race after both transactions
-    // observe no order. If the canonical row now exists, the webhook is handled.
+    // A concurrent delivery can lose the unique-key race after both observers
+    // see no order. If the canonical row now exists, the webhook is handled.
     const existingOrder = await db.order.findUnique({
       where: { providerOrderId: order.providerOrderId },
       select: { id: true },
@@ -199,67 +205,64 @@ async function persistPaidOrder(order: BillableOrder, userId: string, payload: J
   }
 }
 
-async function recalculateUserPlan(transaction: Prisma.TransactionClient, userId: string) {
-  const remainingOrders = await transaction.order.findMany({
+async function computeNextPlan(userId: string, excludeProviderOrderId?: string): Promise<BillingPlan> {
+  const remainingOrders = await db.order.findMany({
     where: {
       userId,
       status: { not: 'refunded' },
+      ...(excludeProviderOrderId ? { providerOrderId: { not: excludeProviderOrderId } } : {}),
     },
     select: { product: true },
   });
-  const nextPlan = remainingOrders.reduce<BillingPlan>((highestPlan, remainingOrder) => {
+  return remainingOrders.reduce<BillingPlan>((highestPlan, remainingOrder) => {
     const candidatePlan = planForProduct(remainingOrder.product);
     return PLAN_RANK[candidatePlan] > PLAN_RANK[highestPlan] ? candidatePlan : highestPlan;
   }, 'FREE');
-
-  await transaction.user.update({
-    where: { id: userId },
-    data: { plan: nextPlan },
-  });
 }
 
 async function markOrderRefunded(providerOrderId: string) {
-  return db.$transaction(async (transaction) => {
-    const order = await transaction.order.findUnique({
-      where: { providerOrderId },
-      select: { userId: true },
-    });
-    if (!order) return false;
+  const order = await db.order.findUnique({
+    where: { providerOrderId },
+    select: { userId: true },
+  });
+  if (!order) return false;
 
-    await transaction.order.update({
+  const nextPlan = await computeNextPlan(order.userId, providerOrderId);
+  await db.$transaction([
+    db.order.update({
       where: { providerOrderId },
       data: { status: 'refunded' },
-    });
-    await recalculateUserPlan(transaction, order.userId);
-    return true;
-  });
+    }),
+    db.user.update({
+      where: { id: order.userId },
+      data: { plan: nextPlan },
+    }),
+  ]);
+  return true;
 }
 
 async function persistRefundedOrder(order: BillableOrder, userId: string, payload: JsonRecord) {
   try {
-    await db.$transaction(async (transaction) => {
-      const existingOrder = await transaction.order.findUnique({
-        where: { providerOrderId: order.providerOrderId },
-        select: { userId: true },
-      });
-      if (existingOrder) {
-        await transaction.order.update({
-          where: { providerOrderId: order.providerOrderId },
-          data: { status: 'refunded' },
-        });
-        await recalculateUserPlan(transaction, existingOrder.userId);
-        return;
-      }
+    const existingOrder = await db.order.findUnique({
+      where: { providerOrderId: order.providerOrderId },
+      select: { userId: true },
+    });
+    if (existingOrder) {
+      await markOrderRefunded(order.providerOrderId);
+      return;
+    }
 
-      const user = await transaction.user.findUnique({
-        where: { id: userId },
-        select: { id: true },
-      });
-      if (!user) {
-        throw new Error('LemonSqueezy refund user disappeared before it could be persisted');
-      }
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+    if (!user) {
+      throw new Error('LemonSqueezy refund user disappeared before it could be persisted');
+    }
 
-      await transaction.order.create({
+    const nextPlan = await computeNextPlan(user.id, order.providerOrderId);
+    await db.$transaction([
+      db.order.create({
         data: {
           userId,
           provider: 'lemonsqueezy',
@@ -269,9 +272,12 @@ async function persistRefundedOrder(order: BillableOrder, userId: string, payloa
           status: 'refunded',
           raw: toPrismaJson(payload),
         },
-      });
-      await recalculateUserPlan(transaction, user.id);
-    });
+      }),
+      db.user.update({
+        where: { id: user.id },
+        data: { plan: nextPlan },
+      }),
+    ]);
   } catch (error) {
     // A paid-order delivery can win the race after the initial lookup. Mark the
     // canonical row refunded rather than allowing a later replay to grant access.

@@ -28,15 +28,16 @@ export async function POST(
     return notFoundResponse();
   }
 
-  const restoredPage = await db.$transaction(async (transaction) => {
-    const updatedPage = await transaction.page.update({
+  // 批量事务形态（D1 不支持交互式事务）
+  const [restoredPage] = await db.$transaction([
+    db.page.update({
       where: { id: page.id },
       data: {
         status: 'PUBLISHED',
         hiddenReason: null,
       },
-    });
-    await transaction.moderationRecord.create({
+    }),
+    db.moderationRecord.create({
       data: {
         targetType: 'page',
         targetId: page.id,
@@ -45,10 +46,8 @@ export async function POST(
         detail: { action: 'restore' },
         reviewedBy: adminId,
       },
-    });
-
-    return updatedPage;
-  });
+    }),
+  ]);
   revalidateTag(pageCacheTag(page.slug), { expire: 0 });
 
   return NextResponse.json({ page: restoredPage });
