@@ -107,6 +107,24 @@ describe('/api/v1/pages', () => {
     });
   });
 
+  it('allows a PRO_MINI user to create a fourth page', async () => {
+    await db.user.update({
+      where: { id: userId },
+      data: { plan: 'PRO_MINI' },
+    });
+    await db.page.createMany({
+      data: [
+        { userId, slug: 'mini-page-one', title: '页面一' },
+        { userId, slug: 'mini-page-two', title: '页面二' },
+        { userId, slug: 'mini-page-three', title: '页面三' },
+      ],
+    });
+
+    const response = await POST(createPageRequest({ slug: 'mini-page-four', title: '页面四' }));
+
+    expect(response.status).toBe(201);
+  });
+
   it('lists only the current user pages with block counts', async () => {
     const ownPage = await db.page.create({
       data: { userId, slug: 'own-page', title: '我的页面' },

@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { PLAN_LIMITS } from './plan';
+
 const ctaValueSchema = z.string();
 
 export const ctaConfigSchema = z
@@ -23,4 +25,5 @@ export const ctaConfigSchema = z
 
 export type CtaConfig = z.infer<typeof ctaConfigSchema>;
 
-export const FREE_PAGE_LIMIT = 3;
+/** @deprecated Use PLAN_LIMITS.FREE.pages instead. */
+export const FREE_PAGE_LIMIT = PLAN_LIMITS.FREE.pages;

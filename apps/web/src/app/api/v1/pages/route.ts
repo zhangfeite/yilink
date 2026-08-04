@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { FREE_PAGE_LIMIT } from '@yilink/shared';
+import { PLAN_LIMITS } from '@yilink/shared';
 import { NextResponse } from 'next/server';
 
 import { apiError, currentUserId, invalidInputResponse, requestJson } from '../../../../lib/api';
@@ -44,11 +44,10 @@ export async function POST(request: Request) {
     return apiError(401, 'UNAUTHORIZED', '请先登录');
   }
 
-  if (user.plan === 'FREE') {
-    const pageCount = await db.page.count({ where: { userId } });
-    if (pageCount >= FREE_PAGE_LIMIT) {
-      return apiError(403, 'PAGE_LIMIT', `免费用户最多创建 ${FREE_PAGE_LIMIT} 个主页`);
-    }
+  const pageLimit = PLAN_LIMITS[user.plan].pages;
+  const pageCount = await db.page.count({ where: { userId } });
+  if (pageCount >= pageLimit) {
+    return apiError(403, 'PAGE_LIMIT', `当前套餐最多创建 ${pageLimit} 个主页`);
   }
 
   try {
