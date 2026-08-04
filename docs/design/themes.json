@@ -3,187 +3,203 @@
     "id": "minimal-light",
     "nameZh": "极简浅色",
     "nameEn": "Minimal Light",
-    "palette": {
-      "bg": "#FFFFFF",
-      "surface": "#F6F6F4",
+    "neutral": {
+      "pageBg": "#F3F3F1",
+      "card": "#FFFFFF",
       "text": "#161616",
-      "subtext": "#6E6E6E",
-      "accent": "#161616",
-      "buttonBg": "#161616",
-      "buttonText": "#FFFFFF",
-      "border": "#E6E6E2"
+      "subtext": "#666664",
+      "hairline": "#E5E5E1"
     },
-    "background": { "type": "solid", "value": "#FFFFFF" },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
-      "headingWeight": 600
+    "accent": "#1C1C1A",
+    "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F3F3F1" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 8px 30px rgba(0, 0, 0, 0.06)" },
+    "typography": {
+      "display": { "size": 36, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "none" },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "ink-dark",
     "nameZh": "墨夜暗色",
     "nameEn": "Ink Dark",
-    "palette": {
-      "bg": "#0E0E11",
-      "surface": "#1A1A1F",
+    "neutral": {
+      "pageBg": "#0E0E11",
+      "card": "#1A1A1F",
       "text": "#F4F4F2",
       "subtext": "#A0A0A8",
-      "accent": "#E5C15C",
-      "buttonBg": "#E5C15C",
-      "buttonText": "#151310",
-      "border": "#2C2C33"
+      "hairline": "#2C2C33"
     },
+    "accent": "#E5C15C",
+    "accentOn": "#151310",
     "background": { "type": "solid", "value": "#0E0E11" },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
-      "headingWeight": 600
+    "texture": "noise",
+    "elevation": { "cardShadow": "inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 28px rgba(0, 0, 0, 0.40)" },
+    "typography": {
+      "display": { "size": 36, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "cream-paper",
     "nameZh": "奶油纸感",
     "nameEn": "Cream Paper",
-    "palette": {
-      "bg": "#FAF5EC",
-      "surface": "#F2EBDD",
+    "neutral": {
+      "pageBg": "#F4EDDC",
+      "card": "#FFFCF5",
       "text": "#3A332B",
       "subtext": "#6E6455",
-      "accent": "#8C5A2E",
-      "buttonBg": "#3A332B",
-      "buttonText": "#FAF5EC",
-      "border": "#E4D9C4"
+      "hairline": "#E7DCC4"
     },
-    "background": { "type": "solid", "value": "#FAF5EC" },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
-      "headingWeight": 600
+    "accent": "#8C5A2E",
+    "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F4EDDC" },
+    "texture": "paper",
+    "elevation": { "cardShadow": "0 8px 30px rgba(90, 70, 40, 0.08)" },
+    "typography": {
+      "display": { "size": 36, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "16px", "button": "12px", "avatar": "50%" },
-    "buttonStyle": { "variant": "soft", "shadow": "none" },
+    "radius": { "card": "18px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "neon-gradient",
     "nameZh": "霓虹渐变",
     "nameEn": "Neon Gradient",
-    "palette": {
-      "bg": "#0B0A1F",
-      "surface": "#191736",
-      "text": "#F3F1FF",
-      "subtext": "#A6A0D8",
-      "accent": "#36E4FF",
-      "buttonBg": "#36E4FF",
-      "buttonText": "#071022",
-      "border": "#322C66"
+    "neutral": {
+      "pageBg": "#0A0E1E",
+      "card": "#171E3B",
+      "text": "#F0F2FA",
+      "subtext": "#9AA3C7",
+      "hairline": "#2A3160"
     },
+    "accent": "#36E4FF",
+    "accentOn": "#06202B",
     "background": {
       "type": "gradient",
-      "value": "linear-gradient(160deg, #0B0A1F 0%, #17123B 55%, #0E1B4D 100%)"
+      "value": "linear-gradient(165deg, #0A0E1E 0%, #111A3C 55%, #0B1F42 100%)"
     },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
-      "headingWeight": 700
+    "texture": "noise",
+    "elevation": { "cardShadow": "inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 32px rgba(2, 6, 20, 0.50)" },
+    "typography": {
+      "display": { "size": 36, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "bamboo-green",
     "nameZh": "竹青森系",
     "nameEn": "Bamboo Green",
-    "palette": {
-      "bg": "#F2F6F0",
-      "surface": "#FFFFFF",
+    "neutral": {
+      "pageBg": "#F0F5EE",
+      "card": "#FFFFFF",
       "text": "#1D3327",
       "subtext": "#57705F",
-      "accent": "#2E7D52",
-      "buttonBg": "#2E7D52",
-      "buttonText": "#FFFFFF",
-      "border": "#D7E2D4"
+      "hairline": "#D9E3D6"
     },
-    "background": { "type": "solid", "value": "#F2F6F0" },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
-      "headingWeight": 600
+    "accent": "#2E7D52",
+    "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F0F5EE" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 8px 30px rgba(30, 60, 40, 0.06)" },
+    "typography": {
+      "display": { "size": 36, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "outline", "shadow": "none" },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "vermilion",
     "nameZh": "朱砂中式",
     "nameEn": "Vermilion",
-    "palette": {
-      "bg": "#F6F1E7",
-      "surface": "#FDFAF3",
+    "neutral": {
+      "pageBg": "#F4EDDE",
+      "card": "#FDFAF3",
       "text": "#2B2420",
       "subtext": "#6E6253",
-      "accent": "#B23B2E",
-      "buttonBg": "#B23B2E",
-      "buttonText": "#FDF6E9",
-      "border": "#E2D6C0"
+      "hairline": "#E3D7BF"
     },
-    "background": { "type": "solid", "value": "#F6F1E7" },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Songti SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", serif",
-      "headingWeight": 700
+    "accent": "#B23B2E",
+    "accentOn": "#FDF6E9",
+    "background": { "type": "solid", "value": "#F4EDDE" },
+    "texture": "paper",
+    "elevation": { "cardShadow": "0 8px 30px rgba(70, 40, 20, 0.07)" },
+    "typography": {
+      "display": { "size": 36, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "8px", "button": "6px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "radius": { "card": "12px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "business-blue",
     "nameZh": "商务蓝",
     "nameEn": "Business Blue",
-    "palette": {
-      "bg": "#F4F7FB",
-      "surface": "#FFFFFF",
+    "neutral": {
+      "pageBg": "#F2F6FA",
+      "card": "#FFFFFF",
       "text": "#182230",
       "subtext": "#52647A",
-      "accent": "#1F5EFF",
-      "buttonBg": "#1F5EFF",
-      "buttonText": "#FFFFFF",
-      "border": "#D9E2EE"
+      "hairline": "#DDE5EF"
     },
-    "background": { "type": "solid", "value": "#F4F7FB" },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
-      "headingWeight": 600
+    "accent": "#1668DC",
+    "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F2F6FA" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 8px 30px rgba(20, 50, 90, 0.06)" },
+    "typography": {
+      "display": { "size": 36, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "10px", "button": "8px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "radius": { "card": "16px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "dopamine",
     "nameZh": "多巴胺撞色",
     "nameEn": "Dopamine",
-    "palette": {
-      "bg": "#FFF6E3",
-      "surface": "#FFFFFF",
+    "neutral": {
+      "pageBg": "#FFF3DC",
+      "card": "#FFFFFF",
       "text": "#211A12",
       "subtext": "#6B5C42",
-      "accent": "#FF4D8D",
-      "buttonBg": "#7C3AED",
-      "buttonText": "#FFFFFF",
-      "border": "#F0DFC0"
+      "hairline": "#EFDFC0"
     },
-    "background": { "type": "solid", "value": "#FFF6E3" },
-    "font": {
-      "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
-      "headingWeight": 700
+    "accent": "#D61F6E",
+    "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#FFF3DC" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 10px 30px rgba(120, 40, 70, 0.08)" },
+    "typography": {
+      "display": { "size": 38, "weight": 800, "tracking": "-0.02em" },
+      "section": { "size": 17, "weight": 700 },
+      "body": { "size": 15, "weight": 400 },
+      "caption": { "size": 12, "weight": 400 }
     },
-    "radius": { "card": "18px", "button": "20px", "avatar": "18px" },
-    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "radius": { "card": "22px", "sticker": "50%", "avatar": "22px" },
     "grid": { "gap": "14px" }
   }
 ]

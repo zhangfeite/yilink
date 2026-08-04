@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>一链 YiLink · 主题预览（8 主题 × 2 布局）</title>
+<title>一链 YiLink · 主题预览 v2（8 主题 × 2 布局）</title>
 <style>
   /* ============ 预览页外壳（不随主题变化） ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,288 +48,409 @@
   /* ============ 主题作用域：.page 以下全部走 CSS 变量 ============ */
   .stage { display: flex; justify-content: center; padding: 24px 12px 48px; }
   .page {
-    --bg: #fff; --surface: #f6f6f4; --text: #161616; --subtext: #6e6e6e;
-    --accent: #161616; --btn-bg: #161616; --btn-text: #fff; --border: #e6e6e2;
-    --radius-card: 14px; --radius-btn: 10px; --radius-avatar: 50%;
-    --gap: 12px; --font: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    --heading-weight: 600;
-    width: 100%; max-width: 480px; min-height: 720px;
-    font-family: var(--font);
+    --card: #fff; --text: #161616; --subtext: #666664; --hairline: #e5e5e1;
+    --accent: #1c1c1a; --accent-on: #fff;
+    --shadow: 0 8px 30px rgba(0,0,0,.06);
+    --r-card: 20px; --r-avatar: 50%; --gap: 12px;
+    --d-size: 36px; --d-weight: 800; --d-track: -0.02em;
+    --s-size: 17px; --s-weight: 700;
+    --b-size: 15px; --b-weight: 400;
+    --c-size: 12px; --c-weight: 400;
+    width: 100%; max-width: 480px; min-height: 760px;
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     color: var(--text);
-    padding: 32px 16px 40px;
+    padding: 40px 16px 56px;
     transition: background .25s ease;
   }
 
-  /* ---- 资料区 ---- */
-  .profile { text-align: center; margin-bottom: 24px; }
-  .avatar {
-    width: 88px; height: 88px; margin: 0 auto 14px;
-    border-radius: var(--radius-avatar);
-    background: var(--accent); color: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 34px; font-weight: var(--heading-weight);
-    border: 2px solid var(--border);
+  /* ---- 通用 ---- */
+  .card {
+    background: var(--card);
+    border-radius: var(--r-card);
+    box-shadow: var(--shadow);
   }
-  .profile h1 { font-size: 22px; font-weight: var(--heading-weight); letter-spacing: .02em; }
-  .bio { font-size: 14px; color: var(--subtext); margin-top: 6px; line-height: 1.6; }
+  .sec-title {
+    font-size: var(--s-size); font-weight: var(--s-weight);
+    color: var(--accent); letter-spacing: -0.01em;
+    margin: 0 4px 10px;
+  }
+  .caption {
+    font-size: var(--c-size); font-weight: var(--c-weight);
+    color: var(--subtext); text-align: center;
+  }
+  .flow > * + * { margin-top: var(--gap); }
+  .flow > .group { margin-top: calc(var(--gap) + 8px); }
 
-  /* ---- 区块通用 ---- */
-  .blocks { display: flex; flex-direction: column; gap: var(--gap); }
-  .block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
+  /* ---- 1. 身份卡（不对称：大字居左，头像右上错位悬置） ---- */
+  .identity {
+    position: relative;
+    padding: 26px 24px 24px;
+    margin-top: 18px; /* 给悬置头像让位 */
+  }
+  .identity .name-zone { padding-right: 104px; }
+  .identity h1 {
+    font-size: var(--d-size); font-weight: var(--d-weight);
+    letter-spacing: var(--d-track); line-height: 1.1;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .identity .role {
+    margin-top: 8px; font-size: 14px; color: var(--subtext);
+  }
+  .identity .avatar {
+    position: absolute; top: -18px; right: 20px;
+    width: 84px; height: 84px;
+    border-radius: var(--r-avatar);
+    background: var(--accent); color: var(--accent-on);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 700;
+    box-shadow: var(--shadow);
+  }
+  .identity .bio {
+    margin-top: 18px; font-size: var(--b-size); font-weight: var(--b-weight);
+    line-height: 1.75;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  /* ---- 链接卡（吃 buttonStyle） ---- */
-  .link {
-    display: flex; align-items: center; gap: 12px;
-    padding: 16px 18px; text-decoration: none; cursor: pointer;
-    border-radius: var(--radius-btn);
+  /* ---- 2. 主链接组（白纸卡 + 内容色缩略图 + →） ---- */
+  .link-cards { display: flex; flex-direction: column; gap: var(--gap); }
+  .link-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card); border-radius: var(--r-card);
+    box-shadow: var(--shadow);
+    padding: 14px 16px;
+    text-decoration: none; cursor: pointer;
     transition: transform .12s ease;
   }
-  .link:active { transform: scale(.985); }
-  .link strong { font-size: 15px; font-weight: var(--heading-weight); display: block; }
-  .link small { font-size: 12px; opacity: .72; display: block; margin-top: 3px; }
-  .link .thumb {
-    flex: none; width: 44px; height: 44px; border-radius: 8px;
-    background: rgba(127,127,127,.22);
+  .link-card:active { transform: scale(.985); }
+  .link-card .thumb {
+    flex: none; width: 52px; height: 52px; border-radius: 12px;
+    background: color-mix(in srgb, var(--subtext) 10%, var(--card));
+    border: 1px solid var(--hairline);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-  .page[data-variant="solid"] .link { background: var(--btn-bg); color: var(--btn-text); border: 1px solid transparent; }
-  .page[data-variant="outline"] .link { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
-  .page[data-variant="outline"] .link .thumb { background: rgba(127,127,127,.14); }
-  .page[data-variant="soft"] .link { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); color: var(--accent); border: 1px solid transparent; }
-  .page[data-shadow="sm"] .link { box-shadow: 0 1px 3px rgba(0,0,0,.18); }
-  .page[data-shadow="md"] .link { box-shadow: 0 6px 16px rgba(0,0,0,.24); }
-
-  /* ---- 社交图标行 ---- */
-  .social { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px; }
-  .dot {
-    width: 34px; height: 34px; border-radius: 50%;
-    border: 1.5px solid var(--border); background: var(--surface);
     color: var(--subtext);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; cursor: pointer;
   }
-  .dot:hover { border-color: var(--accent); color: var(--accent); }
+  .link-card .link-text { flex: 1; min-width: 0; }
+  .link-card .link-text strong {
+    display: block; font-size: 15px; font-weight: 600; color: var(--text);
+  }
+  .link-card .link-text small {
+    display: block; margin-top: 3px; font-size: 13px; color: var(--subtext);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .link-card .arrow { flex: none; font-size: 16px; color: var(--subtext); }
 
-  /* ---- 微信号复制块 ---- */
-  .wechat { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; }
-  .wechat .wx-label { font-size: 12px; color: var(--subtext); }
-  .wechat .wx-id { font-size: 14px; font-weight: 600; letter-spacing: .02em; }
+  /* 网格模式：仅第 2 组变 MD/LG 磁贴，卡面仍是白纸 */
+  .page[data-layout="grid"] .link-cards {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap);
+  }
+  .page[data-layout="grid"] .link-card.lg { grid-column: span 2; }
+  .page[data-layout="grid"] .link-card.md {
+    flex-direction: column; align-items: flex-start; gap: 12px;
+    min-height: 148px; padding: 16px;
+  }
+  .page[data-layout="grid"] .link-card.md .arrow { display: none; }
+  .page[data-layout="grid"] .link-card.md .link-text small { white-space: normal; }
+
+  /* ---- 3. 平台贴纸卡（4-3 阵列） ---- */
+  .stickers { padding: 20px 20px 16px; }
+  .stickers .sec-title { margin: 0 0 16px; }
+  .sticker-grid {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 16px 18px; max-width: 284px; margin: 0 auto;
+  }
+  .sticker {
+    flex: none; width: 56px; height: 56px; border-radius: 50%;
+    display: block; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    transition: transform .12s ease;
+  }
+  .sticker:active { transform: scale(.94); }
+  .sticker svg { display: block; width: 100%; height: 100%; }
+  .stickers .caption { margin-top: 16px; }
+
+  /* ---- 4. 微信卡 ---- */
+  .wechat { padding: 16px 18px 14px; }
+  .wechat .row { display: flex; align-items: center; gap: 12px; }
+  .wechat .wx-icon {
+    flex: none; width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--hairline);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+  }
+  .wechat .wx-id {
+    flex: 1; min-width: 0;
+    font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: .01em;
+  }
+  .wechat .wx-id small { display: block; font-size: 12px; font-weight: 400; color: var(--subtext); margin-top: 2px; }
   .copy-btn {
-    flex: none; border: 1px solid var(--border); background: var(--bg); color: var(--text);
-    border-radius: var(--radius-btn); padding: 6px 12px; font-size: 12px; cursor: pointer;
-    font-family: var(--font);
+    flex: none; border: 1.5px solid var(--accent); background: transparent;
+    color: var(--accent); border-radius: 999px;
+    padding: 6px 16px; font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
   }
-  .copy-btn.copied { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .copy-btn.copied { background: var(--accent); color: var(--accent-on); }
+  .wechat .caption { margin-top: 12px; }
 
-  /* ---- 图片占位 ---- */
-  .image { position: relative; min-height: 150px; }
-  .image .ph {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(135deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), var(--surface));
-    display: flex; align-items: center; justify-content: center;
-    color: var(--subtext); font-size: 12px; letter-spacing: .06em;
+  /* ---- 5. 吸底转化条（双拼，仅上缘圆角，常驻） ---- */
+  .cta-bar {
+    position: sticky; bottom: 0;
+    display: flex; align-items: stretch;
+    margin: calc(var(--gap) + 12px) -16px -56px;
+    border-radius: var(--r-card) var(--r-card) 0 0;
+    overflow: hidden;
+    box-shadow: 0 -6px 24px rgba(0,0,0,.08);
+  }
+  .cta-proof, .cta-action {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 16px 12px; font-size: 14px;
+  }
+  .cta-proof {
+    background: color-mix(in srgb, var(--accent) 12%, var(--card));
+    color: var(--accent); font-weight: 600;
+  }
+  .cta-action {
+    background: var(--accent); color: var(--accent-on); font-weight: 700;
+    cursor: pointer;
   }
 
-  /* ---- 文本块 ---- */
-  .text-block { padding: 14px 16px; font-size: 14px; line-height: 1.8; }
-  .text-block strong { font-weight: var(--heading-weight); }
-  .text-block a { color: var(--accent); }
-
-  /* ============ 网格布局（375px 基准 2 列；SM=1×1，MD=1×2，LG=跨2列×2行） ============ */
-  .page[data-layout="grid"] .blocks {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 84px;
-    grid-auto-flow: dense;
-    gap: var(--gap);
-  }
-  .page[data-layout="grid"] .size-sm { grid-column: span 1; grid-row: span 1; }
-  .page[data-layout="grid"] .size-md { grid-column: span 1; grid-row: span 2; }
-  .page[data-layout="grid"] .size-lg { grid-column: span 2; grid-row: span 2; }
-  .page[data-layout="grid"] .link { flex-direction: column; justify-content: center; text-align: center; padding: 12px; }
-  .page[data-layout="grid"] .link.size-lg { flex-direction: row; text-align: left; padding: 18px; }
-  .page[data-layout="grid"] .link.size-lg .thumb { width: 56px; height: 56px; }
-  .page[data-layout="grid"] .social { flex-wrap: wrap; gap: 8px; padding: 8px; }
-  .page[data-layout="grid"] .dot { width: 28px; height: 28px; font-size: 10px; }
-  .page[data-layout="grid"] .wechat { flex-direction: column; justify-content: center; gap: 4px; padding: 8px; text-align: center; }
-  .page[data-layout="grid"] .image { min-height: 0; height: 100%; }
-  .page[data-layout="grid"] .text-block { font-size: 12.5px; line-height: 1.7; padding: 12px; overflow: hidden; }
+  /* ---- 6. 页脚 ---- */
+  .footer { margin-top: 20px; }
 </style>
 </head>
 <body>
 
 <header class="chrome">
   <div class="chrome-inner">
-    <h2>一链 YiLink · 主题预览（示例数据：林小满）</h2>
+    <h2>一链 YiLink · 主题预览 v2（示例数据：林小满）</h2>
     <div class="theme-bar" id="themeBar"></div>
     <div class="layout-bar">
-      <button class="layout-btn active" data-layout="list">列表布局</button>
-      <button class="layout-btn" data-layout="grid">网格布局</button>
+      <button class="layout-btn active" data-layout="list" type="button" aria-label="切换到列表布局">列表布局</button>
+      <button class="layout-btn" data-layout="grid" type="button" aria-label="切换到网格布局">网格布局</button>
     </div>
-    <div class="hint">网格布局含 SM（社交/微信）· MD（约稿须知/图片/文本）· LG（作品集）三种尺寸，桌面端限宽 480px。</div>
+    <div class="hint">网格模式仅作用于主链接组（MD/LG 磁贴）；桌面端限宽 480px 居中。</div>
   </div>
 </header>
 
 <div class="stage">
-  <main class="page" id="page" data-layout="list" data-variant="solid" data-shadow="none">
-    <section class="profile">
-      <div class="avatar">林</div>
-      <h1>林小满</h1>
-      <p class="bio">插画师 / 约稿开放 / 全网同名</p>
+  <main class="page flow" id="page" data-layout="list">
+
+    <!-- 1. 身份卡 · 不对称构图 -->
+    <section class="card identity">
+      <div class="avatar" aria-hidden="true">林</div>
+      <div class="name-zone">
+        <h1>林小满</h1>
+        <p class="role">插画师 · 自由职业</p>
+      </div>
+      <p class="bio">画商业插画，也画绘本和头像。约稿开放中，档期与报价见下方「约稿须知」，全网同名，欢迎来聊。</p>
     </section>
 
-    <section class="blocks">
-      <!-- LINK · LG -->
-      <a class="block link size-lg" href="#" onclick="return false">
-        <span class="thumb">🎨</span>
-        <span class="link-text">
-          <strong>作品集 · Portfolio</strong>
-          <small>插画与商业案例精选（持续更新）</small>
-        </span>
-      </a>
-      <!-- LINK · MD -->
-      <a class="block link size-md" href="#" onclick="return false">
-        <span class="thumb">📋</span>
-        <span class="link-text">
-          <strong>约稿须知</strong>
-          <small>档期 / 报价 / 合作流程</small>
-        </span>
-      </a>
-      <!-- SOCIAL · SM -->
-      <div class="block social size-sm" aria-label="社交账号">
-        <span class="dot" title="微博">微</span>
-        <span class="dot" title="小红书">薯</span>
-        <span class="dot" title="B站">B</span>
-        <span class="dot" title="抖音">抖</span>
-        <span class="dot" title="X">X</span>
-      </div>
-      <!-- WECHAT · SM -->
-      <div class="block wechat size-sm">
-        <span>
-          <span class="wx-label">微信号</span><br>
-          <span class="wx-id">linxiaoman</span>
-        </span>
-        <button class="copy-btn" id="copyBtn" type="button">复制</button>
-      </div>
-      <!-- IMAGE · MD -->
-      <div class="block image size-md">
-        <div class="ph">图片占位 · 建议 4:3 裁剪</div>
-      </div>
-      <!-- TEXT · MD -->
-      <div class="block text-block size-md">
-        接稿范围：<strong>商业插画</strong>、<em>头像约稿</em>、绘本内页。
-        报价与排期见置顶「约稿须知」，急单请备注截止日期。
+    <!-- 2. 主链接组 -->
+    <section class="group" aria-label="作品与约稿">
+      <h2 class="sec-title">作品与约稿</h2>
+      <div class="link-cards">
+        <a class="link-card lg" href="#" onclick="return false">
+          <span class="thumb" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 3 3 4-4 4 4"/></svg>
+          </span>
+          <span class="link-text">
+            <strong>作品集 · Portfolio</strong>
+            <small>插画与商业案例精选（持续更新）</small>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="link-card md" href="#" onclick="return false">
+          <span class="thumb" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+          </span>
+          <span class="link-text">
+            <strong>约稿须知</strong>
+            <small>档期 / 报价 / 合作流程</small>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
       </div>
     </section>
+
+    <!-- 3. 平台贴纸卡 -->
+    <section class="card stickers group" aria-label="全网同名">
+      <h2 class="sec-title">全网同名</h2>
+      <div class="sticker-grid">
+        <span class="sticker" role="img" aria-label="微信" title="微信">
+          <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#07C160"/><ellipse cx="23.5" cy="24" rx="10" ry="8" fill="#fff"/><path d="M18 30.5l-2.5 5 5.5-3.2" fill="#fff"/><circle cx="20" cy="23" r="1.4" fill="#07C160"/><circle cx="27" cy="23" r="1.4" fill="#07C160"/><ellipse cx="34.5" cy="32.5" rx="8" ry="6.5" fill="#fff"/><path d="M39 37.5l2 4-4.5-2.5" fill="#fff"/><circle cx="31.8" cy="31.8" r="1.1" fill="#07C160"/><circle cx="37.2" cy="31.8" r="1.1" fill="#07C160"/></svg>
+        </span>
+        <span class="sticker" role="img" aria-label="B站" title="B站">
+          <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#fff"/><circle cx="28" cy="28" r="27.2" fill="none" stroke="#EBEBEB" stroke-width="1"/><rect x="14" y="21" width="28" height="21" rx="6" fill="none" stroke="#FB7299" stroke-width="3"/><path d="M22 21l-5-6.5M34 21l5-6.5" stroke="#FB7299" stroke-width="3" stroke-linecap="round"/><circle cx="23" cy="30.5" r="1.8" fill="#FB7299"/><circle cx="33" cy="30.5" r="1.8" fill="#FB7299"/></svg>
+        </span>
+        <span class="sticker" role="img" aria-label="抖音" title="抖音">
+          <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#161823"/><path transform="translate(-1.4,0)" d="M34 15c1 4 4 6 7 6v5c-3 0-5-1-7-2v9a7 7 0 1 1-7-7c1 0 2 .2 3 .5V15h4z" fill="#25F4EE"/><path transform="translate(1.4,0)" d="M34 15c1 4 4 6 7 6v5c-3 0-5-1-7-2v9a7 7 0 1 1-7-7c1 0 2 .2 3 .5V15h4z" fill="#FE2C55"/><path d="M34 15c1 4 4 6 7 6v5c-3 0-5-1-7-2v9a7 7 0 1 1-7-7c1 0 2 .2 3 .5V15h4z" fill="#fff"/></svg>
+        </span>
+        <span class="sticker" role="img" aria-label="小红书" title="小红书">
+          <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#fff"/><circle cx="28" cy="28" r="27.2" fill="none" stroke="#EBEBEB" stroke-width="1"/><rect x="14" y="14" width="28" height="28" rx="8" fill="#FF2442"/><text x="28" y="33" font-size="10" font-weight="800" fill="#fff" text-anchor="middle" font-family="-apple-system, sans-serif">RED</text></svg>
+        </span>
+        <span class="sticker" role="img" aria-label="微博" title="微博">
+          <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#fff"/><circle cx="28" cy="28" r="27.2" fill="none" stroke="#EBEBEB" stroke-width="1"/><path d="M11 29c5-8.5 10.5-12.5 17-12.5S40 20.5 45 29c-5 8.5-10.5 12.5-17 12.5S16 37.5 11 29z" fill="none" stroke="#E6162D" stroke-width="2.6"/><circle cx="28" cy="29" r="7" fill="none" stroke="#E6162D" stroke-width="2.6"/><circle cx="30" cy="29" r="3" fill="#E6162D"/></svg>
+        </span>
+        <span class="sticker" role="img" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#24292F"/><path d="M28 14c-8 0-13 5.6-13 12.7 0 5.6 3.7 10.4 8.8 12.1.6.1.9-.3.9-.6v-2.2c-3.6.8-4.4-1.5-4.4-1.5-.6-1.5-1.4-1.9-1.4-1.9-1.2-.8.1-.8.1-.8 1.3.1 2 1.3 2 1.3 1.1 2 3 1.4 3.7 1.1.1-.9.4-1.4.8-1.8-2.9-.3-5.9-1.4-5.9-6.3 0-1.4.5-2.5 1.3-3.4-.2-.3-.6-1.6.1-3.3 0 0 1-.3 3.4 1.3a11.8 11.8 0 0 1 6.2 0c2.4-1.6 3.4-1.3 3.4-1.3.7 1.7.3 3 .1 3.3.8.9 1.3 2 1.3 3.4 0 4.9-3 6-5.9 6.3.5.4.9 1.2.9 2.4v3.5c0 .3.3.7.9.6 5.1-1.7 8.7-6.5 8.7-12.1C41 19.6 36 14 28 14z" fill="#fff"/></svg>
+        </span>
+        <span class="sticker" role="img" aria-label="播客" title="播客">
+          <svg viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#8E44AD"/><circle cx="28" cy="18.5" r="3.4" fill="#fff"/><path d="M28 23.5c3 0 4.6 2.6 4.9 6.2l.4 6.2a1.8 1.8 0 0 1-3.6.2l-.5-5.6h-2.4l-.5 5.6a1.8 1.8 0 0 1-3.6-.2l.4-6.2c.3-3.6 1.9-6.2 4.9-6.2z" fill="#fff"/><path d="M20.5 34.5a11 11 0 0 1 0-11M35.5 34.5a11 11 0 0 0 0-11" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M16.5 38.5a17 17 0 0 1 0-19M39.5 38.5a17 17 0 0 0 0-19" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".65"/></svg>
+        </span>
+      </div>
+      <p class="caption">点击图标即可跳转对应平台</p>
+    </section>
+
+    <!-- 4. 微信卡 -->
+    <section class="card wechat group" aria-label="微信号">
+      <div class="row">
+        <span class="wx-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4.9A2.5 2.5 0 0 1 4 13.5v-8z"/></svg>
+        </span>
+        <span class="wx-id">linxiaoman<small>合作与约稿请加微信</small></span>
+        <button class="copy-btn" id="copyBtn" type="button" aria-label="复制微信号 linxiaoman">复制</button>
+      </div>
+      <p class="caption">点击复制微信号</p>
+    </section>
+
+    <!-- 5. 吸底转化条 -->
+    <div class="cta-bar">
+      <div class="cta-proof">累计访问 12,408</div>
+      <div class="cta-action" role="button" aria-label="加微信合作">+ 加微信合作</div>
+    </div>
+
+    <!-- 6. 页脚 -->
+    <footer class="footer caption">Powered by 一链 YiLink</footer>
+
   </main>
 </div>
 
 <script>
-/* ============ 主题数据（与 docs/design/themes.json 保持一致） ============ */
+/* ============ 主题数据（与 docs/design/themes.json 保持一致，v2 schema） ============ */
 var THEMES = [
   {
     "id": "minimal-light", "nameZh": "极简浅色", "nameEn": "Minimal Light",
-    "palette": { "bg": "#FFFFFF", "surface": "#F6F6F4", "text": "#161616", "subtext": "#6E6E6E", "accent": "#161616", "buttonBg": "#161616", "buttonText": "#FFFFFF", "border": "#E6E6E2" },
-    "background": { "type": "solid", "value": "#FFFFFF" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "none" },
+    "neutral": { "pageBg": "#F3F3F1", "card": "#FFFFFF", "text": "#161616", "subtext": "#666664", "hairline": "#E5E5E1" },
+    "accent": "#1C1C1A", "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F3F3F1" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 8px 30px rgba(0, 0, 0, 0.06)" },
+    "typography": { "display": { "size": 36, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "ink-dark", "nameZh": "墨夜暗色", "nameEn": "Ink Dark",
-    "palette": { "bg": "#0E0E11", "surface": "#1A1A1F", "text": "#F4F4F2", "subtext": "#A0A0A8", "accent": "#E5C15C", "buttonBg": "#E5C15C", "buttonText": "#151310", "border": "#2C2C33" },
+    "neutral": { "pageBg": "#0E0E11", "card": "#1A1A1F", "text": "#F4F4F2", "subtext": "#A0A0A8", "hairline": "#2C2C33" },
+    "accent": "#E5C15C", "accentOn": "#151310",
     "background": { "type": "solid", "value": "#0E0E11" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "texture": "noise",
+    "elevation": { "cardShadow": "inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 10px 28px rgba(0, 0, 0, 0.40)" },
+    "typography": { "display": { "size": 36, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "cream-paper", "nameZh": "奶油纸感", "nameEn": "Cream Paper",
-    "palette": { "bg": "#FAF5EC", "surface": "#F2EBDD", "text": "#3A332B", "subtext": "#6E6455", "accent": "#8C5A2E", "buttonBg": "#3A332B", "buttonText": "#FAF5EC", "border": "#E4D9C4" },
-    "background": { "type": "solid", "value": "#FAF5EC" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
-    "radius": { "card": "16px", "button": "12px", "avatar": "50%" },
-    "buttonStyle": { "variant": "soft", "shadow": "none" },
+    "neutral": { "pageBg": "#F4EDDC", "card": "#FFFCF5", "text": "#3A332B", "subtext": "#6E6455", "hairline": "#E7DCC4" },
+    "accent": "#8C5A2E", "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F4EDDC" },
+    "texture": "paper",
+    "elevation": { "cardShadow": "0 8px 30px rgba(90, 70, 40, 0.08)" },
+    "typography": { "display": { "size": 36, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "18px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "neon-gradient", "nameZh": "霓虹渐变", "nameEn": "Neon Gradient",
-    "palette": { "bg": "#0B0A1F", "surface": "#191736", "text": "#F3F1FF", "subtext": "#A6A0D8", "accent": "#36E4FF", "buttonBg": "#36E4FF", "buttonText": "#071022", "border": "#322C66" },
-    "background": { "type": "gradient", "value": "linear-gradient(160deg, #0B0A1F 0%, #17123B 55%, #0E1B4D 100%)" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 700 },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "neutral": { "pageBg": "#0A0E1E", "card": "#171E3B", "text": "#F0F2FA", "subtext": "#9AA3C7", "hairline": "#2A3160" },
+    "accent": "#36E4FF", "accentOn": "#06202B",
+    "background": { "type": "gradient", "value": "linear-gradient(165deg, #0A0E1E 0%, #111A3C 55%, #0B1F42 100%)" },
+    "texture": "noise",
+    "elevation": { "cardShadow": "inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 32px rgba(2, 6, 20, 0.50)" },
+    "typography": { "display": { "size": 36, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "bamboo-green", "nameZh": "竹青森系", "nameEn": "Bamboo Green",
-    "palette": { "bg": "#F2F6F0", "surface": "#FFFFFF", "text": "#1D3327", "subtext": "#57705F", "accent": "#2E7D52", "buttonBg": "#2E7D52", "buttonText": "#FFFFFF", "border": "#D7E2D4" },
-    "background": { "type": "solid", "value": "#F2F6F0" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
-    "radius": { "card": "14px", "button": "10px", "avatar": "50%" },
-    "buttonStyle": { "variant": "outline", "shadow": "none" },
+    "neutral": { "pageBg": "#F0F5EE", "card": "#FFFFFF", "text": "#1D3327", "subtext": "#57705F", "hairline": "#D9E3D6" },
+    "accent": "#2E7D52", "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F0F5EE" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 8px 30px rgba(30, 60, 40, 0.06)" },
+    "typography": { "display": { "size": 36, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "20px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "vermilion", "nameZh": "朱砂中式", "nameEn": "Vermilion",
-    "palette": { "bg": "#F6F1E7", "surface": "#FDFAF3", "text": "#2B2420", "subtext": "#6E6253", "accent": "#B23B2E", "buttonBg": "#B23B2E", "buttonText": "#FDF6E9", "border": "#E2D6C0" },
-    "background": { "type": "solid", "value": "#F6F1E7" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Songti SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", serif", "headingWeight": 700 },
-    "radius": { "card": "8px", "button": "6px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "neutral": { "pageBg": "#F4EDDE", "card": "#FDFAF3", "text": "#2B2420", "subtext": "#6E6253", "hairline": "#E3D7BF" },
+    "accent": "#B23B2E", "accentOn": "#FDF6E9",
+    "background": { "type": "solid", "value": "#F4EDDE" },
+    "texture": "paper",
+    "elevation": { "cardShadow": "0 8px 30px rgba(70, 40, 20, 0.07)" },
+    "typography": { "display": { "size": 36, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "12px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "business-blue", "nameZh": "商务蓝", "nameEn": "Business Blue",
-    "palette": { "bg": "#F4F7FB", "surface": "#FFFFFF", "text": "#182230", "subtext": "#52647A", "accent": "#1F5EFF", "buttonBg": "#1F5EFF", "buttonText": "#FFFFFF", "border": "#D9E2EE" },
-    "background": { "type": "solid", "value": "#F4F7FB" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 600 },
-    "radius": { "card": "10px", "button": "8px", "avatar": "50%" },
-    "buttonStyle": { "variant": "solid", "shadow": "sm" },
+    "neutral": { "pageBg": "#F2F6FA", "card": "#FFFFFF", "text": "#182230", "subtext": "#52647A", "hairline": "#DDE5EF" },
+    "accent": "#1668DC", "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#F2F6FA" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 8px 30px rgba(20, 50, 90, 0.06)" },
+    "typography": { "display": { "size": 36, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "16px", "sticker": "50%", "avatar": "50%" },
     "grid": { "gap": "12px" }
   },
   {
     "id": "dopamine", "nameZh": "多巴胺撞色", "nameEn": "Dopamine",
-    "palette": { "bg": "#FFF6E3", "surface": "#FFFFFF", "text": "#211A12", "subtext": "#6B5C42", "accent": "#FF4D8D", "buttonBg": "#7C3AED", "buttonText": "#FFFFFF", "border": "#F0DFC0" },
-    "background": { "type": "solid", "value": "#FFF6E3" },
-    "font": { "family": "-apple-system, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif", "headingWeight": 700 },
-    "radius": { "card": "18px", "button": "20px", "avatar": "18px" },
-    "buttonStyle": { "variant": "solid", "shadow": "md" },
+    "neutral": { "pageBg": "#FFF3DC", "card": "#FFFFFF", "text": "#211A12", "subtext": "#6B5C42", "hairline": "#EFDFC0" },
+    "accent": "#D61F6E", "accentOn": "#FFFFFF",
+    "background": { "type": "solid", "value": "#FFF3DC" },
+    "texture": "none",
+    "elevation": { "cardShadow": "0 10px 30px rgba(120, 40, 70, 0.08)" },
+    "typography": { "display": { "size": 38, "weight": 800, "tracking": "-0.02em" }, "section": { "size": 17, "weight": 700 }, "body": { "size": 15, "weight": 400 }, "caption": { "size": 12, "weight": 400 } },
+    "radius": { "card": "22px", "sticker": "50%", "avatar": "22px" },
     "grid": { "gap": "14px" }
   }
 ];
+
+/* 单色噪点 / 纸纹（内联 SVG data URI，零外部依赖；不透明度 2-3% 量级） */
+var TEXTURES = {
+  noise: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.05'/></svg>\")",
+  paper: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.35 0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23p)' opacity='0.045'/></svg>\")"
+};
 
 var page = document.getElementById('page');
 var themeBar = document.getElementById('themeBar');
 
 function applyTheme(t) {
-  var p = t.palette, s = page.style;
-  s.setProperty('--bg', p.bg);
-  s.setProperty('--surface', p.surface);
-  s.setProperty('--text', p.text);
-  s.setProperty('--subtext', p.subtext);
-  s.setProperty('--accent', p.accent);
-  s.setProperty('--btn-bg', p.buttonBg);
-  s.setProperty('--btn-text', p.buttonText);
-  s.setProperty('--border', p.border);
-  s.setProperty('--radius-card', t.radius.card);
-  s.setProperty('--radius-btn', t.radius.button);
-  s.setProperty('--radius-avatar', t.radius.avatar);
+  var n = t.neutral, ty = t.typography, s = page.style;
+  s.setProperty('--card', n.card);
+  s.setProperty('--text', n.text);
+  s.setProperty('--subtext', n.subtext);
+  s.setProperty('--hairline', n.hairline);
+  s.setProperty('--accent', t.accent);
+  s.setProperty('--accent-on', t.accentOn);
+  s.setProperty('--shadow', t.elevation.cardShadow);
+  s.setProperty('--r-card', t.radius.card);
+  s.setProperty('--r-avatar', t.radius.avatar);
   s.setProperty('--gap', t.grid.gap);
-  s.setProperty('--font', t.font.family);
-  s.setProperty('--heading-weight', t.font.headingWeight);
-  s.background = t.background.value;
-  page.dataset.variant = t.buttonStyle.variant;
-  page.dataset.shadow = t.buttonStyle.shadow;
+  s.setProperty('--d-size', ty.display.size + 'px');
+  s.setProperty('--d-weight', ty.display.weight);
+  s.setProperty('--d-track', ty.display.tracking);
+  s.setProperty('--s-size', ty.section.size + 'px');
+  s.setProperty('--s-weight', ty.section.weight);
+  s.setProperty('--b-size', ty.body.size + 'px');
+  s.setProperty('--b-weight', ty.body.weight);
+  s.setProperty('--c-size', ty.caption.size + 'px');
+  s.setProperty('--c-weight', ty.caption.weight);
+  var tex = TEXTURES[t.texture];
+  s.background = tex ? tex + ', ' + t.background.value : t.background.value;
   var pills = themeBar.querySelectorAll('.theme-pill');
   for (var i = 0; i < pills.length; i++) {
     pills[i].classList.toggle('active', pills[i].dataset.id === t.id);
@@ -341,10 +462,11 @@ THEMES.forEach(function (t) {
   b.type = 'button';
   b.className = 'theme-pill';
   b.dataset.id = t.id;
-  b.innerHTML = '<span class="swatches">' +
-    '<i style="background:' + t.palette.bg + '"></i>' +
-    '<i style="background:' + t.palette.accent + '"></i>' +
-    '<i style="background:' + t.palette.buttonBg + '"></i></span>' +
+  b.setAttribute('aria-label', '切换主题：' + t.nameZh + '（' + t.nameEn + '）');
+  b.innerHTML = '<span class="swatches" aria-hidden="true">' +
+    '<i style="background:' + t.neutral.pageBg + '"></i>' +
+    '<i style="background:' + t.neutral.card + '"></i>' +
+    '<i style="background:' + t.accent + '"></i></span>' +
     '<span>' + t.nameZh + '</span>';
   b.addEventListener('click', function () { applyTheme(t); });
   themeBar.appendChild(b);
@@ -370,9 +492,6 @@ copyBtn.addEventListener('click', function () {
       copyBtn.classList.remove('copied');
     }, 1500);
   }
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(done).catch(function () { fallback(); });
-  } else { fallback(); }
   function fallback() {
     var ta = document.createElement('textarea');
     ta.value = text;
@@ -382,6 +501,9 @@ copyBtn.addEventListener('click', function () {
     document.body.removeChild(ta);
     done();
   }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(fallback);
+  } else { fallback(); }
 });
 
 /* 支持 ?theme=<id>&layout=list|grid 直达（便于验收截图），默认 minimal-light + 列表 */
