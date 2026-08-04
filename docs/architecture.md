@@ -225,12 +225,13 @@ model Setting {
 | [spec-01](spec-01-scaffold.md) | Monorepo 脚手架：应用壳/Prisma/Auth/i18n/Docker/CI | Codex sol | **已派发** |
 | [spec-02](spec-02-themes.md) | 8 套主题 token + 网格视觉规范 + 预览页 | Kimi K3 | v1 交付但视觉被否决，**返工 → [spec-02b](spec-02b-themes-v2.md)**（设计法则见 [design-direction.md](design/design-direction.md)，约束后续一切视觉产出） |
 | [spec-03](spec-03-icons-metadata.md) | 平台图标元数据草稿（42 平台） | DeepSeek Flash | **已派发**（产出仅作草稿，需人工核色） |
-| spec-04 | 编辑器（区块 CRUD/拖拽/尺寸/移动端） | Codex | 待脚手架合入 |
-| spec-05 | 公开页渲染器（列表+网格+主题+微信适配） | Codex | 待 spec-02 产出 |
+| [spec-04](spec-04-pages-api.md) | Pages/Blocks API 层（CRUD/发布+审核钩子/导出/stats 占位） | Codex terra | **已派发**（wave 2） |
+| spec-04b | 编辑器 UI（区块 CRUD/拖拽/尺寸/移动端，消费 spec-04 API） | Codex | wave 3，待 04 合入 |
+| [spec-05](spec-05-public-renderer.md) | 公开页渲染器（列表+网格+主题+微信适配+吸底条+种子数据） | Codex sol | **已派发**（wave 2） |
 | spec-06 | 统计管道（采集/聚合/报表/导出） | Codex | 待脚手架合入 |
 | spec-07 | 二维码 + 海报生成 | Codex | 待 spec-02 产出 |
 | spec-08 | 审核管道 + 管理后台 | Codex | 待脚手架合入 |
 | spec-09 | 计费（LemonSqueezy）+ 套餐门控 | Codex | 待脚手架合入 |
-| spec-10 | packages/icons 实装（simple-icons 底座 + 自绘缺口） | Codex + 人工审 | 待 spec-03 核验 |
+| [spec-10](spec-10-icons-package.md) | packages/icons 实装（simple-icons 26 真实 + 16 自绘占位机制） | Codex terra | **已派发**（wave 2）；16 个自绘 glyph 为后续设计任务 |
 
 流程（按 CLAUDE.md 铁律）：每个 spec 附精确文件清单与验收命令；工人交付后 Claude 本体跑验收 + 评审；重要模块 Codex↔Claude 交叉评审 ≤2 轮；并行 Codex ≤4（`--ephemeral`）。
