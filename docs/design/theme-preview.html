@@ -228,8 +228,9 @@
     <div class="layout-bar">
       <button class="layout-btn active" data-layout="list" type="button" aria-label="切换到列表布局">列表布局</button>
       <button class="layout-btn" data-layout="grid" type="button" aria-label="切换到网格布局">网格布局</button>
+      <button class="layout-btn active" id="ctaToggle" type="button" aria-pressed="true" aria-label="开关吸底转化条">转化条 开</button>
     </div>
-    <div class="hint">网格模式仅作用于主链接组（MD/LG 磁贴）；桌面端限宽 480px 居中。</div>
+    <div class="hint">网格模式仅作用于主链接组（MD/LG 磁贴）；桌面端限宽 480px 居中。转化条开启时微信卡自动收起（转化唯一性：同一动作全页只出现一次），CTA 点击即复制微信号。</div>
   </div>
 </header>
 
@@ -314,7 +315,11 @@
       <p class="caption">点击复制微信号</p>
     </section>
 
-    <!-- 5. 吸底转化条 -->
+    <!-- 5. 吸底转化条（转化唯一性：开启时微信卡自动收起，CTA 点击即完成复制） -->
+    <style>
+      .toast { position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%); background: var(--card); color: var(--text); border: 1px solid var(--hairline); box-shadow: var(--shadow); border-radius: 999px; padding: 8px 18px; font-size: var(--c-size); opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 30; white-space: nowrap; }
+    </style>
+    <div class="toast" id="ctaToast" role="status">已复制微信号 linxiaoman，去微信添加</div>
     <div class="cta-bar">
       <div class="cta-proof">累计访问 12,408</div>
       <div class="cta-action" role="button" aria-label="加微信合作">+ 加微信合作</div>
@@ -517,6 +522,35 @@ if (params.get('layout') === 'grid') {
   page.dataset.layout = 'grid';
   layoutBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.layout === 'grid'); });
 }
+
+/* ============ 转化唯一性：吸底条 ↔ 微信卡联动（design-direction 法则八） ============ */
+var ctaToggle = document.getElementById('ctaToggle');
+var ctaBar = document.querySelector('.cta-bar');
+var wechatCard = document.querySelector('.wechat');
+function syncCta(on) {
+  ctaBar.style.display = on ? '' : 'none';
+  wechatCard.style.display = on ? 'none' : '';
+  ctaToggle.textContent = on ? '转化条 开' : '转化条 关';
+  ctaToggle.setAttribute('aria-pressed', String(on));
+  ctaToggle.classList.toggle('active', on);
+}
+var ctaOn = true;
+syncCta(ctaOn);
+ctaToggle.addEventListener('click', function () { ctaOn = !ctaOn; syncCta(ctaOn); });
+
+var ctaAction = document.querySelector('.cta-action');
+var ctaToast = document.getElementById('ctaToast');
+var toastTimer = null;
+ctaAction.addEventListener('click', function () {
+  var done = function () {
+    ctaToast.style.opacity = '1';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { ctaToast.style.opacity = '0'; }, 1800);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText('linxiaoman').then(done, done);
+  } else { done(); }
+});
 </script>
 </body>
 </html>
