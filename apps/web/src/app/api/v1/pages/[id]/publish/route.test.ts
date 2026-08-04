@@ -20,6 +20,7 @@ import { POST } from './route';
 const userId = 'publish-owner';
 
 async function clearDatabase() {
+  await db.moderationRecord.deleteMany();
   await db.block.deleteMany();
   await db.page.deleteMany();
   await db.order.deleteMany();
@@ -66,6 +67,13 @@ describe('/api/v1/pages/:id/publish', () => {
       status: 'DRAFT',
       publishedAt: null,
     });
+    await expect(
+      db.moderationRecord.findFirst({ where: { targetType: 'page', targetId: page.id } }),
+    ).resolves.toMatchObject({
+      provider: 'local-words',
+      verdict: 'block',
+      detail: { labels: ['blocked'] },
+    });
     expect(revalidateTagMock).not.toHaveBeenCalled();
   });
 
@@ -101,6 +109,36 @@ describe('/api/v1/pages/:id/publish', () => {
       status: 'PUBLISHED',
       publishedAt: expect.any(Date),
     });
+    await expect(
+      db.moderationRecord.findFirst({ where: { targetType: 'page', targetId: page.id } }),
+    ).resolves.toMatchObject({
+      provider: 'local-words',
+      verdict: 'pass',
+      detail: { labels: [] },
+    });
+  });
+
+  it('publishes review content and leaves its moderation record pending human review', async () => {
+    const page = await db.page.create({
+      data: { userId, slug: 'review-page', title: '待人工复核的主页', bio: '简介' },
+    });
+    moderationCheckMock.mockResolvedValue({ verdict: 'review', labels: ['需要复核'] });
+
+    const response = await POST(new Request('http://localhost'), pageContext(page.id));
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({
+      page: { id: page.id, status: 'PUBLISHED' },
+    });
+    await expect(
+      db.moderationRecord.findFirst({ where: { targetType: 'page', targetId: page.id } }),
+    ).resolves.toMatchObject({
+      provider: 'local-words',
+      verdict: 'review',
+      detail: { labels: ['需要复核'] },
+      reviewedBy: null,
+    });
+    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-page', 'max');
   });
 
   it('returns 404 before calling moderation for a page the user does not own', async () => {
