@@ -125,3 +125,13 @@ const fallbackTheme = (() => {
 export function getTheme(id: string | null | undefined): PublicTheme {
   return (id ? themesById.get(id) : undefined) ?? fallbackTheme;
 }
+
+/** 主题是否为深色底：用于 color-scheme 声明（防微信安卓等对浅色页强制反色破坏主题）。 */
+export function isDarkTheme(theme: PublicTheme): boolean {
+  const hex = theme.neutral.pageBg.trim();
+  const match = /^#?([0-9a-f]{6})$/i.exec(hex.replace(/^#([0-9a-f]{3})$/i, (_, s: string) => '#' + s.split('').map((c: string) => c + c).join('')));
+  if (!match) return false;
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(match[1].slice(i, i + 2), 16) / 255);
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return lum < 0.35;
+}

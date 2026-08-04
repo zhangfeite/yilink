@@ -196,12 +196,15 @@
 .sticker:focus-visible,
 .copyButton:focus-visible,
 .ctaAction:focus-visible {
+  /* 旧微信内核（Chrome<111）无 color-mix：先给实色兜底，新内核用下一行覆盖 */
+  outline: 2px solid var(--accent);
   outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
   outline-offset: 3px;
 }
 
 @media (hover: hover) {
   .linkCard:hover {
+    background: var(--card);
     background: color-mix(in srgb, var(--accent) 6%, var(--card));
   }
 }
@@ -215,6 +218,7 @@
   place-items: center;
   border: 1px solid var(--hairline);
   border-radius: 12px;
+  background: var(--card);
   background: color-mix(in srgb, var(--subtext) 8%, var(--card));
   color: var(--subtext);
   font-size: 18px;
@@ -527,11 +531,13 @@
   align-items: stretch;
   border-radius: var(--r-card) var(--r-card) 0 0;
   box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.08);
+  /* iPhone 全面屏（微信全屏 WebView）的 Home 指示条安全区 */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* 启用转化条时给页面留底部安全区，防内容被条遮挡 */
 .hasCtaBar {
-  padding-bottom: 78px;
+  padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px));
 }
 
 .ctaProof,
@@ -550,6 +556,7 @@
 }
 
 .ctaProof {
+  background: var(--card);
   background: color-mix(in srgb, var(--accent) 12%, var(--card));
   color: var(--accent);
   font-weight: 600;

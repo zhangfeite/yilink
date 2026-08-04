@@ -1,17 +1,20 @@
 import { pageCacheTag } from '@yilink/shared';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { unstable_cache } from 'next/cache';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { cache } from 'react';
+import { cache, type ReactNode } from 'react';
 
 import {
   PublicPageRenderer,
   UnavailablePage,
   type PublicPageData,
 } from '@/components/public/public-page';
+import { WechatShare } from '@/components/public/wechat-share';
 import { db } from '@/lib/db';
+import { getTheme, isDarkTheme } from '@/lib/themes';
 import { classifyUserAgent } from '@/lib/ua';
+import { getWechatJssdkConfig, wechatJssdkEnabled } from '@/lib/wechat-jssdk';
 
 interface PublicPageProps {
   params: Promise<{ slug: string }>;
@@ -117,7 +120,9 @@ export async function generateMetadata({ params }: PublicPageProps): Promise<Met
 
   const title = page.seoTitle?.trim() || page.title;
   const description = page.seoDesc?.trim() || page.bio?.trim() || undefined;
+  // 分享卡片缩略图：头像优先，无头像回落品牌兜底图（微信/QQ 会话卡片取 og:image）
   const avatarUrl = await absoluteImageUrl(page.avatarUrl);
+  const shareImage = avatarUrl ?? new URL('/share-default.png', await requestOrigin()).toString();
 
   return {
     title,
@@ -126,8 +131,26 @@ export async function generateMetadata({ params }: PublicPageProps): Promise<Met
       type: 'website',
       title,
       description,
-      images: avatarUrl ? [{ url: avatarUrl, alt: `${page.title}的头像` }] : undefined,
+      images: [{ url: shareImage, alt: `${page.title}的主页` }],
     },
+  };
+}
+
+export async function generateViewport({ params }: PublicPageProps): Promise<Viewport> {
+  const { slug } = await params;
+  const page = await loadPublicPage(slug);
+  if (!page || page.status !== 'PUBLISHED') {
+    return { width: 'device-width', initialScale: 1, viewportFit: 'cover' };
+  }
+
+  const theme = getTheme(page.themeId);
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    viewportFit: 'cover',
+    // 按主题声明明暗与浏览器 UI 色：阻止微信安卓「强制深色」反转浅色主题、避免暗色主题被套浅色框
+    themeColor: theme.neutral.pageBg,
+    colorScheme: isDarkTheme(theme) ? 'dark' : 'light',
   };
 }
 
@@ -142,5 +165,37 @@ export default async function PublicPage({ params }: PublicPageProps) {
   const requestHeaders = await headers();
   const uaClass = classifyUserAgent(requestHeaders.get('user-agent'));
 
-  return <PublicPageRenderer page={page satisfies PublicPageData} uaClass={uaClass} />;
+  // 微信内 + 已配置公众号 JS-SDK：注入自定义分享卡片（标题/摘要/缩略图）；否则零开销
+  let wechatShare: ReactNode = null;
+  if (uaClass === 'wechat' && wechatJssdkEnabled()) {
+    const origin = await requestOrigin();
+    const pagesHost = process.env.PAGES_HOST?.trim();
+    const host = requestHeaders.get('host')?.toLowerCase() ?? '';
+    const pageUrl =
+      pagesHost && host === pagesHost.toLowerCase()
+        ? `${origin}/${page.slug}`
+        : `${origin}/p/${page.slug}`;
+    const config = await getWechatJssdkConfig(pageUrl);
+    if (config) {
+      const avatarUrl = await absoluteImageUrl(page.avatarUrl);
+      wechatShare = (
+        <WechatShare
+          config={config}
+          share={{
+            title: page.seoTitle?.trim() || page.title,
+            desc: page.seoDesc?.trim() || page.bio?.trim() || `${page.title} 的主页`,
+            link: pageUrl,
+            imgUrl: avatarUrl ?? new URL('/share-default.png', origin).toString(),
+          }}
+        />
+      );
+    }
+  }
+
+  return (
+    <>
+      {wechatShare}
+      <PublicPageRenderer page={page satisfies PublicPageData} uaClass={uaClass} />
+    </>
+  );
 }

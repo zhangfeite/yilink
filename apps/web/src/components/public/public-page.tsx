@@ -2,7 +2,7 @@
 import { PlatformSticker, getPlatformIcon, platformIconIds } from '@yilink/icons';
 import type { CSSProperties, ReactNode } from 'react';
 
-import { getTheme, type PublicTheme } from '@/lib/themes';
+import { getTheme, isDarkTheme, type PublicTheme } from '@/lib/themes';
 import type { UaClass } from '@/lib/ua';
 
 import { PUBLIC_INTERACTION_SCRIPT } from './interaction-script';
@@ -94,6 +94,8 @@ function themeStyle(theme: PublicTheme): ThemeStyle {
       : theme.background.value;
 
   return {
+    // 元素级 color-scheme：公开页跟随主题明暗（防强制反色），不受全局 light 声明影响
+    colorScheme: isDarkTheme(theme) ? 'dark' : 'light',
     '--page-bg': theme.neutral.pageBg,
     '--page-background': background,
     '--card': theme.neutral.card,
