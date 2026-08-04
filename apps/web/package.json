@@ -16,6 +16,8 @@
     "db:migrate": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} prisma migrate dev",
     "db:deploy": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} prisma migrate deploy",
     "db:seed": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-../../.cache} DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} node prisma/seed.mjs",
+    "admin:grant": "node scripts/grant-admin.mjs",
+    "stats:rollup": "DATABASE_URL=${DATABASE_URL:-file:./data/yilink.db} node scripts/rollup-daily.mjs",
     "test": "vitest run"
   },
   "dependencies": {

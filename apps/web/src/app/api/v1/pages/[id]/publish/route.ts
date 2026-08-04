@@ -10,6 +10,7 @@ import {
   notFoundResponse,
 } from '../../../../../../lib/api';
 import { db } from '../../../../../../lib/db';
+import { moderationDetail } from '../../../../../../lib/moderation';
 import { pageIdSchema } from '../../../../../../lib/pages-api-schemas';
 
 const moderationProvider = new LocalWordsModerationProvider();
@@ -45,16 +46,30 @@ export async function POST(
     bio: page.bio,
     blocks: page.blocks.map((block) => block.config),
   });
+  const moderationRecord = {
+    targetType: 'page',
+    targetId: page.id,
+    provider: 'local-words',
+    verdict: moderation.verdict,
+    detail: moderationDetail(moderation.labels),
+  };
+
   if (moderation.verdict === 'block') {
+    await db.moderationRecord.create({ data: moderationRecord });
     return apiError(422, 'MODERATION_BLOCKED', '内容未通过审核');
   }
 
-  const publishedPage = await db.page.update({
-    where: { id: page.id },
-    data: {
-      status: 'PUBLISHED',
-      publishedAt: new Date(),
-    },
+  const publishedPage = await db.$transaction(async (transaction) => {
+    const updatedPage = await transaction.page.update({
+      where: { id: page.id },
+      data: {
+        status: 'PUBLISHED',
+        publishedAt: new Date(),
+      },
+    });
+    await transaction.moderationRecord.create({ data: moderationRecord });
+
+    return updatedPage;
   });
   revalidateTag(pageCacheTag(page.slug), 'max');
 
