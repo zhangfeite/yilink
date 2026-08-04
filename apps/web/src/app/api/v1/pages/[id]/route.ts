@@ -64,7 +64,7 @@ export async function PATCH(
     return notFoundResponse();
   }
 
-  const { ctaConfig, ...pageData } = parsed.data;
+  const { ctaConfig, themeConfig, ...pageData } = parsed.data;
   const page = await db.page.update({
     where: { id: pageId },
     data: {
@@ -74,6 +74,12 @@ export async function PATCH(
         : {
             ctaConfig:
               ctaConfig === null ? Prisma.DbNull : (ctaConfig as Prisma.InputJsonValue),
+          }),
+      ...(themeConfig === undefined
+        ? {}
+        : {
+            themeConfig:
+              themeConfig === null ? Prisma.DbNull : (themeConfig as Prisma.InputJsonValue),
           }),
     },
   });

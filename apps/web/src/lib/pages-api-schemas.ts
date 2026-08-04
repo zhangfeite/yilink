@@ -39,6 +39,7 @@ export const pageUpdateSchema = z
     seoTitle: z.string().trim().max(120).nullable(),
     seoDesc: z.string().trim().max(500).nullable(),
     ctaConfig: ctaConfigSchema,
+    themeConfig: z.record(z.string(), z.unknown()).nullable(),
   })
   .partial()
   .strict()
