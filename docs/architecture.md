@@ -223,7 +223,7 @@ model Setting {
 | 规格 | 内容 | 工人 | 状态 |
 |---|---|---|---|
 | [spec-01](spec-01-scaffold.md) | Monorepo 脚手架：应用壳/Prisma/Auth/i18n/Docker/CI | Codex sol | **已派发** |
-| [spec-02](spec-02-themes.md) | 8 套主题 token + 网格视觉规范 + 预览页 | Kimi K3 | **已派发** |
+| [spec-02](spec-02-themes.md) | 8 套主题 token + 网格视觉规范 + 预览页 | Kimi K3 | v1 交付但视觉被否决，**返工 → [spec-02b](spec-02b-themes-v2.md)**（设计法则见 [design-direction.md](design/design-direction.md)，约束后续一切视觉产出） |
 | [spec-03](spec-03-icons-metadata.md) | 平台图标元数据草稿（42 平台） | DeepSeek Flash | **已派发**（产出仅作草稿，需人工核色） |
 | spec-04 | 编辑器（区块 CRUD/拖拽/尺寸/移动端） | Codex | 待脚手架合入 |
 | spec-05 | 公开页渲染器（列表+网格+主题+微信适配） | Codex | 待 spec-02 产出 |
