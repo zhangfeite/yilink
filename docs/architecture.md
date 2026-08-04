@@ -207,7 +207,7 @@ model Setting {
 2. 无诱导话术组件；UI 不模仿微信原生样式（外链规范 2.16）。
 3. UA=micromessenger 时：App 下载类链接自动降级为「复制链接」；正常链接直接跳转。域名异常期的浏览器引导遮罩由 `Setting.degradeMode` 开关控制，默认关。
 4. 简化网格规范：移动 375px 基准 2 列 grid，`SM`=1 列 × 1 行（紧凑行高），`MD`=1 列 × 2 行，`LG`=跨 2 列；间距 token 由主题控制；桌面端容器限宽 480px 居中（保持手机版式，对齐 Bento 观感）。
-5. 主题 = 设计 token JSON（palette/background/font/radius/buttonStyle），`packages/shared` 定义 schema，`docs/design/themes.json` 为首批 8 套（spec-02 产出后并入 `apps/web`）。
+5. 主题 = 设计 token JSON（palette/background/font/radius/buttonStyle），`packages/shared` 定义 schema，`docs/design/themes.json` 为首批 8 套（spec-02 产出后并入 `apps/web`）。其上还有**场景模板层**（主题 × 版式 × 预置区块与文案骨架，静态 JSON 资产，见 [template-system.md](design/template-system.md)）——onboarding 与渲染器（spec-05）按此实装。
 
 ## 7. 部署形态矩阵
 
