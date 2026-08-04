@@ -1,0 +1,66 @@
+{
+  "Metadata": {
+    "title": "YiLink",
+    "description": "An open-source link-in-bio for Chinese creators"
+  },
+  "Marketing": {
+    "tagline": "One link for everything you make.",
+    "description": "YiLink is an open-source link-in-bio tool for Chinese creators.",
+    "github": "View on GitHub",
+    "login": "Log in",
+    "register": "Register"
+  },
+  "Login": {
+    "title": "Log in to YiLink",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Log in",
+    "submitting": "Logging in…",
+    "or": "or",
+    "github": "Continue with GitHub",
+    "invalidFields": "Enter a valid email and a password of at least 8 characters.",
+    "invalidCredentials": "Incorrect email or password.",
+    "unexpectedError": "Login failed. Please try again.",
+    "registered": "Registration complete. You can now log in.",
+    "noAccount": "Need an account?",
+    "registerLink": "Register now"
+  },
+  "Register": {
+    "title": "Create an account",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Use at least 8 characters; letters, numbers, and symbols are recommended.",
+    "strengthWeak": "Password strength: weak",
+    "strengthMedium": "Password strength: medium",
+    "strengthStrong": "Password strength: strong",
+    "submit": "Register",
+    "submitting": "Registering…",
+    "invalidEmail": "Enter a valid email.",
+    "shortPassword": "Password must be at least 8 characters.",
+    "duplicateEmail": "That email is already registered.",
+    "unexpectedError": "Registration failed. Please try again.",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Back to login"
+  },
+  "Navigation": {
+    "home": "My page",
+    "data": "Analytics",
+    "settings": "Settings"
+  },
+  "Studio": {
+    "title": "My page",
+    "description": "The editor is coming in a later release.",
+    "dataTitle": "Analytics",
+    "dataDescription": "The analytics dashboard is coming in a later release.",
+    "settingsTitle": "Settings",
+    "settingsDescription": "Account and instance settings are coming in a later release."
+  },
+  "PublicPage": {
+    "title": "{slug}'s page",
+    "comingSoon": "coming soon"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you requested is not ready yet."
+  }
+}

@@ -1,0 +1,269 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/*
+model User {
+  id           String   @id @default(cuid())
+  email        String?  @unique
+  phone        String?  @unique
+  passwordHash String?
+  githubId     String?  @unique
+  name         String?
+  plan         Plan     @default(FREE)      // FREE | PRO_MINI | PRO（买断）
+  role         Role     @default(USER)      // USER | ADMIN
+  trustLevel   Int      @default(0)         // 新号信任分级（PRD §7）
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  pages        Page[]
+  orders       Order[]
+}
+enum Plan { FREE PRO_MINI PRO }
+enum Role { USER ADMIN }
+
+model Page {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug         String     @unique             // 主页路径，全局唯一，3-30 位小写字母数字连字符
+  title        String
+  bio          String?
+  avatarUrl    String?
+  layout       Layout     @default(LIST)
+  themeId      String     @default("minimal-light")
+  themeConfig  Json?                          // 主题覆写（预留）
+  seoTitle     String?
+  seoDesc      String?
+  status       PageStatus @default(DRAFT)     // DRAFT | PUBLISHED | HIDDEN
+  hiddenReason String?                        // 违规先隐藏不羞辱（PRD §5）
+  publishedAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  blocks       Block[]
+  @@index([userId])
+}
+enum Layout { LIST GRID }
+enum PageStatus { DRAFT PUBLISHED HIDDEN }
+
+model Block {
+  id        String    @id @default(cuid())
+  pageId    String
+  page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      BlockType
+  position  Int
+  size      BlockSize @default(MD)            // 简化网格：SM/MD/LG（LIST 布局忽略）
+  isVisible Boolean   @default(true)
+  config    Json                              // 按 type 用 packages/shared 的 zod schema 校验
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  @@index([pageId, position])
+}
+enum BlockType { LINK SOCIAL TEXT IMAGE WECHAT QR DIVIDER }
+enum BlockSize { SM MD LG }
+
+model ClickEvent {
+  id        BigInt   @id @default(autoincrement())
+  pageId    String
+  blockId   String?
+  kind      EventKind // VIEW | CLICK
+  tsBucket  DateTime  // 事件时间截断到小时
+  uaClass   String?   // wechat|weibo|qq|douyin|browser|bot
+  refClass  String?   // 来源平台粗分
+  ipHash    String?   // sha256(ip + 当日盐)，不存原始 IP
+  createdAt DateTime @default(now())
+  @@index([pageId, tsBucket])
+}
+enum EventKind { VIEW CLICK }
+
+model DailyStat {
+  id      String   @id @default(cuid())
+  pageId  String
+  date    DateTime // 日期（UTC 日截断）
+  views   Int      @default(0)
+  uniques Int      @default(0)
+  clicks  Int      @default(0)
+  byBlock Json?
+  byRef   Json?
+  @@unique([pageId, date])
+}
+
+model ModerationRecord {
+  id         String   @id @default(cuid())
+  targetType String   // page | block | image
+  targetId   String
+  provider   String   // local-words | aliyun | tencent | manual
+  verdict    String   // pass | review | block
+  detail     Json?
+  reviewedBy String?
+  createdAt  DateTime @default(now())
+  @@index([targetType, targetId])
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  provider        String   // lemonsqueezy
+  providerOrderId String   @unique
+  product         String   // pro_mini | pro
+  amountUsdCents  Int
+  status          String   // paid | refunded
+  raw             Json?
+  createdAt       DateTime @default(now())
+}
+
+model Setting {
+  key   String @id  // multiUser | moderationProviders | pagesHost …实例级配置
+  value Json
+}
+*/
+
+// Active Prisma representation of the frozen architecture block above.
+// Prisma requires enum members on separate lines; all model fields and comments stay unchanged.
+model User {
+  id           String   @id @default(cuid())
+  email        String?  @unique
+  phone        String?  @unique
+  passwordHash String?
+  githubId     String?  @unique
+  name         String?
+  plan         Plan     @default(FREE)      // FREE | PRO_MINI | PRO（买断）
+  role         Role     @default(USER)      // USER | ADMIN
+  trustLevel   Int      @default(0)         // 新号信任分级（PRD §7）
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  pages        Page[]
+  orders       Order[]
+}
+enum Plan {
+  FREE
+  PRO_MINI
+  PRO
+}
+enum Role {
+  USER
+  ADMIN
+}
+
+model Page {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug         String     @unique             // 主页路径，全局唯一，3-30 位小写字母数字连字符
+  title        String
+  bio          String?
+  avatarUrl    String?
+  layout       Layout     @default(LIST)
+  themeId      String     @default("minimal-light")
+  themeConfig  Json?                          // 主题覆写（预留）
+  seoTitle     String?
+  seoDesc      String?
+  status       PageStatus @default(DRAFT)     // DRAFT | PUBLISHED | HIDDEN
+  hiddenReason String?                        // 违规先隐藏不羞辱（PRD §5）
+  publishedAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  blocks       Block[]
+  @@index([userId])
+}
+enum Layout {
+  LIST
+  GRID
+}
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+}
+
+model Block {
+  id        String    @id @default(cuid())
+  pageId    String
+  page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      BlockType
+  position  Int
+  size      BlockSize @default(MD)            // 简化网格：SM/MD/LG（LIST 布局忽略）
+  isVisible Boolean   @default(true)
+  config    Json                              // 按 type 用 packages/shared 的 zod schema 校验
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  @@index([pageId, position])
+}
+enum BlockType {
+  LINK
+  SOCIAL
+  TEXT
+  IMAGE
+  WECHAT
+  QR
+  DIVIDER
+}
+enum BlockSize {
+  SM
+  MD
+  LG
+}
+
+model ClickEvent {
+  id        BigInt   @id @default(autoincrement())
+  pageId    String
+  blockId   String?
+  kind      EventKind // VIEW | CLICK
+  tsBucket  DateTime  // 事件时间截断到小时
+  uaClass   String?   // wechat|weibo|qq|douyin|browser|bot
+  refClass  String?   // 来源平台粗分
+  ipHash    String?   // sha256(ip + 当日盐)，不存原始 IP
+  createdAt DateTime @default(now())
+  @@index([pageId, tsBucket])
+}
+enum EventKind {
+  VIEW
+  CLICK
+}
+
+model DailyStat {
+  id      String   @id @default(cuid())
+  pageId  String
+  date    DateTime // 日期（UTC 日截断）
+  views   Int      @default(0)
+  uniques Int      @default(0)
+  clicks  Int      @default(0)
+  byBlock Json?
+  byRef   Json?
+  @@unique([pageId, date])
+}
+
+model ModerationRecord {
+  id         String   @id @default(cuid())
+  targetType String   // page | block | image
+  targetId   String
+  provider   String   // local-words | aliyun | tencent | manual
+  verdict    String   // pass | review | block
+  detail     Json?
+  reviewedBy String?
+  createdAt  DateTime @default(now())
+  @@index([targetType, targetId])
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  provider        String   // lemonsqueezy
+  providerOrderId String   @unique
+  product         String   // pro_mini | pro
+  amountUsdCents  Int
+  status          String   // paid | refunded
+  raw             Json?
+  createdAt       DateTime @default(now())
+}
+
+model Setting {
+  key   String @id  // multiUser | moderationProviders | pagesHost …实例级配置
+  value Json
+}

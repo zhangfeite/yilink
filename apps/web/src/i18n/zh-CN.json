@@ -1,0 +1,66 @@
+{
+  "Metadata": {
+    "title": "一链 YiLink",
+    "description": "面向中文创作者的开源聚合主页"
+  },
+  "Marketing": {
+    "tagline": "一条链接，装下你的全部主页。",
+    "description": "一链 YiLink 是面向中文创作者的开源聚合主页工具。",
+    "github": "在 GitHub 查看",
+    "login": "登录",
+    "register": "注册"
+  },
+  "Login": {
+    "title": "登录一链",
+    "email": "邮箱",
+    "password": "密码",
+    "submit": "登录",
+    "submitting": "正在登录…",
+    "or": "或者",
+    "github": "使用 GitHub 登录",
+    "invalidFields": "请输入有效邮箱和至少 8 位密码。",
+    "invalidCredentials": "邮箱或密码错误。",
+    "unexpectedError": "登录失败，请稍后重试。",
+    "registered": "注册成功，请登录。",
+    "noAccount": "还没有账号？",
+    "registerLink": "立即注册"
+  },
+  "Register": {
+    "title": "创建账号",
+    "email": "邮箱",
+    "password": "密码",
+    "passwordHint": "至少 8 位；建议同时使用字母、数字和符号。",
+    "strengthWeak": "密码强度：弱",
+    "strengthMedium": "密码强度：中",
+    "strengthStrong": "密码强度：强",
+    "submit": "注册",
+    "submitting": "正在注册…",
+    "invalidEmail": "请输入有效邮箱。",
+    "shortPassword": "密码至少需要 8 位。",
+    "duplicateEmail": "该邮箱已注册。",
+    "unexpectedError": "注册失败，请稍后重试。",
+    "hasAccount": "已有账号？",
+    "loginLink": "返回登录"
+  },
+  "Navigation": {
+    "home": "我的主页",
+    "data": "数据",
+    "settings": "设置"
+  },
+  "Studio": {
+    "title": "我的主页",
+    "description": "编辑器将在后续版本开放。",
+    "dataTitle": "数据",
+    "dataDescription": "统计面板将在后续版本开放。",
+    "settingsTitle": "设置",
+    "settingsDescription": "账号与实例设置将在后续版本开放。"
+  },
+  "PublicPage": {
+    "title": "{slug} 的主页",
+    "comingSoon": "coming soon"
+  },
+  "NotFound": {
+    "title": "页面不存在",
+    "description": "你访问的页面还没有准备好。"
+  }
+}

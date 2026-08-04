@@ -1,0 +1,14 @@
+{
+  "name": "@yilink/moderation",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/provider.ts",
+    "./local-words": "./src/local-words.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}

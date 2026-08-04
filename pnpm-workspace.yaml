@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Next.js can use sharp optionally for image optimization. The scaffold does not use next/image,
+# and sharp bundles LGPL libvips binaries that are outside this repository's license allowlist.
+ignoredOptionalDependencies:
+  - sharp
+
+# Allow deterministic node_modules recreation in non-interactive CI and container builds.
+confirmModulesPurge: false

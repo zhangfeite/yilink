@@ -1,0 +1,38 @@
+{
+  "name": "yilink",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "postinstall": "pnpm db:generate",
+    "dev": "pnpm --filter @yilink/web dev",
+    "build": "pnpm --filter @yilink/web build",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --max-warnings 0",
+    "typecheck": "pnpm --recursive --if-present typecheck",
+    "test": "pnpm --filter @yilink/shared test",
+    "e2e": "pnpm --filter @yilink/web e2e",
+    "db:generate": "pnpm --filter @yilink/web db:generate",
+    "db:migrate": "pnpm --filter @yilink/web db:migrate",
+    "db:deploy": "pnpm --filter @yilink/web db:deploy",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "16.2.12",
+    "@playwright/test": "1.61.1",
+    "@typescript-eslint/eslint-plugin": "8.66.0",
+    "@typescript-eslint/parser": "8.66.0",
+    "@types/node": "^20.19.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "eslint": "^9.39.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "prettier": "^3.8.0",
+    "typescript": "^5.9.3",
+    "vitest": "4.1.10"
+  }
+}
