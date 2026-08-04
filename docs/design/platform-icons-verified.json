@@ -1,0 +1,666 @@
+{
+  "generatedAt": "2026-08-04",
+  "simpleIconsVersion": "16.28.0",
+  "platforms": [
+    {
+      "id": "wechat",
+      "nameZh": "微信",
+      "nameEn": "WeChat",
+      "category": "social",
+      "aliases": [
+        "微信",
+        "WeChat"
+      ],
+      "simpleIcon": {
+        "slug": "wechat",
+        "title": "WeChat",
+        "officialHex": "#07C160"
+      },
+      "stickerHex": "#07C160",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "wechat-official-account",
+      "nameZh": "微信公众号",
+      "nameEn": "WeChat Official Account",
+      "category": "content",
+      "aliases": [
+        "微信公众号",
+        "公众号"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "wechat-channels",
+      "nameZh": "微信视频号",
+      "nameEn": "WeChat Channels",
+      "category": "video",
+      "aliases": [
+        "微信视频号",
+        "视频号"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "wecom",
+      "nameZh": "企业微信",
+      "nameEn": "WeCom",
+      "category": "contact",
+      "aliases": [
+        "企业微信",
+        "WeCom"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "qq",
+      "nameZh": "QQ",
+      "nameEn": "QQ",
+      "category": "social",
+      "aliases": [
+        "QQ",
+        "腾讯QQ"
+      ],
+      "simpleIcon": {
+        "slug": "qq",
+        "title": "QQ",
+        "officialHex": "#1EBAFC"
+      },
+      "stickerHex": "#1EBAFC",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "douyin",
+      "nameZh": "抖音",
+      "nameEn": "Douyin",
+      "category": "video",
+      "aliases": [
+        "抖音",
+        "TikTok中国"
+      ],
+      "simpleIcon": {
+        "slug": "tiktok",
+        "title": "TikTok",
+        "officialHex": "#000000"
+      },
+      "stickerHex": "#161823",
+      "needsCustomGlyph": false,
+      "note": "复用 TikTok 音符路径（同源标识）"
+    },
+    {
+      "id": "xiaohongshu",
+      "nameZh": "小红书",
+      "nameEn": "Xiaohongshu",
+      "category": "social",
+      "aliases": [
+        "小红书",
+        "RED"
+      ],
+      "simpleIcon": {
+        "slug": "xiaohongshu",
+        "title": "Xiaohongshu",
+        "officialHex": "#FF2442"
+      },
+      "stickerHex": "#FF2442",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "bilibili",
+      "nameZh": "哔哩哔哩",
+      "nameEn": "Bilibili",
+      "category": "video",
+      "aliases": [
+        "哔哩哔哩",
+        "B站"
+      ],
+      "simpleIcon": {
+        "slug": "bilibili",
+        "title": "Bilibili",
+        "officialHex": "#00A1D6"
+      },
+      "stickerHex": "#FB7299",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "kuaishou",
+      "nameZh": "快手",
+      "nameEn": "Kuaishou",
+      "category": "video",
+      "aliases": [
+        "快手"
+      ],
+      "simpleIcon": {
+        "slug": "kuaishou",
+        "title": "Kuaishou",
+        "officialHex": "#FF4906"
+      },
+      "stickerHex": "#FF4906",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "weibo",
+      "nameZh": "微博",
+      "nameEn": "Weibo",
+      "category": "social",
+      "aliases": [
+        "微博",
+        "新浪微博"
+      ],
+      "simpleIcon": {
+        "slug": "sinaweibo",
+        "title": "Sina Weibo",
+        "officialHex": "#E6162D"
+      },
+      "stickerHex": "#E6162D",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "zhihu",
+      "nameZh": "知乎",
+      "nameEn": "Zhihu",
+      "category": "content",
+      "aliases": [
+        "知乎"
+      ],
+      "simpleIcon": {
+        "slug": "zhihu",
+        "title": "Zhihu",
+        "officialHex": "#0084FF"
+      },
+      "stickerHex": "#0084FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "jike",
+      "nameZh": "即刻",
+      "nameEn": "Jike",
+      "category": "social",
+      "aliases": [
+        "即刻",
+        "Jike"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "douban",
+      "nameZh": "豆瓣",
+      "nameEn": "Douban",
+      "category": "social",
+      "aliases": [
+        "豆瓣"
+      ],
+      "simpleIcon": {
+        "slug": "douban",
+        "title": "Douban",
+        "officialHex": "#2D963D"
+      },
+      "stickerHex": "#2D963D",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "dewu",
+      "nameZh": "得物",
+      "nameEn": "Dewu",
+      "category": "shopping",
+      "aliases": [
+        "得物",
+        "毒App"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "taobao",
+      "nameZh": "淘宝",
+      "nameEn": "Taobao",
+      "category": "shopping",
+      "aliases": [
+        "淘宝",
+        "淘宝网"
+      ],
+      "simpleIcon": {
+        "slug": "taobao",
+        "title": "Taobao",
+        "officialHex": "#E94F20"
+      },
+      "stickerHex": "#E94F20",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "jd",
+      "nameZh": "京东",
+      "nameEn": "JD.com",
+      "category": "shopping",
+      "aliases": [
+        "京东",
+        "JD"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "pinduoduo",
+      "nameZh": "拼多多",
+      "nameEn": "Pinduoduo",
+      "category": "shopping",
+      "aliases": [
+        "拼多多",
+        "PDD"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "goofish",
+      "nameZh": "闲鱼",
+      "nameEn": "Goofish",
+      "category": "shopping",
+      "aliases": [
+        "闲鱼",
+        "Goofish"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "netease-cloud-music",
+      "nameZh": "网易云音乐",
+      "nameEn": "Netease Cloud Music",
+      "category": "music",
+      "aliases": [
+        "网易云音乐",
+        "网易云"
+      ],
+      "simpleIcon": {
+        "slug": "neteasecloudmusic",
+        "title": "NetEase Cloud Music",
+        "officialHex": "#D43C33"
+      },
+      "stickerHex": "#D43C33",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "qq-music",
+      "nameZh": "QQ音乐",
+      "nameEn": "QQ Music",
+      "category": "music",
+      "aliases": [
+        "QQ音乐",
+        "QQMusic"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "xiaoyuzhou",
+      "nameZh": "小宇宙",
+      "nameEn": "Xiaoyuzhou",
+      "category": "content",
+      "aliases": [
+        "小宇宙",
+        "小宇宙FM"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "ximalaya",
+      "nameZh": "喜马拉雅",
+      "nameEn": "Ximalaya",
+      "category": "content",
+      "aliases": [
+        "喜马拉雅",
+        "喜马拉雅FM"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "github",
+      "nameZh": "GitHub",
+      "nameEn": "GitHub",
+      "category": "dev",
+      "aliases": [
+        "GitHub",
+        "Github"
+      ],
+      "simpleIcon": {
+        "slug": "github",
+        "title": "GitHub",
+        "officialHex": "#181717"
+      },
+      "stickerHex": "#181717",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "juejin",
+      "nameZh": "掘金",
+      "nameEn": "Juejin",
+      "category": "dev",
+      "aliases": [
+        "掘金",
+        "掘金社区"
+      ],
+      "simpleIcon": {
+        "slug": "juejin",
+        "title": "Juejin",
+        "officialHex": "#007FFF"
+      },
+      "stickerHex": "#007FFF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "csdn",
+      "nameZh": "CSDN",
+      "nameEn": "CSDN",
+      "category": "dev",
+      "aliases": [
+        "CSDN",
+        "CSDN社区"
+      ],
+      "simpleIcon": {
+        "slug": "csdn",
+        "title": "CSDN",
+        "officialHex": "#FC5531"
+      },
+      "stickerHex": "#FC5531",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "sspai",
+      "nameZh": "少数派",
+      "nameEn": "SSPAI",
+      "category": "content",
+      "aliases": [
+        "少数派",
+        "SSPai"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "v2ex",
+      "nameZh": "V2EX",
+      "nameEn": "V2EX",
+      "category": "dev",
+      "aliases": [
+        "V2EX"
+      ],
+      "simpleIcon": {
+        "slug": "v2ex",
+        "title": "V2EX",
+        "officialHex": "#1F1F1F"
+      },
+      "stickerHex": "#1F1F1F",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "email",
+      "nameZh": "电子邮件",
+      "nameEn": "Email",
+      "category": "contact",
+      "aliases": [
+        "电子邮件",
+        "邮箱"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "phone",
+      "nameZh": "电话",
+      "nameEn": "Phone",
+      "category": "contact",
+      "aliases": [
+        "电话",
+        "手机号"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "website",
+      "nameZh": "个人网站",
+      "nameEn": "Personal Website",
+      "category": "other",
+      "aliases": [
+        "个人网站",
+        "网站"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "tiktok",
+      "nameZh": "TikTok",
+      "nameEn": "TikTok",
+      "category": "video",
+      "aliases": [
+        "TikTok",
+        "抖音国际版"
+      ],
+      "simpleIcon": {
+        "slug": "tiktok",
+        "title": "TikTok",
+        "officialHex": "#000000"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "instagram",
+      "nameZh": "Instagram",
+      "nameEn": "Instagram",
+      "category": "social",
+      "aliases": [
+        "Instagram",
+        "Ins"
+      ],
+      "simpleIcon": {
+        "slug": "instagram",
+        "title": "Instagram",
+        "officialHex": "#FF0069"
+      },
+      "stickerHex": "#FF0069",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "youtube",
+      "nameZh": "YouTube",
+      "nameEn": "YouTube",
+      "category": "video",
+      "aliases": [
+        "YouTube",
+        "Youtube"
+      ],
+      "simpleIcon": {
+        "slug": "youtube",
+        "title": "YouTube",
+        "officialHex": "#FF0000"
+      },
+      "stickerHex": "#FF0000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "x",
+      "nameZh": "X",
+      "nameEn": "X (Twitter)",
+      "category": "social",
+      "aliases": [
+        "X",
+        "Twitter",
+        "推特"
+      ],
+      "simpleIcon": {
+        "slug": "x",
+        "title": "X",
+        "officialHex": "#000000"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "facebook",
+      "nameZh": "Facebook",
+      "nameEn": "Facebook",
+      "category": "social",
+      "aliases": [
+        "Facebook",
+        "脸书"
+      ],
+      "simpleIcon": {
+        "slug": "facebook",
+        "title": "Facebook",
+        "officialHex": "#0866FF"
+      },
+      "stickerHex": "#0866FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "linkedin",
+      "nameZh": "LinkedIn",
+      "nameEn": "LinkedIn",
+      "category": "social",
+      "aliases": [
+        "LinkedIn",
+        "领英"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true,
+      "note": "需自绘（simple-icons 未收录或已下架）"
+    },
+    {
+      "id": "telegram",
+      "nameZh": "Telegram",
+      "nameEn": "Telegram",
+      "category": "contact",
+      "aliases": [
+        "Telegram",
+        "电报"
+      ],
+      "simpleIcon": {
+        "slug": "telegram",
+        "title": "Telegram",
+        "officialHex": "#26A5E4"
+      },
+      "stickerHex": "#26A5E4",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "whatsapp",
+      "nameZh": "WhatsApp",
+      "nameEn": "WhatsApp",
+      "category": "contact",
+      "aliases": [
+        "WhatsApp",
+        "Whatsapp"
+      ],
+      "simpleIcon": {
+        "slug": "whatsapp",
+        "title": "WhatsApp",
+        "officialHex": "#25D366"
+      },
+      "stickerHex": "#25D366",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "discord",
+      "nameZh": "Discord",
+      "nameEn": "Discord",
+      "category": "contact",
+      "aliases": [
+        "Discord"
+      ],
+      "simpleIcon": {
+        "slug": "discord",
+        "title": "Discord",
+        "officialHex": "#5865F2"
+      },
+      "stickerHex": "#5865F2",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "spotify",
+      "nameZh": "Spotify",
+      "nameEn": "Spotify",
+      "category": "music",
+      "aliases": [
+        "Spotify"
+      ],
+      "simpleIcon": {
+        "slug": "spotify",
+        "title": "Spotify",
+        "officialHex": "#1ED760"
+      },
+      "stickerHex": "#1ED760",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "twitch",
+      "nameZh": "Twitch",
+      "nameEn": "Twitch",
+      "category": "video",
+      "aliases": [
+        "Twitch"
+      ],
+      "simpleIcon": {
+        "slug": "twitch",
+        "title": "Twitch",
+        "officialHex": "#9146FF"
+      },
+      "stickerHex": "#9146FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "threads",
+      "nameZh": "Threads",
+      "nameEn": "Threads",
+      "category": "social",
+      "aliases": [
+        "Threads"
+      ],
+      "simpleIcon": {
+        "slug": "threads",
+        "title": "Threads",
+        "officialHex": "#000000"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    }
+  ]
+}
