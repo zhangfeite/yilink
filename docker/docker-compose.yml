@@ -4,14 +4,20 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     environment:
-      DATABASE_URL: file:/data/yilink.db
+      DATABASE_URL: ${DATABASE_URL:-file:/data/yilink.db}
       AUTH_SECRET: ${AUTH_SECRET:-change-this-development-secret-before-production}
       AUTH_URL: ${AUTH_URL:-http://localhost:3000}
       GITHUB_ID: ${GITHUB_ID:-}
       GITHUB_SECRET: ${GITHUB_SECRET:-}
       PAGES_HOST: ${PAGES_HOST:-}
-      MULTI_USER: ${MULTI_USER:-false}
-      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-一链 YiLink}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-}
+      LEMONSQUEEZY_WEBHOOK_SECRET: ${LEMONSQUEEZY_WEBHOOK_SECRET:-}
+      LEMONSQUEEZY_VARIANT_MINI: ${LEMONSQUEEZY_VARIANT_MINI:-}
+      LEMONSQUEEZY_VARIANT_PRO: ${LEMONSQUEEZY_VARIANT_PRO:-}
+      LEMONSQUEEZY_CHECKOUT_URL_MINI: ${LEMONSQUEEZY_CHECKOUT_URL_MINI:-}
+      LEMONSQUEEZY_CHECKOUT_URL_PRO: ${LEMONSQUEEZY_CHECKOUT_URL_PRO:-}
+      NEXT_PUBLIC_PRICE_MINI: ${NEXT_PUBLIC_PRICE_MINI:-}
+      NEXT_PUBLIC_PRICE_PRO: ${NEXT_PUBLIC_PRICE_PRO:-}
     ports:
       - '3000:3000'
     volumes:
