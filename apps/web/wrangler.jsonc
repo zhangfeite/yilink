@@ -4,6 +4,7 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-07-01",
   "compatibility_flags": ["nodejs_compat"],
+  "routes": [{ "pattern": "yilink.app", "custom_domain": true }],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -13,13 +14,13 @@
       // 业务库：schema 与 prisma/migrations 完全复用（D1 即 SQLite 方言）
       "binding": "DB",
       "database_name": "yilink-db",
-      "database_id": "local-placeholder-main"
+      "database_id": "7017f5ce-de74-41b3-933e-63f50ff20fd9"
     },
     {
       // OpenNext tag cache（revalidateTag 跨隔离即时失效）
       "binding": "NEXT_TAG_CACHE_D1",
       "database_name": "yilink-tag-cache",
-      "database_id": "local-placeholder-tagcache"
+      "database_id": "1ae5d4ef-51e9-4344-9f39-99a8ab1210d7"
     }
   ],
   "r2_buckets": [
