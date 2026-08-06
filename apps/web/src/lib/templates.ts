@@ -1,5 +1,4 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
 
 import { sceneTemplatesFileSchema, type SceneTemplate } from '@yilink/shared';
 
@@ -170,22 +169,14 @@ export function parseSceneTemplates(value: unknown): SceneTemplate[] {
   return parsed.success ? parsed.data : fallbackSceneTemplates;
 }
 
-function defaultTemplatePaths(): string[] {
-  return [
-    resolve(process.cwd(), 'src/templates/templates.json'),
-    resolve(process.cwd(), 'apps/web/src/templates/templates.json'),
-  ];
-}
-
 export function loadSceneTemplates(filePath?: string): SceneTemplate[] {
   // 默认路径：构建期静态打包的 JSON（workerd 无文件系统，fs 只在显式传路径时用）
   if (!filePath) {
     return parseSceneTemplates(bundledTemplates as unknown);
   }
 
-  const candidates = [filePath, ...defaultTemplatePaths()];
-  const existingPath = candidates.find((candidate) => existsSync(candidate));
-  if (!existingPath) return fallbackSceneTemplates;
+  if (!existsSync(filePath)) return fallbackSceneTemplates;
+  const existingPath = filePath;
 
   try {
     return parseSceneTemplates(JSON.parse(readFileSync(existingPath, 'utf8')) as unknown);
