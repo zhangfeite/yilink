@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { classifyReferrer, hashIp, startOfUtcDay, startOfUtcHour } from './stats';
+import { classifyReferrer, clientIp, hashIp, startOfUtcDay, startOfUtcHour } from './stats';
 import { classifyUserAgent } from './ua';
 
 describe('stats helpers', () => {
@@ -24,6 +24,20 @@ describe('stats helpers', () => {
     );
     expect(hashIp('203.0.113.10', instant, 'test-secret')).not.toBe(
       hashIp('203.0.113.10', new Date('2026-08-05T00:00:00.000Z'), 'test-secret'),
+    );
+  });
+
+  it('prefers the Cloudflare-injected IP and only falls back to forwarded-for locally', () => {
+    expect(
+      clientIp(
+        new Headers({
+          'cf-connecting-ip': '198.51.100.8',
+          'x-forwarded-for': '203.0.113.99, 203.0.113.1',
+        }),
+      ),
+    ).toBe('198.51.100.8');
+    expect(clientIp(new Headers({ 'x-forwarded-for': '203.0.113.99, 203.0.113.1' }))).toBe(
+      '203.0.113.99',
     );
   });
 

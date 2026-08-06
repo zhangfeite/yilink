@@ -71,6 +71,7 @@ function webhookPayload({
         total,
         total_usd: totalUsd,
         first_order_item: { variant_id: variantId },
+        created_at: '2026-08-06T12:34:56.000Z',
       },
     },
   };
@@ -128,6 +129,28 @@ describe('/api/webhooks/lemonsqueezy', () => {
     ]);
     await expect(db.user.findUnique({ where: { id: user.id } })).resolves.toMatchObject({
       plan: 'PRO_MINI',
+    });
+  });
+
+  it('stores only the compact operational fields in Order.raw', async () => {
+    const user = await createUser();
+
+    const response = await POST(
+      signedRequest(webhookPayload({ userId: user.id, orderId: 'compact-raw-order' })),
+    );
+
+    expect(response.status).toBe(200);
+    await expect(
+      db.order.findUnique({ where: { providerOrderId: 'compact-raw-order' } }),
+    ).resolves.toMatchObject({
+      raw: {
+        orderId: 'compact-raw-order',
+        variantId: miniVariantId,
+        amountUsdCents: 1200,
+        emailDomain: 'example.com',
+        eventName: 'order_created',
+        eventTime: '2026-08-06T12:34:56.000Z',
+      },
     });
   });
 

@@ -62,6 +62,42 @@ cp .dev.vars.example .dev.vars 2>/dev/null || printf 'AUTH_SECRET=local-dev-only
 pnpm cf:preview   # build + wrangler dev（http://localhost:8787）
 ```
 
+## 六、边缘限频（托管版必配项）
+
+应用内的静默丢弃只作为最后一道保护，托管版必须在 Cloudflare 控制台的
+**Security → WAF → Rate limiting rules** 配置以下三条按 IP 计数的规则。动作可按业务
+风险从 Managed Challenge 调整为 Block，但阈值不能高于下表建议值。
+
+| 规则 | 匹配条件（均为 POST） | 阈值 | 建议动作 |
+|---|---|---:|---|
+| register | 路径为 `/register` 或 `/api/v1/auth/register` | 每 IP 10 次 / 10 分钟 | Managed Challenge，持续 1 小时 |
+| login | 路径为 `/login` 或 `/api/auth/callback/credentials` | 每 IP 20 次 / 10 分钟 | Managed Challenge，持续 30 分钟 |
+| api-e | 路径为 `/api/e` | 每 IP 120 次 / 1 分钟 | Block，持续 10 分钟 |
+
+这三条规则是托管版上线的必配项：它们提供跨 Worker isolate 的共享限频，避免匿名统计、
+注册和登录流量绕过进程内保护并消耗 D1/CPU。
+
+## 七、备份与恢复
+
+仓库中的 `.github/workflows/scheduled.yml` 每日 UTC 20:00（北京时间 04:00）执行两项运维：
+调用受 `CRON_SECRET` 保护的 `/api/internal/rollup` 完成昨日统计聚合与 30 天原始事件清理，
+并执行 `wrangler d1 export yilink-db --remote`。导出的 SQL 作为 GitHub Actions artifact 保留
+30 天。部署前请在 Worker 写入 `CRON_SECRET`，并在 GitHub Actions secrets 同时配置同名、相同
+的 `CRON_SECRET` 和具备 D1 权限的 `CLOUDFLARE_API_TOKEN`。
+
+手工恢复必须先导入**空库**，不要直接覆盖仍可能可读的生产库：
+
+```bash
+cd apps/web
+pnpm exec wrangler d1 create yilink-db-restore
+pnpm exec wrangler d1 execute yilink-db-restore --remote --file /path/to/yilink-db.sql
+pnpm exec wrangler d1 execute yilink-db-restore --remote --command \
+  "SELECT (SELECT COUNT(*) FROM User) AS users, (SELECT COUNT(*) FROM Page) AS pages, (SELECT COUNT(*) FROM Order) AS orders;"
+```
+
+核对导入后的用户、主页和订单行数与备份时记录一致后，才将恢复库的 `database_id` 切入
+`wrangler.jsonc` 并部署。恢复演练由验收方在 staging 执行并记录恢复时间、行数校验和结论。
+
 ## 关键实现约定（改代码前必读）
 
 1. **Prisma 官方形态**：`prisma-client-js` + `previewFeatures = ["driverAdapters"]`，**不要**给 generator 配置自定义 `output`；`next.config.ts` 的 `serverExternalPackages: ['@prisma/client', '.prisma/client']` 是 OpenNext 构建期 patch client 适配 workerd 的前提，二者缺一即回退到二进制引擎并在 Workers 崩溃。

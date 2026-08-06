@@ -24,11 +24,12 @@ async function clearDatabase() {
 describe('daily stats rollup', () => {
   beforeEach(clearDatabase);
 
-  it('upserts yesterday exactly once and prunes raw events older than 90 days', async () => {
+  it('upserts yesterday exactly once and prunes only raw events older than 30 days', async () => {
     const now = new Date('2026-08-05T12:00:00.000Z');
     const today = startOfUtcDay(now);
     const yesterday = addUtcDays(today, -1);
-    const oldDay = addUtcDays(today, -91);
+    const retentionBoundary = addUtcDays(today, -30);
+    const expiredDay = addUtcDays(today, -31);
     const user = await db.user.create({ data: { id: 'rollup-user', email: 'rollup@example.com' } });
     const page = await db.page.create({
       data: { userId: user.id, slug: 'rollup-page', title: '汇总主页', status: 'PUBLISHED' },
@@ -73,7 +74,15 @@ describe('daily stats rollup', () => {
         {
           pageId: page.id,
           kind: 'VIEW',
-          tsBucket: oldDay,
+          tsBucket: retentionBoundary,
+          uaClass: 'browser',
+          refClass: 'other',
+          ipHash: 'retained-visitor',
+        },
+        {
+          pageId: page.id,
+          kind: 'VIEW',
+          tsBucket: expiredDay,
           uaClass: 'browser',
           refClass: 'other',
           ipHash: 'old-visitor',
@@ -95,13 +104,16 @@ describe('daily stats rollup', () => {
       byBlock: { 'link-a': 1, 'social-a': 1 },
       byRef: { direct: 1, wechat: 2, search: 1 },
     });
-    await expect(db.clickEvent.count({ where: { tsBucket: { lt: addUtcDays(today, -90) } } })).resolves.toBe(
-      0,
-    );
+    await expect(
+      db.clickEvent.count({ where: { tsBucket: { lt: retentionBoundary } } }),
+    ).resolves.toBe(0);
+    await expect(db.clickEvent.count({ where: { tsBucket: retentionBoundary } })).resolves.toBe(1);
 
     await rollupDaily(db, now);
 
-    await expect(db.dailyStat.count({ where: { pageId: page.id, date: yesterday } })).resolves.toBe(1);
+    await expect(db.dailyStat.count({ where: { pageId: page.id, date: yesterday } })).resolves.toBe(
+      1,
+    );
     await expect(
       db.dailyStat.findUnique({ where: { pageId_date: { pageId: page.id, date: yesterday } } }),
     ).resolves.toMatchObject({ views: 2, uniques: 2, clicks: 2 });

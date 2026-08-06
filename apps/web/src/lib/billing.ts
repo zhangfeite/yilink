@@ -146,8 +146,29 @@ function logUnassignedOrder(order: BillableOrder) {
   });
 }
 
-function toPrismaJson(payload: JsonRecord): Prisma.InputJsonObject {
-  return payload as unknown as Prisma.InputJsonObject;
+function emailDomain(value: unknown): string | null {
+  const email = nonEmptyString(value)?.toLowerCase();
+  if (!email) return null;
+
+  const atIndex = email.lastIndexOf('@');
+  return atIndex > 0 && atIndex < email.length - 1 ? email.slice(atIndex + 1) : null;
+}
+
+function toPrismaJson(order: BillableOrder, payload: JsonRecord): Prisma.InputJsonObject {
+  const { attributes } = orderData(payload);
+  const meta = asRecord(payload.meta);
+  const firstOrderItem = asRecord(attributes.first_order_item);
+
+  // Order.raw 只保留运营对账所需的最小字段，绝不整包持久化第三方 webhook。
+  return {
+    orderId: order.providerOrderId,
+    variantId: identifier(firstOrderItem?.variant_id),
+    amountUsdCents: order.amountUsdCents,
+    emailDomain: emailDomain(attributes.user_email),
+    eventName: nonEmptyString(meta?.event_name),
+    eventTime:
+      nonEmptyString(attributes.updated_at) ?? nonEmptyString(attributes.created_at) ?? new Date().toISOString(),
+  } as Prisma.InputJsonObject;
 }
 
 /**
@@ -180,7 +201,7 @@ async function persistPaidOrder(order: BillableOrder, userId: string, payload: J
           product: order.product,
           amountUsdCents: order.amountUsdCents,
           status: 'paid',
-          raw: toPrismaJson(payload),
+          raw: toPrismaJson(order, payload),
         },
       }),
     ];
@@ -270,7 +291,7 @@ async function persistRefundedOrder(order: BillableOrder, userId: string, payloa
           product: order.product,
           amountUsdCents: order.amountUsdCents,
           status: 'refunded',
-          raw: toPrismaJson(payload),
+          raw: toPrismaJson(order, payload),
         },
       }),
       db.user.update({

@@ -1,0 +1,60 @@
+name: Daily data operations
+
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rollup:
+    name: Roll up statistics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger the protected rollup endpoint
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${CRON_SECRET}" \
+            https://yilink.app/api/internal/rollup
+
+  backup:
+    name: Export D1 backup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Export remote D1 database
+        working-directory: apps/web
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          mkdir -p "${RUNNER_TEMP}/yilink-d1-backup"
+          pnpm exec wrangler d1 export yilink-db --remote --skip-confirmation \
+            --output "${RUNNER_TEMP}/yilink-d1-backup/yilink-db.sql"
+
+      - name: Upload daily D1 backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: yilink-d1-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/yilink-d1-backup/yilink-db.sql
+          retention-days: 30

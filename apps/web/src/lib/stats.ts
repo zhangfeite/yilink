@@ -4,14 +4,7 @@ import { z } from 'zod';
 
 import { db } from './db';
 
-export type RefClass =
-  | 'wechat'
-  | 'weibo'
-  | 'zhihu'
-  | 'bilibili'
-  | 'search'
-  | 'direct'
-  | 'other';
+export type RefClass = 'wechat' | 'weibo' | 'zhihu' | 'bilibili' | 'search' | 'direct' | 'other';
 
 export interface DailyStatsPoint {
   date: Date;
@@ -103,14 +96,15 @@ export function addUtcDays(value: Date, days: number): Date {
 }
 
 export function clientIp(headers: Headers): string {
-  const forwarded = headers
-    .get('x-forwarded-for')
-    ?.split(',')[0]
-    ?.trim();
-  const ip = forwarded || headers.get('x-real-ip')?.trim() || headers.get('cf-connecting-ip')?.trim();
+  const cloudflareIp = headers.get('cf-connecting-ip')?.trim();
+  if (cloudflareIp) return cloudflareIp.slice(0, 128);
 
-  // 本地开发或未配置反向代理时没有可用 IP；仍只持久化它的日盐哈希。
-  return ip?.slice(0, 128) || '0.0.0.0';
+  // 托管版只信任 Cloudflare 注入的 CF-Connecting-IP；本地开发或自部署直连时
+  // 才退回 x-forwarded-for 首段。自部署若经过代理，部署者须先由可信代理覆写该头。
+  const forwarded = headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+
+  // 没有可用 IP 时仍只持久化固定占位值的日盐哈希。
+  return forwarded?.slice(0, 128) || '0.0.0.0';
 }
 
 export function hashIp(ip: string, at: Date, secret = process.env.AUTH_SECRET ?? ''): string {
@@ -138,7 +132,10 @@ export function resetEventRateLimit(): void {
   eventRateLimitBuckets.clear();
 }
 
-export async function getRecentPageStats(pageId: string, now = new Date()): Promise<PageStatsReport> {
+export async function getRecentPageStats(
+  pageId: string,
+  now = new Date(),
+): Promise<PageStatsReport> {
   const today = startOfUtcDay(now);
   const tomorrow = addUtcDays(today, 1);
   const rangeStart = addUtcDays(today, -29);
