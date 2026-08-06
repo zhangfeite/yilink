@@ -9,6 +9,7 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/lib/auth';
 import { credentialsSchema } from '@/lib/auth-validation';
 import { db } from '@/lib/db';
+import { validateInviteCode } from '@/lib/invite';
 
 export interface AuthFormState {
   error: string | null;
@@ -35,6 +36,10 @@ export async function registerAction(
   if (!parsed.success) {
     const passwordIssue = parsed.error.issues.some((issue) => issue.path[0] === 'password');
     return { error: passwordIssue ? t('shortPassword') : t('invalidEmail') };
+  }
+
+  if (!validateInviteCode(formData.get('inviteCode'))) {
+    return { error: t('invalidInvite') };
   }
 
   try {

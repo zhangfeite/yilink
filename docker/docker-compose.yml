@@ -6,6 +6,8 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL:-file:/data/yilink.db}
       AUTH_SECRET: ${AUTH_SECRET:-change-this-development-secret-before-production}
+      # 可选：邀请码白名单，多个邀请码用英文逗号分隔；留空时保持开放注册
+      INVITE_CODES: ${INVITE_CODES:-}
       AUTH_URL: ${AUTH_URL:-http://localhost:3000}
       GITHUB_ID: ${GITHUB_ID:-}
       GITHUB_SECRET: ${GITHUB_SECRET:-}

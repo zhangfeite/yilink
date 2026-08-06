@@ -25,7 +25,11 @@ function passwordStrength(password: string): 'weak' | 'medium' | 'strong' {
 
 const initialState: AuthFormState = { error: null };
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  inviteRequired: boolean;
+}
+
+export function RegisterForm({ inviteRequired }: RegisterFormProps) {
   const t = useTranslations('Register');
   const [state, formAction, isPending] = useActionState(registerAction, initialState);
   const [password, setPassword] = useState('');
@@ -79,6 +83,22 @@ export function RegisterForm() {
           )}
         </p>
       </div>
+
+      {inviteRequired ? (
+        <div className="space-y-1">
+          <label className="block text-sm font-medium" htmlFor="register-invite-code">
+            {t('inviteCode')}
+          </label>
+          <input
+            className="w-full rounded-md border border-slate-300 px-3 py-2"
+            id="register-invite-code"
+            name="inviteCode"
+            type="text"
+            autoComplete="off"
+            required
+          />
+        </div>
+      ) : null}
 
       <button
         className="w-full rounded-md bg-slate-900 px-4 py-2 font-medium text-white disabled:opacity-60"

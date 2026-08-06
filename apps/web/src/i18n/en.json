@@ -5,10 +5,83 @@
   },
   "Marketing": {
     "tagline": "One link for everything you make.",
-    "description": "YiLink is an open-source link-in-bio tool for Chinese creators.",
+    "description": "An open-source link-in-bio for Chinese creators that puts your work, social profiles, and contact details on one WeChat-friendly page.",
     "github": "View on GitHub",
     "login": "Log in",
-    "register": "Register"
+    "register": "Register",
+    "nav": {
+      "label": "Main navigation",
+      "pricing": "Pricing"
+    },
+    "hero": {
+      "eyebrow": "Open source · WeChat friendly · Your data",
+      "primaryCta": "Start free",
+      "demoCta": "View a real page",
+      "caption": "The free plan stays free, starts with 3 pages, and takes no commission.",
+      "liveLabel": "Real page · Loaded live",
+      "previewTitle": "Live preview of the YiLink illustrator demo page",
+      "previewCaption": "This is the running public page, not a product screenshot."
+    },
+    "features": {
+      "eyebrow": "Three concrete advantages",
+      "title": "Less setup. More sharing for real.",
+      "description": "No vague creator promises. Every feature maps to a real job: building, sharing inside WeChat, and keeping control of your data.",
+      "template": {
+        "title": "A useful page in five minutes",
+        "description": "Start from 8 practical scenes for photographers, illustrators, developers, and more. Every block remains editable."
+      },
+      "wechat": {
+        "title": "Opens in WeChat, ships as a QR poster",
+        "description": "Public pages account for the WeChat browser, while links, QR codes, and themed posters live in one sharing panel."
+      },
+      "openSource": {
+        "title": "Open source, self-hostable, data in your hands",
+        "description": "Apache-2.0 licensed with SQLite by default. Use the hosted edition or keep both code and data on your own server."
+      }
+    },
+    "pricing": {
+      "eyebrow": "Transparent lifetime pricing",
+      "title": "Pay once. Keep using it.",
+      "description": "You buy defined software capabilities and page quotas—not a vague promise of unlimited infrastructure forever.",
+      "promiseLabel": "Price promise",
+      "promise": "One payment, lifetime use, no price increases; existing customers always keep their price",
+      "lifetime": "One payment · Lifetime use",
+      "pageQuota": "Create up to {count} pages",
+      "buy": "Buy lifetime access",
+      "comingSoon": "Coming soon",
+      "recommended": "Complete plan",
+      "fairUse": "See the documentation for quotas and reasonable-use limits: they prevent abuse, not genuine use.",
+      "free": {
+        "name": "Free",
+        "billing": "Free forever · No commission",
+        "description": "Build, publish, and use the core distribution tools before you decide to pay.",
+        "action": "Start free"
+      },
+      "mini": {
+        "name": "Lifetime Basic",
+        "description": "For individual creators with several roles, projects, or campaign pages."
+      },
+      "pro": {
+        "name": "Lifetime Complete",
+        "description": "A clear 50-page ceiling for teams, studios, and long-running operations."
+      },
+      "trustEyebrow": "Five trust commitments",
+      "trustTitle": "YiLink will not lock you in.",
+      "trustDescription": "Each scar left by the category should become a product principle users can verify.",
+      "commitments": {
+        "export": "Export your data at any time in an open format—a lesson from Bento shutting down and Milkshake offering no export.",
+        "free": "The free plan stays available, takes no commission, and lets you turn off branding—a lesson from Linktree's 12% fee.",
+        "price": "Existing customers always keep their price—a lesson from Linktree's 67% increase.",
+        "moderation": "We hide first and provide human appeal; we never publicly shame a page with an “ACCOUNT BANNED” label.",
+        "openSource": "Open source is the final promise: if the hosted service disappears, you can self-host and take everything with you."
+      }
+    },
+    "footer": {
+      "label": "Footer navigation",
+      "description": "An open-source link-in-bio and digital card for Chinese creators.",
+      "deploy": "Deployment docs",
+      "report": "Report abuse"
+    }
   },
   "Login": {
     "title": "Log in to YiLink",
@@ -29,6 +102,7 @@
     "title": "Create an account",
     "email": "Email",
     "password": "Password",
+    "inviteCode": "Invitation code",
     "passwordHint": "Use at least 8 characters; letters, numbers, and symbols are recommended.",
     "strengthWeak": "Password strength: weak",
     "strengthMedium": "Password strength: medium",
@@ -37,6 +111,7 @@
     "submitting": "Registering…",
     "invalidEmail": "Enter a valid email.",
     "shortPassword": "Password must be at least 8 characters.",
+    "invalidInvite": "Invalid invitation code.",
     "duplicateEmail": "That email is already registered.",
     "unexpectedError": "Registration failed. Please try again.",
     "hasAccount": "Already have an account?",

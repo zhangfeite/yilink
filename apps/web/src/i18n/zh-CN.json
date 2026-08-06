@@ -5,10 +5,83 @@
   },
   "Marketing": {
     "tagline": "一条链接，装下你的全部主页。",
-    "description": "一链 YiLink 是面向中文创作者的开源聚合主页工具。",
+    "description": "为中文创作者做的开源聚合主页：把作品、社交平台和联系方式放进一张能在微信里顺畅打开的名片。",
     "github": "在 GitHub 查看",
     "login": "登录",
-    "register": "注册"
+    "register": "注册",
+    "nav": {
+      "label": "主导航",
+      "pricing": "定价"
+    },
+    "hero": {
+      "eyebrow": "开源 · 微信友好 · 数据自主",
+      "primaryCta": "免费开始",
+      "demoCta": "看一个真实主页",
+      "caption": "免费版永久可用，3 个主页起步；不收抽成。",
+      "liveLabel": "真实页面 · 实时加载",
+      "previewTitle": "一链插画师演示主页实时预览",
+      "previewCaption": "这里不是产品截图，而是正在运行的公开页。"
+    },
+    "features": {
+      "eyebrow": "三个具体优势",
+      "title": "少一点配置，多一点真的发出去。",
+      "description": "没有模糊的“赋能创作者”。从建页、微信分发到数据归属，每一项都对应真实使用场景。",
+      "template": {
+        "title": "场景模板，5 分钟出页",
+        "description": "从摄影、插画、开发者等 8 个场景开始，内容、主题和区块都能继续改。"
+      },
+      "wechat": {
+        "title": "微信内可打开，也能变成二维码海报",
+        "description": "公开页兼顾微信内置浏览器；链接、二维码和主题海报从同一个分享面板拿走。"
+      },
+      "openSource": {
+        "title": "开源可自部署，数据由你做主",
+        "description": "Apache-2.0 开源，默认 SQLite；可以用托管版，也可以把代码和数据留在自己的服务器。"
+      }
+    },
+    "pricing": {
+      "eyebrow": "透明买断定价",
+      "title": "付一次，长期用。",
+      "description": "买的是明确的软件能力和主页配额，不是没有成本上限的模糊承诺。",
+      "promiseLabel": "价格承诺",
+      "promise": "一次买断，终身使用，永不涨价；老用户永远保价",
+      "lifetime": "一次付费 · 终身使用",
+      "pageQuota": "最多创建 {count} 个主页",
+      "buy": "购买买断版",
+      "comingSoon": "即将开放",
+      "recommended": "完整方案",
+      "fairUse": "配额与合理使用限制见文档，防滥用不防真实使用",
+      "free": {
+        "name": "免费",
+        "billing": "永久免费 · 无抽成",
+        "description": "完整体验建页、发布和基础分发，适合先把主页真正用起来。",
+        "action": "免费开始"
+      },
+      "mini": {
+        "name": "基础买断",
+        "description": "适合有多个身份、项目或活动页的个人创作者。"
+      },
+      "pro": {
+        "name": "完整买断",
+        "description": "50 个主页的明确上限，适合团队、工作室和长期运营。"
+      },
+      "trustEyebrow": "五条信任承诺",
+      "trustTitle": "不把用户锁在一链里。",
+      "trustDescription": "竞品留下的每一道伤疤，都应该变成可以被核验的产品原则。",
+      "commitments": {
+        "export": "数据随时一键导出，格式开放（Bento 关停、Milkshake 无导出之鉴）",
+        "free": "免费版永久可用、无抽成、水印可关（Linktree 12% 抽成之鉴）",
+        "price": "涨价永远对老用户保价（Linktree +67% 之鉴）",
+        "moderation": "违规先隐藏 + 人工申诉，绝不公开羞辱页（\"ACCOUNT BANNED\" 之鉴）",
+        "openSource": "开源本身即最终承诺：托管版死了，你随时可以自己部署带走一切"
+      }
+    },
+    "footer": {
+      "label": "页脚导航",
+      "description": "面向中文创作者的开源 link-in-bio 与数字名片。",
+      "deploy": "部署文档",
+      "report": "举报邮箱"
+    }
   },
   "Login": {
     "title": "登录一链",
@@ -29,6 +102,7 @@
     "title": "创建账号",
     "email": "邮箱",
     "password": "密码",
+    "inviteCode": "邀请码",
     "passwordHint": "至少 8 位；建议同时使用字母、数字和符号。",
     "strengthWeak": "密码强度：弱",
     "strengthMedium": "密码强度：中",
@@ -37,6 +111,7 @@
     "submitting": "正在注册…",
     "invalidEmail": "请输入有效邮箱。",
     "shortPassword": "密码至少需要 8 位。",
+    "invalidInvite": "邀请码无效",
     "duplicateEmail": "该邮箱已注册。",
     "unexpectedError": "注册失败，请稍后重试。",
     "hasAccount": "已有账号？",

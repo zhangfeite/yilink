@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 
 import { credentialsSchema } from '@/lib/auth-validation';
 import { db } from '@/lib/db';
+import { validateInviteCode } from '@/lib/invite';
 
 function errorResponse(status: number, code: string, message: string) {
   return NextResponse.json(
@@ -23,6 +24,14 @@ export async function POST(request: Request) {
 
   if (!parsed.success) {
     return errorResponse(400, 'INVALID_INPUT', '邮箱格式无效或密码少于 8 位');
+  }
+
+  const inviteCode =
+    typeof payload === 'object' && payload !== null
+      ? (payload as Record<string, unknown>).inviteCode
+      : undefined;
+  if (!validateInviteCode(inviteCode)) {
+    return errorResponse(403, 'INVITE_INVALID', '邀请码无效');
   }
 
   const existingUser = await db.user.findUnique({
