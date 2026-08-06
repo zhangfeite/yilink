@@ -7,10 +7,15 @@ const { authMock, moderationCheckMock, revalidateTagMock } = vi.hoisted(() => ({
 }));
 
 vi.mock('../../../../../../lib/auth', () => ({ auth: authMock }));
-vi.mock('@yilink/moderation/local-words', () => ({
-  LocalWordsModerationProvider: class {
-    check = moderationCheckMock;
-  },
+vi.mock('../../../../../../lib/moderation', () => ({
+  moderatePageContent: moderationCheckMock,
+  pageModerationRecordData: (pageId: string, result: { verdict: string; labels: string[] }) => ({
+    targetType: 'page',
+    targetId: pageId,
+    provider: 'local-words+url-blocklist',
+    verdict: result.verdict,
+    detail: { labels: result.labels },
+  }),
 }));
 vi.mock('next/cache', () => ({ revalidateTag: revalidateTagMock }));
 
@@ -70,7 +75,7 @@ describe('/api/v1/pages/:id/publish', () => {
     await expect(
       db.moderationRecord.findFirst({ where: { targetType: 'page', targetId: page.id } }),
     ).resolves.toMatchObject({
-      provider: 'local-words',
+      provider: 'local-words+url-blocklist',
       verdict: 'block',
       detail: { labels: ['blocked'] },
     });
@@ -102,6 +107,11 @@ describe('/api/v1/pages/:id/publish', () => {
     expect(moderationCheckMock).toHaveBeenCalledWith({
       title: '可发布主页',
       bio: '页面简介',
+      avatarUrl: null,
+      seoTitle: null,
+      seoDesc: null,
+      ctaConfig: null,
+      themeConfig: null,
       blocks: [{ title: '官网', url: 'https://example.com' }],
     });
     expect(revalidateTagMock).toHaveBeenCalledWith('page:approved-page', { expire: 0 });
@@ -112,13 +122,13 @@ describe('/api/v1/pages/:id/publish', () => {
     await expect(
       db.moderationRecord.findFirst({ where: { targetType: 'page', targetId: page.id } }),
     ).resolves.toMatchObject({
-      provider: 'local-words',
+      provider: 'local-words+url-blocklist',
       verdict: 'pass',
       detail: { labels: [] },
     });
   });
 
-  it('publishes review content and leaves its moderation record pending human review', async () => {
+  it('keeps review content offline in REVIEW and leaves it pending human review', async () => {
     const page = await db.page.create({
       data: { userId, slug: 'review-page', title: '待人工复核的主页', bio: '简介' },
     });
@@ -128,17 +138,52 @@ describe('/api/v1/pages/:id/publish', () => {
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toMatchObject({
-      page: { id: page.id, status: 'PUBLISHED' },
+      page: { id: page.id, status: 'REVIEW', publishedAt: null },
+      moderation: { verdict: 'review', labels: ['需要复核'] },
+      message: '已提交审核',
     });
     await expect(
       db.moderationRecord.findFirst({ where: { targetType: 'page', targetId: page.id } }),
     ).resolves.toMatchObject({
-      provider: 'local-words',
+      provider: 'local-words+url-blocklist',
       verdict: 'review',
       detail: { labels: ['需要复核'] },
       reviewedBy: null,
     });
     expect(revalidateTagMock).toHaveBeenCalledWith('page:review-page', { expire: 0 });
+  });
+
+  it('does not let an owner republish a page hidden by an admin', async () => {
+    const page = await db.page.create({
+      data: {
+        userId,
+        slug: 'admin-hidden-page',
+        title: '管理员隐藏页面',
+        status: 'HIDDEN',
+      },
+    });
+
+    const response = await POST(new Request('http://localhost'), pageContext(page.id));
+
+    expect(response.status).toBe(409);
+    expect(moderationCheckMock).not.toHaveBeenCalled();
+    expect(revalidateTagMock).not.toHaveBeenCalled();
+  });
+
+  it('treats a soft-deleted owned page as not found', async () => {
+    const page = await db.page.create({
+      data: {
+        userId,
+        slug: 'deleted-publish-page',
+        title: '已删除页面',
+        deletedAt: new Date(),
+      },
+    });
+
+    const response = await POST(new Request('http://localhost'), pageContext(page.id));
+
+    expect(response.status).toBe(404);
+    expect(moderationCheckMock).not.toHaveBeenCalled();
   });
 
   it('returns 404 before calling moderation for a page the user does not own', async () => {

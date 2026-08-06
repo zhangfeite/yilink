@@ -125,6 +125,20 @@ describe('/api/v1/pages', () => {
     expect(response.status).toBe(201);
   });
 
+  it('does not count soft-deleted pages against the page limit', async () => {
+    await db.page.createMany({
+      data: [
+        { userId, slug: 'active-one', title: '页面一' },
+        { userId, slug: 'active-two', title: '页面二' },
+        { userId, slug: 'deleted-three', title: '已删除', deletedAt: new Date() },
+      ],
+    });
+
+    const response = await POST(createPageRequest({ slug: 'replacement-page', title: '替代页面' }));
+
+    expect(response.status).toBe(201);
+  });
+
   it('lists only the current user pages with block counts', async () => {
     const ownPage = await db.page.create({
       data: { userId, slug: 'own-page', title: '我的页面' },
@@ -143,12 +157,21 @@ describe('/api/v1/pages', () => {
     await db.page.create({
       data: { userId: otherUser.id, slug: 'other-page', title: '别人的页面' },
     });
+    await db.page.create({
+      data: {
+        userId,
+        slug: 'deleted-own-page',
+        title: '已删除页面',
+        deletedAt: new Date(),
+      },
+    });
 
     const response = await GET();
 
     expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toMatchObject({
-      pages: [{ id: ownPage.id, _count: { blocks: 1 } }],
-    });
+    const body = await response.json();
+    expect(body.pages).toEqual([
+      expect.objectContaining({ id: ownPage.id, _count: { blocks: 1 } }),
+    ]);
   });
 });

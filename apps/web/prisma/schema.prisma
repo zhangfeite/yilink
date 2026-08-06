@@ -166,13 +166,14 @@ model Page {
   themeConfig  Json?                          // 主题覆写（预留）
   seoTitle     String?
   seoDesc      String?
-  status       PageStatus @default(DRAFT)     // DRAFT | PUBLISHED | HIDDEN
+  status       PageStatus @default(DRAFT)     // DRAFT | REVIEW | PUBLISHED | HIDDEN
   hiddenReason String?                        // 违规先隐藏不羞辱（PRD §5）
   ctaConfig    Json?                          // 吸底转化条：{type:'wechat'|'link', label, value}；null=不启用（转化唯一性联动见 design-direction 法则八）
   templateId   String?                        // 建页来源的场景模板 id（选用率统计用）
   publishedAt  DateTime?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?                      // 软删除；30 天后由数据运维任务硬清理
   blocks       Block[]
   @@index([userId])
 }
@@ -182,6 +183,7 @@ enum Layout {
 }
 enum PageStatus {
   DRAFT
+  REVIEW
   PUBLISHED
   HIDDEN
 }

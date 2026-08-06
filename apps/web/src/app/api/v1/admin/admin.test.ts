@@ -40,7 +40,7 @@ function jsonRequest(url: string, method: string, body?: unknown) {
   });
 }
 
-async function createPage(status: 'DRAFT' | 'PUBLISHED' | 'HIDDEN' = 'PUBLISHED') {
+async function createPage(status: 'DRAFT' | 'REVIEW' | 'PUBLISHED' | 'HIDDEN' = 'PUBLISHED') {
   return db.page.create({
     data: {
       userId: ownerId,
@@ -77,7 +77,7 @@ describe('/api/v1/admin', () => {
   });
 
   it('lists pending review records with their page and owner context', async () => {
-    const page = await createPage();
+    const page = await createPage('REVIEW');
     await db.moderationRecord.create({
       data: {
         targetType: 'page',
@@ -151,7 +151,9 @@ describe('/api/v1/admin', () => {
       detail: { reason: '疑似违规，需要整改' },
       reviewedBy: adminId,
     });
-    await expect(db.moderationRecord.findUnique({ where: { id: pendingReview.id } })).resolves.toMatchObject({
+    await expect(
+      db.moderationRecord.findUnique({ where: { id: pendingReview.id } }),
+    ).resolves.toMatchObject({
       reviewedBy: adminId,
     });
     expect(revalidateTagMock).toHaveBeenCalledWith('page:review-target', { expire: 0 });
@@ -177,12 +179,12 @@ describe('/api/v1/admin', () => {
       db.moderationRecord.findFirst({
         where: { targetType: 'page', targetId: page.id, provider: 'manual', verdict: 'pass' },
       }),
-    ).resolves.toMatchObject({ detail: { action: 'restore' }, reviewedBy: adminId });
+    ).resolves.toMatchObject({ detail: { action: 'restore-hidden' }, reviewedBy: adminId });
     expect(revalidateTagMock).toHaveBeenCalledWith('page:review-target', { expire: 0 });
   });
 
-  it('marks a review record as handled by the current admin', async () => {
-    const page = await createPage();
+  it('approves a REVIEW page, publishes it, and invalidates its cache', async () => {
+    const page = await createPage('REVIEW');
     const record = await db.moderationRecord.create({
       data: {
         targetType: 'page',
@@ -199,11 +201,51 @@ describe('/api/v1/admin', () => {
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toMatchObject({
+      page: { id: page.id, status: 'PUBLISHED' },
       record: { id: record.id, reviewedBy: adminId },
     });
-    await expect(db.moderationRecord.findUnique({ where: { id: record.id } })).resolves.toMatchObject({
+    await expect(
+      db.moderationRecord.findUnique({ where: { id: record.id } }),
+    ).resolves.toMatchObject({
       reviewedBy: adminId,
     });
+    expect(revalidateTagMock).toHaveBeenCalledWith('page:review-target', { expire: 0 });
+  });
+
+  it('lists deleted pages separately and restores one without changing its status', async () => {
+    const page = await createPage('REVIEW');
+    await db.page.update({
+      where: { id: page.id },
+      data: { deletedAt: new Date() },
+    });
+
+    const activeResponse = await getPages(
+      new Request('http://localhost/api/v1/admin/pages?slug=review'),
+    );
+    await expect(activeResponse.json()).resolves.toMatchObject({ pages: [] });
+
+    const deletedResponse = await getPages(
+      new Request('http://localhost/api/v1/admin/pages?deleted=only'),
+    );
+    await expect(deletedResponse.json()).resolves.toMatchObject({
+      deleted: 'only',
+      pages: [{ id: page.id, status: 'REVIEW', deletedAt: expect.any(String) }],
+    });
+
+    const restoreResponse = await restorePage(
+      jsonRequest(`http://localhost/api/v1/admin/pages/${page.id}/restore`, 'POST'),
+      context(page.id),
+    );
+    await expect(restoreResponse.json()).resolves.toMatchObject({
+      page: { id: page.id, status: 'REVIEW', deletedAt: null },
+    });
+    await expect(db.page.findUnique({ where: { id: page.id } })).resolves.toMatchObject({
+      status: 'REVIEW',
+      deletedAt: null,
+    });
+    await expect(
+      db.moderationRecord.findFirst({ where: { targetId: page.id, provider: 'manual' } }),
+    ).resolves.toMatchObject({ detail: { action: 'restore-deleted' } });
   });
 
   it('searches pages by slug and lists users with editable trust levels', async () => {

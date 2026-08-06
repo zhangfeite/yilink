@@ -1,4 +1,3 @@
-import { LocalWordsModerationProvider } from '@yilink/moderation/local-words';
 import { pageCacheTag } from '@yilink/shared';
 import { revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
@@ -10,15 +9,10 @@ import {
   notFoundResponse,
 } from '../../../../../../lib/api';
 import { db } from '../../../../../../lib/db';
-import { moderationDetail } from '../../../../../../lib/moderation';
+import { moderatePageContent, pageModerationRecordData } from '../../../../../../lib/moderation';
 import { pageIdSchema } from '../../../../../../lib/pages-api-schemas';
 
-const moderationProvider = new LocalWordsModerationProvider();
-
-export async function POST(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const userId = await currentUserId();
   if (!userId) {
     return apiError(401, 'UNAUTHORIZED', '请先登录');
@@ -30,7 +24,7 @@ export async function POST(
   }
 
   const page = await db.page.findFirst({
-    where: { id: pageIdParsed.data, userId },
+    where: { id: pageIdParsed.data, userId, deletedAt: null },
     include: {
       blocks: {
         orderBy: { position: 'asc' },
@@ -40,19 +34,21 @@ export async function POST(
   if (!page) {
     return notFoundResponse();
   }
+  if (page.status === 'HIDDEN') {
+    return apiError(409, 'PAGE_HIDDEN', '页面已被管理员隐藏');
+  }
 
-  const moderation = await moderationProvider.check({
+  const moderation = await moderatePageContent({
     title: page.title,
     bio: page.bio,
+    avatarUrl: page.avatarUrl,
+    seoTitle: page.seoTitle,
+    seoDesc: page.seoDesc,
+    ctaConfig: page.ctaConfig,
+    themeConfig: page.themeConfig,
     blocks: page.blocks.map((block) => block.config),
   });
-  const moderationRecord = {
-    targetType: 'page',
-    targetId: page.id,
-    provider: 'local-words',
-    verdict: moderation.verdict,
-    detail: moderationDetail(moderation.labels),
-  };
+  const moderationRecord = pageModerationRecordData(page.id, moderation);
 
   if (moderation.verdict === 'block') {
     await db.moderationRecord.create({ data: moderationRecord });
@@ -60,17 +56,22 @@ export async function POST(
   }
 
   // 批量事务形态（D1 不支持交互式事务）
+  const nextStatus = moderation.verdict === 'review' ? 'REVIEW' : 'PUBLISHED';
   const [publishedPage] = await db.$transaction([
     db.page.update({
       where: { id: page.id },
       data: {
-        status: 'PUBLISHED',
-        publishedAt: new Date(),
+        status: nextStatus,
+        ...(nextStatus === 'PUBLISHED' ? { publishedAt: page.publishedAt ?? new Date() } : {}),
       },
     }),
     db.moderationRecord.create({ data: moderationRecord }),
   ]);
   revalidateTag(pageCacheTag(page.slug), { expire: 0 });
 
-  return NextResponse.json({ page: publishedPage });
+  return NextResponse.json({
+    page: publishedPage,
+    moderation,
+    message: nextStatus === 'REVIEW' ? '已提交审核' : '发布成功',
+  });
 }

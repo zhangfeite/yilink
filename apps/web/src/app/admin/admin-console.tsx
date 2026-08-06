@@ -2,7 +2,7 @@
 
 import { useCallback, useState, type FormEvent } from 'react';
 
-type PageStatus = 'DRAFT' | 'PUBLISHED' | 'HIDDEN';
+type PageStatus = 'DRAFT' | 'REVIEW' | 'PUBLISHED' | 'HIDDEN';
 
 interface AdminPageSummary {
   id: string;
@@ -87,6 +87,7 @@ function hitWords(detail: unknown) {
 
 function statusLabel(status: PageStatus) {
   if (status === 'PUBLISHED') return '已发布';
+  if (status === 'REVIEW') return '审核中';
   if (status === 'HIDDEN') return '已隐藏';
   return '草稿';
 }
@@ -285,7 +286,9 @@ export function AdminConsole({
           <div className="flex items-baseline justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">待人工审核</h2>
-              <p className="mt-1 text-sm text-slate-600">机审命中仅进入队列，页面已先发布，等待人工兜底。</p>
+              <p className="mt-1 text-sm text-slate-600">
+                机审命中后页面保持不可公开，人工通过后才恢复展示。
+              </p>
             </div>
             <button
               className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"

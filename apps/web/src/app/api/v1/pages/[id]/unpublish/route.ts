@@ -26,7 +26,7 @@ export async function POST(
   }
 
   const page = await db.page.findFirst({
-    where: { id: pageIdParsed.data, userId },
+    where: { id: pageIdParsed.data, userId, deletedAt: null },
     select: { id: true, slug: true },
   });
   if (!page) {

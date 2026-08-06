@@ -16,13 +16,15 @@ import { getTheme, isDarkTheme } from '@/lib/themes';
 import { classifyUserAgent } from '@/lib/ua';
 import { getWechatJssdkConfig, wechatJssdkEnabled } from '@/lib/wechat-jssdk';
 
+import { publicPageDisposition } from './public-state';
+
 interface PublicPageProps {
   params: Promise<{ slug: string }>;
 }
 
 async function queryPublicPage(slug: string) {
   const page = await db.page.findFirst({
-    where: { slug, status: 'PUBLISHED' },
+    where: { slug, status: 'PUBLISHED', deletedAt: null },
     select: {
       id: true,
       slug: true,
@@ -50,9 +52,18 @@ async function queryPublicPage(slug: string) {
   });
 
   if (!page) {
-    const unavailablePage = await db.page.findUnique({ where: { slug }, select: { status: true } });
+    const unavailablePage = await db.page.findUnique({
+      where: { slug },
+      select: { status: true, deletedAt: true },
+    });
     if (!unavailablePage) return null;
-    if (unavailablePage.status === 'HIDDEN') return { status: 'HIDDEN' as const };
+    const disposition = publicPageDisposition(unavailablePage.status, unavailablePage.deletedAt);
+    if (disposition === 'missing') return null;
+    if (disposition === 'unavailable') {
+      return unavailablePage.status === 'HIDDEN'
+        ? { status: 'HIDDEN' as const }
+        : { status: 'REVIEW' as const };
+    }
     return { status: 'DRAFT' as const };
   }
 
@@ -71,6 +82,13 @@ function cachedPublicPage(slug: string) {
 }
 
 const loadPublicPage = cache(cachedPublicPage);
+
+function reportEmail(): string {
+  const configured = process.env.REPORT_EMAIL?.trim();
+  return configured && /^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(configured)
+    ? configured
+    : 'report@yilink.app';
+}
 
 function forwardedHeader(value: string | null): string | null {
   return value?.split(',')[0]?.trim() || null;
@@ -111,7 +129,7 @@ export async function generateMetadata({ params }: PublicPageProps): Promise<Met
     return { title: '页面不存在' };
   }
 
-  if (page.status === 'HIDDEN') {
+  if (page.status === 'HIDDEN' || page.status === 'REVIEW') {
     return {
       title: '页面暂不可用',
       description: '这个页面现在无法访问，请稍后再试。',
@@ -159,7 +177,7 @@ export default async function PublicPage({ params }: PublicPageProps) {
   const page = await loadPublicPage(slug);
 
   if (!page || page.status === 'DRAFT') notFound();
-  if (page.status === 'HIDDEN') return <UnavailablePage />;
+  if (page.status === 'HIDDEN' || page.status === 'REVIEW') return <UnavailablePage />;
   if (page.status !== 'PUBLISHED') notFound();
 
   const requestHeaders = await headers();
@@ -195,7 +213,11 @@ export default async function PublicPage({ params }: PublicPageProps) {
   return (
     <>
       {wechatShare}
-      <PublicPageRenderer page={page satisfies PublicPageData} uaClass={uaClass} />
+      <PublicPageRenderer
+        page={page satisfies PublicPageData}
+        reportEmail={reportEmail()}
+        uaClass={uaClass}
+      />
     </>
   );
 }

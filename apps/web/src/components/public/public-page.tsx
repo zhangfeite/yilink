@@ -32,6 +32,7 @@ export interface PublicPageData {
 interface PublicPageRendererProps {
   page: PublicPageData;
   preview?: boolean;
+  reportEmail?: string;
   uaClass: UaClass;
 }
 
@@ -306,7 +307,13 @@ function ImageBlock({ block }: { block: PublicBlockData }) {
   return (
     <figure className={classNames(styles.card, styles.imageCard)}>
       {href ? (
-        <a data-block-id={block.id} data-track={block.id} href={href} rel="noreferrer noopener" target="_blank">
+        <a
+          data-block-id={block.id}
+          data-track={block.id}
+          href={href}
+          rel="noreferrer noopener"
+          target="_blank"
+        >
           {image}
         </a>
       ) : (
@@ -453,7 +460,12 @@ function ConversionBar({ cta, totalViews }: { cta: CtaConfig; totalViews: number
   );
 }
 
-export function PublicPageRenderer({ page, preview = false, uaClass }: PublicPageRendererProps) {
+export function PublicPageRenderer({
+  page,
+  preview = false,
+  reportEmail = 'report@yilink.app',
+  uaClass,
+}: PublicPageRendererProps) {
   const theme = getTheme(page.themeId);
   const cta = parseCta(page.ctaConfig);
   const role = textValue(asRecord(page.themeConfig), 'role');
@@ -488,6 +500,8 @@ export function PublicPageRenderer({ page, preview = false, uaClass }: PublicPag
 
         <footer className={classNames(styles.caption, styles.footer)}>
           Powered by 一链 YiLink
+          <span aria-hidden="true"> · </span>
+          <a href={`mailto:${reportEmail}`}>举报</a>
         </footer>
         {cta ? <ConversionBar cta={cta} totalViews={page.totalViews} /> : null}
       </div>

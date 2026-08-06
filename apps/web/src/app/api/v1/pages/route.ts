@@ -13,7 +13,7 @@ export async function GET() {
   }
 
   const pages = await db.page.findMany({
-    where: { userId },
+    where: { userId, deletedAt: null },
     orderBy: { createdAt: 'desc' },
     include: {
       _count: {
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   }
 
   const pageLimit = PLAN_LIMITS[user.plan].pages;
-  const pageCount = await db.page.count({ where: { userId } });
+  const pageCount = await db.page.count({ where: { userId, deletedAt: null } });
   if (pageCount >= pageLimit) {
     return apiError(403, 'PAGE_LIMIT', `当前套餐最多创建 ${pageLimit} 个主页`);
   }

@@ -5,22 +5,31 @@ import { db } from '../../../../../lib/db';
 import { currentAdminId } from '../../../../../lib/moderation';
 
 const slugSearchPattern = /^[a-z0-9-]{1,30}$/;
+const deletedFilters = new Set(['exclude', 'only']);
 
 export async function GET(request: Request) {
   if (!(await currentAdminId())) {
     return notFoundResponse();
   }
 
-  const slug = (new URL(request.url).searchParams.get('slug') ?? '').trim().toLowerCase();
-  if (!slug) {
+  const searchParams = new URL(request.url).searchParams;
+  const slug = (searchParams.get('slug') ?? '').trim().toLowerCase();
+  const deleted = searchParams.get('deleted') ?? 'exclude';
+  if (!deletedFilters.has(deleted)) {
+    return invalidInputResponse();
+  }
+  if (!slug && deleted !== 'only') {
     return NextResponse.json({ pages: [] });
   }
-  if (!slugSearchPattern.test(slug)) {
+  if (slug && !slugSearchPattern.test(slug)) {
     return invalidInputResponse();
   }
 
   const pages = await db.page.findMany({
-    where: { slug: { contains: slug } },
+    where: {
+      ...(slug ? { slug: { contains: slug } } : {}),
+      deletedAt: deleted === 'only' ? { not: null } : null,
+    },
     orderBy: { updatedAt: 'desc' },
     take: 20,
     select: {
@@ -30,9 +39,10 @@ export async function GET(request: Request) {
       status: true,
       hiddenReason: true,
       publishedAt: true,
+      deletedAt: true,
       user: { select: { email: true } },
     },
   });
 
-  return NextResponse.json({ pages });
+  return NextResponse.json({ deleted, pages });
 }

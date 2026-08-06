@@ -25,8 +25,8 @@ export async function POST(
     return invalidInputResponse();
   }
 
-  const page = await db.page.findUnique({
-    where: { id: parsedId.data },
+  const page = await db.page.findFirst({
+    where: { id: parsedId.data, deletedAt: null },
     select: { id: true, slug: true },
   });
   if (!page) {

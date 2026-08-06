@@ -27,7 +27,11 @@ export async function GET(request: Request) {
   const targetIds = [...new Set(records.map((record) => record.targetId))];
   const pages = targetIds.length
     ? await db.page.findMany({
-        where: { id: { in: targetIds } },
+        where: {
+          id: { in: targetIds },
+          deletedAt: null,
+          ...(filter === 'review' ? { status: 'REVIEW' as const } : {}),
+        },
         select: {
           id: true,
           slug: true,
@@ -41,9 +45,11 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     filter,
-    records: records.map((record) => ({
-      ...record,
-      page: pagesById.get(record.targetId) ?? null,
-    })),
+    records: records
+      .filter((record) => pagesById.has(record.targetId))
+      .map((record) => ({
+        ...record,
+        page: pagesById.get(record.targetId)!,
+      })),
   });
 }

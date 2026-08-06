@@ -38,7 +38,7 @@ export async function PATCH(
       email: true,
       plan: true,
       trustLevel: true,
-      _count: { select: { pages: true } },
+      _count: { select: { pages: { where: { deletedAt: null } } } },
     },
   });
 
