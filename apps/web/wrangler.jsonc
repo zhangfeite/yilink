@@ -4,7 +4,9 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-07-01",
   "compatibility_flags": ["nodejs_compat"],
-  "routes": [{ "pattern": "yilink.app", "custom_domain": true }],
+  // 自定义域名 yilink.app 已在首次部署时挂载并持久生效；配置中不再声明 routes——
+  // 当前 API Token 无 zone 级权限，带 routes 的部署会在 zone API 上 10000 失败。
+  // 如需变更域名：控制台 Workers → yilink → Domains，或换用含 Zone:Workers Routes:Edit 的 token。
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"

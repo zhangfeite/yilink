@@ -3,6 +3,8 @@ import { resolve } from 'node:path';
 
 import { sceneTemplatesFileSchema, type SceneTemplate } from '@yilink/shared';
 
+import bundledTemplates from '@/templates/templates.json';
+
 const fallbackTemplatesInput = [
   {
     id: 'illustrator-commission',
@@ -176,7 +178,12 @@ function defaultTemplatePaths(): string[] {
 }
 
 export function loadSceneTemplates(filePath?: string): SceneTemplate[] {
-  const candidates = filePath ? [filePath] : defaultTemplatePaths();
+  // 默认路径：构建期静态打包的 JSON（workerd 无文件系统，fs 只在显式传路径时用）
+  if (!filePath) {
+    return parseSceneTemplates(bundledTemplates as unknown);
+  }
+
+  const candidates = [filePath, ...defaultTemplatePaths()];
   const existingPath = candidates.find((candidate) => existsSync(candidate));
   if (!existingPath) return fallbackSceneTemplates;
 
