@@ -16,6 +16,7 @@ interface SharePanelProps {
   avatarUrl: string;
   bio: string;
   pageId: string;
+  publishSuccessSignal?: number;
   role: string;
   slug: string;
   theme: PublicTheme;
@@ -27,18 +28,75 @@ type PreviewState =
   | { status: 'ready'; url: string }
   | { message: string; qrUnavailable: boolean; status: 'error' };
 
-const copy = {
+export interface SharePanelOpenState {
+  handledPublishSuccessSignal: number;
+  isOpen: boolean;
+  openedAfterPublish: boolean;
+}
+
+export type DistributionCopyKind = 'moments' | 'xiaohongshu';
+
+export function initialSharePanelOpenState(publishSuccessSignal = 0): SharePanelOpenState {
+  return {
+    handledPublishSuccessSignal: publishSuccessSignal,
+    isOpen: false,
+    openedAfterPublish: false,
+  };
+}
+
+export function applyPublishSuccessSignal(
+  state: SharePanelOpenState,
+  publishSuccessSignal: number,
+): SharePanelOpenState {
+  if (publishSuccessSignal <= state.handledPublishSuccessSignal) return state;
+
+  return {
+    handledPublishSuccessSignal: publishSuccessSignal,
+    isOpen: true,
+    openedAfterPublish: true,
+  };
+}
+
+export function nextPublishSuccessSignal(current: number): number {
+  return current + 1;
+}
+
+export function distributionCopy(
+  kind: DistributionCopyKind,
+  locale: string,
+  title: string,
+  publicUrl: string,
+): string {
+  const isChinese = locale.startsWith('zh');
+  if (kind === 'xiaohongshu') {
+    return isChinese
+      ? `我的作品和联系方式都整理在这里：${title}\n${publicUrl}`
+      : `My work and contact details are all here: ${title}\n${publicUrl}`;
+  }
+
+  return isChinese
+    ? `我的新主页上线了：${title}\n作品、链接和联系方式都在这里 → ${publicUrl}`
+    : `My new page is live: ${title}\nFind my work, links, and contact details here → ${publicUrl}`;
+}
+
+export const sharePanelCopy = {
   'zh-CN': {
     close: '关闭分享面板',
     copied: '公开页链接已复制',
+    copiedMoments: '朋友圈文案已复制',
+    copiedXiaohongshu: '小红书简介文案已复制',
     copyFailed: '复制失败，请手动复制公开页地址',
     copyLink: '复制链接',
+    copyMoments: '复制朋友圈文案',
+    copyXiaohongshu: '复制小红书简介文案',
     downloadPoster: '下载海报',
     downloadQr: '下载二维码',
     generating: '正在生成清晰预览…',
     posterHint: '头像和二维码只在浏览器中合成，不会上传海报文件。',
     posterTitle: '生成分享海报',
     previewAlt: '当前主页的分享海报预览',
+    publicPage: '主页链接',
+    publishedKicker: '已发布！现在把它发出去',
     qrUnavailable: '二维码暂时不可用，海报下载已停用。请稍后重试。',
     retry: '重新生成',
     share: '分享',
@@ -53,14 +111,20 @@ const copy = {
   en: {
     close: 'Close share panel',
     copied: 'Public page link copied',
+    copiedMoments: 'Moments copy copied',
+    copiedXiaohongshu: 'Xiaohongshu bio copy copied',
     copyFailed: 'Could not copy. Please copy the public URL manually.',
     copyLink: 'Copy link',
+    copyMoments: 'Copy Moments text',
+    copyXiaohongshu: 'Copy Xiaohongshu bio',
     downloadPoster: 'Download poster',
     downloadQr: 'Download QR',
     generating: 'Generating a high-resolution preview…',
     posterHint: 'Your avatar and QR code are composed locally in this browser.',
     posterTitle: 'Create a share poster',
     previewAlt: 'Share poster preview for this page',
+    publicPage: 'Public page',
+    publishedKicker: 'Published! Now send it out',
     qrUnavailable: 'The QR code is unavailable, so poster download is disabled. Try again later.',
     retry: 'Generate again',
     share: 'Share',
@@ -161,19 +225,41 @@ async function copyText(value: string): Promise<void> {
   if (!copied) throw new Error('Copy command failed');
 }
 
-export function SharePanel({ avatarUrl, bio, pageId, role, slug, theme, title }: SharePanelProps) {
+export function SharePanel({
+  avatarUrl,
+  bio,
+  pageId,
+  publishSuccessSignal = 0,
+  role,
+  slug,
+  theme,
+  title,
+}: SharePanelProps) {
   const locale = useLocale();
-  const text = copy[locale.startsWith('zh') ? 'zh-CN' : 'en'];
-  const [isOpen, setIsOpen] = useState(false);
+  const text = sharePanelCopy[locale.startsWith('zh') ? 'zh-CN' : 'en'];
+  const [panelState, setPanelState] = useState(() => {
+    if (publishSuccessSignal === 0) return initialSharePanelOpenState();
+    return applyPublishSuccessSignal(
+      initialSharePanelOpenState(publishSuccessSignal - 1),
+      publishSuccessSignal,
+    );
+  });
   const [size, setSize] = useState<PosterSize>('portrait');
   const [preview, setPreview] = useState<PreviewState>({ status: 'idle' });
   const [copyNotice, setCopyNotice] = useState<string | null>(null);
   const [generation, setGeneration] = useState(0);
+  const isOpen = panelState.isOpen;
 
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsOpen(false);
+      if (event.key === 'Escape') {
+        setPanelState((current) => ({
+          ...current,
+          isOpen: false,
+          openedAfterPublish: false,
+        }));
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -217,10 +303,19 @@ export function SharePanel({ avatarUrl, bio, pageId, role, slug, theme, title }:
     };
   }, [avatarUrl, bio, generation, isOpen, pageId, role, size, slug, text, theme, title]);
 
-  async function handleCopyLink() {
+  async function handleCopy(kind: 'link' | DistributionCopyKind) {
+    const pageUrl = publicPageUrl(slug);
+    const value = kind === 'link' ? pageUrl : distributionCopy(kind, locale, title, pageUrl);
+    const successNotice =
+      kind === 'link'
+        ? text.copied
+        : kind === 'xiaohongshu'
+          ? text.copiedXiaohongshu
+          : text.copiedMoments;
+
     try {
-      await copyText(publicPageUrl(slug));
-      setCopyNotice(text.copied);
+      await copyText(value);
+      setCopyNotice(successNotice);
     } catch {
       setCopyNotice(text.copyFailed);
     }
@@ -238,6 +333,7 @@ export function SharePanel({ avatarUrl, bio, pageId, role, slug, theme, title }:
 
   const qrUnavailable = preview.status === 'error' && preview.qrUnavailable;
   const qrReady = preview.status === 'ready' || (preview.status === 'error' && !qrUnavailable);
+  const pageUrl = isOpen ? publicPageUrl(slug) : '';
 
   return (
     <>
@@ -246,7 +342,11 @@ export function SharePanel({ avatarUrl, bio, pageId, role, slug, theme, title }:
         onClick={() => {
           setCopyNotice(null);
           setPreview({ status: 'loading' });
-          setIsOpen(true);
+          setPanelState((current) => ({
+            ...current,
+            isOpen: true,
+            openedAfterPublish: false,
+          }));
         }}
         type="button"
       >
@@ -257,7 +357,13 @@ export function SharePanel({ avatarUrl, bio, pageId, role, slug, theme, title }:
         <div
           className="fixed inset-0 z-[100] flex items-end justify-center bg-slate-950/55 p-0 backdrop-blur-[2px] sm:items-center sm:p-6"
           onMouseDown={(event) => {
-            if (event.currentTarget === event.target) setIsOpen(false);
+            if (event.currentTarget === event.target) {
+              setPanelState((current) => ({
+                ...current,
+                isOpen: false,
+                openedAfterPublish: false,
+              }));
+            }
           }}
         >
           <section
@@ -280,19 +386,46 @@ export function SharePanel({ avatarUrl, bio, pageId, role, slug, theme, title }:
                 aria-label={text.close}
                 autoFocus
                 className="grid h-9 w-9 flex-none place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm hover:text-slate-950"
-                onClick={() => setIsOpen(false)}
+                onClick={() =>
+                  setPanelState((current) => ({
+                    ...current,
+                    isOpen: false,
+                    openedAfterPublish: false,
+                  }))
+                }
                 type="button"
               >
                 <CloseIcon />
               </button>
             </header>
 
+            <div className="space-y-3 border-b border-slate-200 px-5 py-4 sm:px-7">
+              {panelState.openedAfterPublish ? (
+                <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-extrabold text-emerald-800">
+                  {text.publishedKicker}
+                </p>
+              ) : null}
+              <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
+                <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                  {text.publicPage}
+                </span>
+                <a
+                  className="mt-1 block break-all text-sm font-semibold text-blue-700 hover:underline"
+                  href={pageUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {pageUrl}
+                </a>
+              </div>
+            </div>
+
             <div className="grid gap-6 p-5 sm:p-7 md:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
               <div>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     className="flex min-h-24 flex-col items-start justify-between rounded-2xl border border-slate-200 bg-white p-4 text-left text-sm font-bold text-slate-800 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:border-blue-300 hover:text-blue-700"
-                    onClick={() => void handleCopyLink()}
+                    onClick={() => void handleCopy('link')}
                     type="button"
                   >
                     <span className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 text-slate-500">
@@ -323,6 +456,28 @@ export function SharePanel({ avatarUrl, bio, pageId, role, slug, theme, title }:
                       {text.downloadQr}
                     </button>
                   )}
+                </div>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
+                  <button
+                    className="flex min-h-20 items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left text-xs font-bold leading-5 text-slate-800 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:border-blue-300 hover:text-blue-700"
+                    onClick={() => void handleCopy('xiaohongshu')}
+                    type="button"
+                  >
+                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full border border-slate-200 text-slate-500">
+                      <CopyIcon />
+                    </span>
+                    {text.copyXiaohongshu}
+                  </button>
+                  <button
+                    className="flex min-h-20 items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left text-xs font-bold leading-5 text-slate-800 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:border-blue-300 hover:text-blue-700"
+                    onClick={() => void handleCopy('moments')}
+                    type="button"
+                  >
+                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full border border-slate-200 text-slate-500">
+                      <CopyIcon />
+                    </span>
+                    {text.copyMoments}
+                  </button>
                 </div>
                 <p aria-live="polite" className="mt-2 min-h-5 px-1 text-xs text-slate-500">
                   {copyNotice ?? ''}

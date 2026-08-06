@@ -21,16 +21,21 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
-import { persistPageRole } from '@/app/studio/actions';
 import { PublicPageRenderer } from '@/components/public/public-page';
 
 import { SortableBlockEditor } from './block-editor';
 import { studioApiRequest, StudioApiError } from './create-from-template';
-import { SharePanel } from './share-panel';
+import { nextPublishSuccessSignal, SharePanel } from './share-panel';
 import { studioThemes } from './theme-options';
 import type { StudioBlock, StudioBlockType, StudioPageDraft } from './types';
 
 type CtaDraft = NonNullable<CtaConfig>;
+type EditorStatus = StudioPageDraft['status'] | 'REVIEW';
+
+interface ModerationResponse {
+  moderation: { verdict: 'pass' | 'review' | 'block'; labels: string[] } | null;
+  page: { status: EditorStatus };
+}
 
 interface EditorMeta {
   avatarUrl: string;
@@ -45,7 +50,7 @@ interface EditorMeta {
 }
 
 interface Notice {
-  kind: 'error' | 'success';
+  kind: 'error' | 'review' | 'success';
   text: string;
 }
 
@@ -69,10 +74,11 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
-function statusClass(status: StudioPageDraft['status']): string {
+function statusClass(status: EditorStatus): string {
   if (status === 'PUBLISHED') return 'bg-emerald-50 text-emerald-700';
   if (status === 'HIDDEN') return 'bg-rose-50 text-rose-700';
-  return 'bg-amber-50 text-amber-700';
+  if (status === 'REVIEW') return 'bg-amber-50 text-amber-700';
+  return 'bg-slate-100 text-slate-600';
 }
 
 export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
@@ -90,10 +96,11 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
     title: initialPage.title,
   });
   const [blocks, setBlocks] = useState(initialPage.blocks);
-  const [status, setStatus] = useState(initialPage.status);
+  const [status, setStatus] = useState<EditorStatus>(initialPage.status);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [pageAction, setPageAction] = useState<'publish' | 'unpublish' | null>(null);
+  const [publishSuccessSignal, setPublishSuccessSignal] = useState(0);
   const [notice, setNotice] = useState<Notice | null>(null);
   const [mobileTab, setMobileTab] = useState<'edit' | 'preview'>('edit');
 
@@ -229,38 +236,60 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
     setIsSaving(true);
     setNotice(null);
     try {
-      await studioApiRequest(fetch, `/api/v1/pages/${initialPage.id}`, {
-        method: 'PATCH',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          title: meta.title.trim(),
-          bio: meta.bio.trim() || null,
-          avatarUrl: meta.avatarUrl.trim() || null,
-          layout: meta.layout,
-          themeId: meta.themeId,
-          seoTitle: meta.seoTitle.trim() || null,
-          seoDesc: meta.seoDesc.trim() || null,
-          ctaConfig: meta.ctaConfig,
-        }),
-      });
-      await studioApiRequest(fetch, `/api/v1/pages/${initialPage.id}/blocks`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(
-          blocks.map(({ type, size, isVisible, config }) => ({
-            type,
-            size,
-            isVisible,
-            config,
-          })),
-        ),
-      });
-      await persistPageRole(initialPage.id, meta.role);
+      const metadataResult = await studioApiRequest<ModerationResponse>(
+        fetch,
+        `/api/v1/pages/${initialPage.id}`,
+        {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            title: meta.title.trim(),
+            bio: meta.bio.trim() || null,
+            avatarUrl: meta.avatarUrl.trim() || null,
+            layout: meta.layout,
+            themeId: meta.themeId,
+            seoTitle: meta.seoTitle.trim() || null,
+            seoDesc: meta.seoDesc.trim() || null,
+            ctaConfig: meta.ctaConfig,
+            themeConfig: { ...recordValue(initialPage.themeConfig), role: meta.role.trim() },
+          }),
+        },
+      );
+      setStatus(metadataResult.page.status);
+      const blocksResult = await studioApiRequest<ModerationResponse>(
+        fetch,
+        `/api/v1/pages/${initialPage.id}/blocks`,
+        {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(
+            blocks.map(({ type, size, isVisible, config }) => ({
+              type,
+              size,
+              isVisible,
+              config,
+            })),
+          ),
+        },
+      );
+      setStatus(blocksResult.page.status);
       setIsDirty(false);
-      if (announce) setNotice({ kind: 'success', text: t('saved') });
+      if (announce) {
+        setNotice(
+          blocksResult.page.status === 'REVIEW'
+            ? { kind: 'review', text: t('reviewPending') }
+            : { kind: 'success', text: t('saved') },
+        );
+      }
       return true;
-    } catch {
-      setNotice({ kind: 'error', text: t('errors.saveFailed') });
+    } catch (error) {
+      setNotice({
+        kind: 'error',
+        text:
+          error instanceof StudioApiError && error.code === 'MODERATION_BLOCKED'
+            ? t('errors.moderationBlocked', { reason: error.message })
+            : t('errors.saveFailed'),
+      });
       return false;
     } finally {
       setIsSaving(false);
@@ -275,11 +304,18 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
       return;
     }
     try {
-      await studioApiRequest(fetch, `/api/v1/pages/${initialPage.id}/publish`, {
-        method: 'POST',
-      });
-      setStatus('PUBLISHED');
-      setNotice({ kind: 'success', text: t('published') });
+      const result = await studioApiRequest<ModerationResponse>(
+        fetch,
+        `/api/v1/pages/${initialPage.id}/publish`,
+        { method: 'POST' },
+      );
+      setStatus(result.page.status);
+      if (result.page.status === 'REVIEW') {
+        setNotice({ kind: 'review', text: t('submittedForReview') });
+      } else {
+        setNotice({ kind: 'success', text: t('published') });
+        setPublishSuccessSignal(nextPublishSuccessSignal);
+      }
     } catch (error) {
       if (error instanceof StudioApiError && error.code === 'MODERATION_BLOCKED') {
         setNotice({
@@ -506,7 +542,9 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
           <SharePanel
             avatarUrl={meta.avatarUrl}
             bio={meta.bio}
+            key={publishSuccessSignal}
             pageId={initialPage.id}
+            publishSuccessSignal={publishSuccessSignal}
             role={meta.role}
             slug={initialPage.slug}
             theme={currentTheme}
@@ -546,7 +584,9 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
             className={`mt-2 rounded-xl px-3 py-2 text-xs ${
               notice.kind === 'error'
                 ? 'bg-rose-50 text-rose-700'
-                : 'bg-emerald-50 text-emerald-700'
+                : notice.kind === 'review'
+                  ? 'bg-amber-50 text-amber-800'
+                  : 'bg-emerald-50 text-emerald-700'
             }`}
           >
             {notice.text}

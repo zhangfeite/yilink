@@ -3,8 +3,10 @@ export type Plan = 'FREE' | 'PRO_MINI' | 'PRO';
 export const PLAN_LIMITS = {
   FREE: { pages: 3 },
   PRO_MINI: { pages: 10 },
-  PRO: { pages: Infinity },
+  PRO: { pages: 50 },
 } as const satisfies Record<Plan, { pages: number }>;
+
+export const PLAN_QUOTA_NOTE_ZH = '配额与合理使用限制见文档，防滥用不防真实使用';
 
 export const PLAN_NAMES_ZH = {
   FREE: '免费版',

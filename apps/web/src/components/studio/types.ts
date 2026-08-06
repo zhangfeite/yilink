@@ -22,6 +22,6 @@ export interface StudioPageDraft {
   seoTitle: string | null;
   seoDesc: string | null;
   ctaConfig: unknown;
-  status: 'DRAFT' | 'PUBLISHED' | 'HIDDEN';
+  status: 'DRAFT' | 'REVIEW' | 'PUBLISHED' | 'HIDDEN';
   blocks: StudioBlock[];
 }

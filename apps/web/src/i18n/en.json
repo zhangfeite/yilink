@@ -55,7 +55,7 @@
         "name": "Free",
         "billing": "Free forever · No commission",
         "description": "Build, publish, and use the core distribution tools before you decide to pay.",
-        "action": "Start free"
+        "action": "No payment needed"
       },
       "mini": {
         "name": "Lifetime Basic",
@@ -159,9 +159,11 @@
     "save": "Save",
     "saving": "Saving…",
     "saved": "All changes saved.",
+    "reviewPending": "Content is under review and will reappear after approval.",
     "publish": "Publish",
     "publishing": "Publishing…",
     "published": "Page published.",
+    "submittedForReview": "Submitted for review.",
     "unpublish": "Unpublish",
     "unpublishing": "Working…",
     "unpublished": "Page unpublished.",
@@ -190,6 +192,7 @@
     },
     "status": {
       "draft": "Draft",
+      "review": "In review",
       "published": "Published",
       "hidden": "Hidden"
     },

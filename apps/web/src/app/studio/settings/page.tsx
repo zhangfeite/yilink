@@ -1,4 +1,4 @@
-import { PLAN_LIMITS, PLAN_NAMES_ZH } from '@yilink/shared';
+import { PLAN_LIMITS, PLAN_NAMES_ZH, PLAN_QUOTA_NOTE_ZH } from '@yilink/shared';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
@@ -60,7 +60,7 @@ export default async function StudioSettingsPage() {
   if (!user) redirect('/login');
 
   const pageLimit = PLAN_LIMITS[user.plan].pages;
-  const quota = pageLimit === Infinity ? '无限' : String(pageLimit);
+  const quota = String(pageLimit);
   const miniCheckoutUrl = checkoutUrl(process.env.LEMONSQUEEZY_CHECKOUT_URL_MINI, user.id);
   const proCheckoutUrl = checkoutUrl(process.env.LEMONSQUEEZY_CHECKOUT_URL_PRO, user.id);
   const checkoutUrls =
@@ -92,6 +92,7 @@ export default async function StudioSettingsPage() {
           </p>
         </article>
       </section>
+      <p className="mt-3 text-center text-xs leading-5 text-slate-500">{PLAN_QUOTA_NOTE_ZH}</p>
 
       <section className="mt-8" aria-labelledby="orders-heading">
         <div className="flex items-end justify-between gap-4">
@@ -172,7 +173,7 @@ export default async function StudioSettingsPage() {
                 {proPrice}
               </p>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                无限创建主页，随功能持续升级。
+                最多创建 {PLAN_LIMITS.PRO.pages} 个主页，随功能持续升级。
               </p>
               <a
                 className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-blue-700 px-5 text-sm font-semibold text-white transition hover:bg-blue-800"

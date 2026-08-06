@@ -55,7 +55,7 @@
         "name": "免费",
         "billing": "永久免费 · 无抽成",
         "description": "完整体验建页、发布和基础分发，适合先把主页真正用起来。",
-        "action": "免费开始"
+        "action": "无需付费"
       },
       "mini": {
         "name": "基础买断",
@@ -159,9 +159,11 @@
     "save": "保存",
     "saving": "保存中…",
     "saved": "已保存所有更改。",
+    "reviewPending": "内容审核中，通过后自动恢复展示。",
     "publish": "发布",
     "publishing": "发布中…",
     "published": "主页已发布。",
+    "submittedForReview": "已提交审核。",
     "unpublish": "取消发布",
     "unpublishing": "处理中…",
     "unpublished": "主页已取消发布。",
@@ -190,6 +192,7 @@
     },
     "status": {
       "draft": "草稿",
+      "review": "审核中",
       "published": "已发布",
       "hidden": "已隐藏"
     },
