@@ -43,6 +43,14 @@
   要删**整个 `.next`** 再重启 dev。判断是不是缓存：把某个值改成显眼的异常值看页面跟不跟随。
 - **跑 e2e 前先停掉自己的 dev server**：playwright 配了 `reuseExistingServer`，会复用连着 wrangler D1
   的那个进程，导致 e2e 种子数据全都查不到、9 条全挂（看起来像代码坏了，其实是连错库）。
+- **生产同理，而且重新部署也不会失效**：R2 增量缓存跨部署存活。绕过应用直接改远端 D1 后，
+  要往 `yilink-tag-cache` 的 `revalidations` 表插一条失效记录，tag 形如 `<BUILD_ID>/page:<slug>`
+  （`BUILD_ID` 取 `apps/web/.next/BUILD_ID`，每次构建都变，所以旧记录对新构建无效）：
+  ```
+  INSERT INTO revalidations (tag, revalidatedAt, stale, expire)
+  VALUES ('<BUILD_ID>/page:<slug>', <毫秒时间戳>, <同>, <同>);
+  ```
+  正常路径应当走应用自身的接口（发布 / 审核放行都会调 `revalidateTag`），只有在手工改库时才需要这招。
 - macOS 没有 `setsid`；要让 dev server 活过后台任务，用 `nohup … & disown`
 - schema 变更后：`pnpm --filter @yilink/web db:migrate` + 对本地/远端 D1 各执行一次 migration SQL
 - 给 codex 派重活必须：`-c model_reasoning_effort=medium` + spec 内写死「分段落盘 + 进度信标」（否则会挂死）
