@@ -24,6 +24,21 @@ import { useEffect, useMemo, useState } from 'react';
 import { PublicPageRenderer } from '@/components/public/public-page';
 
 import { SortableBlockEditor } from './block-editor';
+import { BentoCanvas } from './bento-canvas';
+import { BentoConversionDialog } from './bento-conversion-dialog';
+import {
+  commitHistory,
+  createBentoCandidate,
+  createHistory,
+  detectBentoGuardrails,
+  normalizeStudioBento,
+  publishingBlocker,
+  randomizeBentoLayout,
+  redoHistory,
+  tidyBentoLayout,
+  undoHistory,
+  type PositionedStudioBlock,
+} from './bento-editor-logic';
 import { studioApiRequest, StudioApiError } from './create-from-template';
 import { nextPublishSuccessSignal, SharePanel } from './share-panel';
 import { studioThemes } from './theme-options';
@@ -99,13 +114,20 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
     themeId: initialPage.themeId,
     title: initialPage.title,
   });
-  const [blocks, setBlocks] = useState(initialPage.blocks);
+  const [blockHistory, setBlockHistory] = useState(() => createHistory(initialPage.blocks));
+  const blocks = blockHistory.present;
+  const [bentoVersion, setBentoVersion] = useState(initialPage.bentoVersion);
+  const [bentoCandidate, setBentoCandidate] = useState<PositionedStudioBlock[] | null>(null);
+  const [isApplyingBento, setIsApplyingBento] = useState(false);
   const [status, setStatus] = useState<EditorStatus>(initialPage.status);
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [pageAction, setPageAction] = useState<'publish' | 'unpublish' | null>(null);
   const [publishSuccessSignal, setPublishSuccessSignal] = useState(0);
   const [notice, setNotice] = useState<Notice | null>(null);
+  const [guardrailWarnings, setGuardrailWarnings] = useState<
+    ReturnType<typeof detectBentoGuardrails>
+  >([]);
   const [mobileTab, setMobileTab] = useState<'edit' | 'preview'>('edit');
 
   const sensors = useSensors(
@@ -163,13 +185,23 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
   }
 
   function updateBlock(nextBlock: StudioBlock) {
-    setBlocks((current) => current.map((block) => (block.id === nextBlock.id ? nextBlock : block)));
+    setBlockHistory((current) =>
+      commitHistory(
+        current,
+        current.present.map((block) => (block.id === nextBlock.id ? nextBlock : block)),
+      ),
+    );
     setIsDirty(true);
     setNotice(null);
   }
 
   function removeBlock(id: string) {
-    setBlocks((current) => current.filter((block) => block.id !== id));
+    setBlockHistory((current) =>
+      commitHistory(
+        current,
+        current.present.filter((block) => block.id !== id),
+      ),
+    );
     setIsDirty(true);
     setNotice(null);
   }
@@ -204,10 +236,13 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
       return;
     }
     const id = `draft-${crypto.randomUUID()}`;
-    setBlocks((current) => [
-      ...current,
-      { id, type, size: 'MD', isVisible: true, config: defaultConfig(type) },
-    ]);
+    setBlockHistory((current) => {
+      const next = [
+        ...current.present,
+        { id, type, size: 'MD', isVisible: true, config: defaultConfig(type) },
+      ] satisfies StudioBlock[];
+      return commitHistory(current, bentoVersion === 1 ? normalizeStudioBento(next) : next);
+    });
     setIsDirty(true);
     setNotice(null);
   }
@@ -215,13 +250,75 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-    setBlocks((current) => {
-      const from = current.findIndex((block) => block.id === active.id);
-      const to = current.findIndex((block) => block.id === over.id);
-      return from < 0 || to < 0 ? current : arrayMove(current, from, to);
+    setBlockHistory((current) => {
+      const from = current.present.findIndex((block) => block.id === active.id);
+      const to = current.present.findIndex((block) => block.id === over.id);
+      return from < 0 || to < 0
+        ? current
+        : commitHistory(current, arrayMove(current.present, from, to));
     });
     setIsDirty(true);
     setNotice(null);
+  }
+
+  function layoutBody(nextBlocks: readonly StudioBlock[], nextBentoVersion = bentoVersion) {
+    return {
+      title: meta.title.trim(),
+      bio: meta.bio.trim() || null,
+      avatarUrl: meta.avatarUrl.trim() || null,
+      layout: meta.layout,
+      bentoVersion: nextBentoVersion,
+      themeId: meta.themeId,
+      seoTitle: meta.seoTitle.trim() || null,
+      seoDesc: meta.seoDesc.trim() || null,
+      ctaConfig: meta.ctaConfig,
+      themeConfig: { ...recordValue(initialPage.themeConfig), role: meta.role.trim() },
+      blocks: nextBlocks.map(({ id, type, size, isVisible, config, placement }) => ({
+        id,
+        type,
+        size,
+        isVisible,
+        config,
+        placement,
+      })),
+    };
+  }
+
+  function chooseLayout(layout: EditorMeta['layout']) {
+    updateMeta({ layout });
+    setBentoVersion(null);
+  }
+
+  function openBentoConversion() {
+    if (bentoVersion === 1) return;
+    setBentoCandidate(createBentoCandidate(blocks, meta.layout));
+  }
+
+  async function applyBentoConversion() {
+    if (!bentoCandidate) return;
+    setIsApplyingBento(true);
+    setNotice(null);
+    try {
+      const result = await studioApiRequest<BlocksSaveResponse>(
+        fetch,
+        `/api/v1/pages/${initialPage.id}/layout`,
+        {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(layoutBody(bentoCandidate, 1)),
+        },
+      );
+      setBlockHistory(createHistory(result.blocks));
+      setBentoVersion(1);
+      setBentoCandidate(null);
+      setIsDirty(false);
+      setStatus(result.page.status);
+      setNotice({ kind: 'success', text: t('bento.conversion.applied') });
+    } catch {
+      setNotice({ kind: 'error', text: t('bento.conversion.failed') });
+    } finally {
+      setIsApplyingBento(false);
+    }
   }
 
   async function saveDraft(announce = true): Promise<boolean> {
@@ -239,6 +336,7 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
 
     setIsSaving(true);
     setNotice(null);
+    setGuardrailWarnings(bentoVersion === 1 ? detectBentoGuardrails(blocks) : []);
     try {
       const layoutResult = await studioApiRequest<BlocksSaveResponse>(
         fetch,
@@ -246,30 +344,11 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
         {
           method: 'PUT',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            title: meta.title.trim(),
-            bio: meta.bio.trim() || null,
-            avatarUrl: meta.avatarUrl.trim() || null,
-            layout: meta.layout,
-            bentoVersion: null,
-            themeId: meta.themeId,
-            seoTitle: meta.seoTitle.trim() || null,
-            seoDesc: meta.seoDesc.trim() || null,
-            ctaConfig: meta.ctaConfig,
-            themeConfig: { ...recordValue(initialPage.themeConfig), role: meta.role.trim() },
-            blocks: blocks.map(({ id, type, size, isVisible, config, placement }) => ({
-              id,
-              type,
-              size,
-              isVisible,
-              config,
-              placement,
-            })),
-          }),
+          body: JSON.stringify(layoutBody(blocks)),
         },
       );
       setStatus(layoutResult.page.status);
-      setBlocks(layoutResult.blocks);
+      setBlockHistory(createHistory(layoutResult.blocks));
       setIsDirty(false);
       if (announce) {
         setNotice(
@@ -294,6 +373,14 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
   }
 
   async function publishPage() {
+    const blocker = bentoVersion === 1 ? publishingBlocker(blocks) : null;
+    if (blocker) {
+      setNotice({
+        kind: 'error',
+        text: t('bento.guardrails.blocking', { type: t(`blockTypes.${blocker.type}`) }),
+      });
+      return;
+    }
     setPageAction('publish');
     const saved = await saveDraft(false);
     if (!saved) {
@@ -350,13 +437,20 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
     bio: meta.bio || null,
     avatarUrl: meta.avatarUrl || null,
     layout: meta.layout,
+    bentoVersion,
     themeId: meta.themeId,
     themeConfig: { ...recordValue(initialPage.themeConfig), role: meta.role },
     ctaConfig: meta.ctaConfig,
     totalViews: 0,
     blocks: blocks
       .filter((block) => block.isVisible)
-      .map(({ id, type, size, config }) => ({ id, type, size, config })),
+      .map(({ id, type, size, config, placement }) => ({
+        id,
+        type,
+        size,
+        config,
+        placement,
+      })),
   };
 
   return (
@@ -421,17 +515,29 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
           <div className="flex rounded-full border border-slate-200 bg-white p-1 shadow-sm">
             {(['LIST', 'GRID'] as const).map((layout) => (
               <button
-                aria-pressed={meta.layout === layout}
+                aria-pressed={bentoVersion === null && meta.layout === layout}
                 className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
-                  meta.layout === layout ? 'bg-slate-950 text-white' : 'text-slate-600'
+                  bentoVersion === null && meta.layout === layout
+                    ? 'bg-slate-950 text-white'
+                    : 'text-slate-600'
                 }`}
                 key={layout}
-                onClick={() => updateMeta({ layout })}
+                onClick={() => chooseLayout(layout)}
                 type="button"
               >
                 {t(`layouts.${layout.toLowerCase()}`)}
               </button>
             ))}
+            <button
+              aria-pressed={bentoVersion === 1}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
+                bentoVersion === 1 ? 'bg-blue-600 text-white' : 'text-slate-600'
+              }`}
+              onClick={openBentoConversion}
+              type="button"
+            >
+              {t('layouts.bento')}
+            </button>
           </div>
 
           <details className="group relative">
@@ -589,6 +695,26 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
             {notice.text}
           </p>
         ) : null}
+        {guardrailWarnings.length ? (
+          <div className="mt-2 flex flex-wrap items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            <span className="mr-auto">
+              {guardrailWarnings.map((warning) => t(`bento.guardrails.${warning}`)).join(' · ')}
+            </span>
+            <button
+              className="rounded-full bg-amber-200 px-3 py-1.5 font-bold"
+              onClick={() => {
+                setBlockHistory((current) =>
+                  commitHistory(current, tidyBentoLayout(current.present)),
+                );
+                setGuardrailWarnings([]);
+                setIsDirty(true);
+              }}
+              type="button"
+            >
+              ✨ {t('bento.tidy')}
+            </button>
+          </div>
+        ) : null}
       </header>
 
       <div className="mt-5 grid grid-cols-2 rounded-xl bg-slate-200 p-1 lg:hidden">
@@ -721,6 +847,42 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
             </details>
           </section>
 
+          {bentoVersion === 1 ? (
+            <BentoCanvas
+              blocks={blocks}
+              canRedo={blockHistory.future.length > 0}
+              canUndo={blockHistory.past.length > 0}
+              onChange={(nextBlocks, nextAnnouncement) => {
+                setBlockHistory((current) => commitHistory(current, nextBlocks));
+                setIsDirty(true);
+                setNotice({ kind: 'success', text: nextAnnouncement });
+              }}
+              onRedo={() => {
+                setBlockHistory((current) => redoHistory(current));
+                setIsDirty(true);
+              }}
+              onShuffle={() => {
+                setBlockHistory((current) =>
+                  commitHistory(current, randomizeBentoLayout(current.present)),
+                );
+                setIsDirty(true);
+                setNotice(null);
+              }}
+              onTidy={() => {
+                setBlockHistory((current) =>
+                  commitHistory(current, tidyBentoLayout(current.present)),
+                );
+                setGuardrailWarnings([]);
+                setIsDirty(true);
+                setNotice(null);
+              }}
+              onUndo={() => {
+                setBlockHistory((current) => undoHistory(current));
+                setIsDirty(true);
+              }}
+            />
+          ) : null}
+
           <section>
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
@@ -765,7 +927,7 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
                       <SortableBlockEditor
                         block={block}
                         key={block.id}
-                        layout={meta.layout}
+                        layout={bentoVersion === 1 ? 'LIST' : meta.layout}
                         onChange={updateBlock}
                         onRemove={removeBlock}
                       />
@@ -803,6 +965,16 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
           </div>
         </aside>
       </div>
+      {bentoCandidate ? (
+        <BentoConversionDialog
+          blocks={blocks}
+          candidate={bentoCandidate}
+          isApplying={isApplyingBento}
+          layout={meta.layout}
+          onApply={() => void applyBentoConversion()}
+          onCancel={() => setBentoCandidate(null)}
+        />
+      ) : null}
     </div>
   );
 }

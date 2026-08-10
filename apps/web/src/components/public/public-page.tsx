@@ -5,6 +5,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { getTheme, isDarkTheme, type PublicTheme } from '@/lib/themes';
 import type { UaClass } from '@/lib/ua';
 
+import { BentoFlow, bentoRowUnit, parsePlacement, type BentoRenderBlock } from './bento-flow';
 import { PUBLIC_INTERACTION_SCRIPT } from './interaction-script';
 import { SafeMarkdown } from './markdown';
 import styles from './public-page.module.css';
@@ -14,6 +15,7 @@ export interface PublicBlockData {
   type: 'LINK' | 'SOCIAL' | 'TEXT' | 'IMAGE' | 'WECHAT' | 'QR' | 'DIVIDER';
   size: 'SM' | 'MD' | 'LG';
   config: unknown;
+  placement?: unknown;
 }
 
 export interface PublicPageData {
@@ -22,6 +24,7 @@ export interface PublicPageData {
   bio: string | null;
   avatarUrl: string | null;
   layout: 'LIST' | 'GRID';
+  bentoVersion?: number | null;
   themeId: string;
   themeConfig: unknown;
   ctaConfig: unknown;
@@ -110,6 +113,7 @@ function themeStyle(theme: PublicTheme): ThemeStyle {
     '--r-avatar': theme.radius.avatar,
     '--r-sticker': theme.radius.sticker,
     '--gap': theme.grid.gap,
+    '--bento-row-unit': bentoRowUnit(theme.grid.gap),
     '--d-size': `${theme.typography.display.size}px`,
     '--d-weight': theme.typography.display.weight,
     '--d-track': theme.typography.display.tracking,
@@ -382,6 +386,11 @@ function DividerBlock() {
   return <div className={styles.divider} role="separator" />;
 }
 
+function renderBentoBlock(block: PublicBlockData, uaClass: UaClass): ReactNode {
+  if (block.type === 'LINK') return <LinkBlock block={block} isGrid={false} uaClass={uaClass} />;
+  return renderSingleBlock(block);
+}
+
 function renderSingleBlock(block: PublicBlockData): ReactNode {
   if (block.type === 'SOCIAL') return <SocialBlock block={block} key={block.id} />;
   if (block.type === 'TEXT') return <TextBlock block={block} key={block.id} />;
@@ -496,7 +505,18 @@ export function PublicPageRenderer({
           {page.bio ? <p className={styles.bio}>{page.bio}</p> : null}
         </section>
 
-        <ContentFlow blocks={blocks} layout={page.layout} uaClass={uaClass} />
+        {page.bentoVersion === 1 ? (
+          <BentoFlow
+            blocks={blocks.map<BentoRenderBlock>((block) => ({
+              id: block.id,
+              type: block.type,
+              placement: parsePlacement(block.placement),
+              node: renderBentoBlock(block, uaClass),
+            }))}
+          />
+        ) : (
+          <ContentFlow blocks={blocks} layout={page.layout} uaClass={uaClass} />
+        )}
 
         <footer className={classNames(styles.caption, styles.footer)}>
           Powered by 一链 YiLink

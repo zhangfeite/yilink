@@ -15,6 +15,13 @@ function configRecord(value: unknown): Record<string, unknown> {
     : {};
 }
 
+function blockPlacement(value: unknown): StudioPageDraft['blocks'][number]['placement'] {
+  const placement = configRecord(value);
+  return ['x', 'y', 'w', 'h'].every((key) => typeof placement[key] === 'number')
+    ? (placement as StudioPageDraft['blocks'][number]['placement'])
+    : null;
+}
+
 export default async function StudioEditorPage({ params }: EditorRouteProps) {
   const session = await auth();
   const userId = session?.user?.id;
@@ -30,6 +37,7 @@ export default async function StudioEditorPage({ params }: EditorRouteProps) {
       bio: true,
       avatarUrl: true,
       layout: true,
+      bentoVersion: true,
       themeId: true,
       themeConfig: true,
       seoTitle: true,
@@ -44,6 +52,7 @@ export default async function StudioEditorPage({ params }: EditorRouteProps) {
           size: true,
           isVisible: true,
           config: true,
+          placement: true,
         },
       },
     },
@@ -52,7 +61,11 @@ export default async function StudioEditorPage({ params }: EditorRouteProps) {
 
   const initialPage: StudioPageDraft = {
     ...page,
-    blocks: page.blocks.map((block) => ({ ...block, config: configRecord(block.config) })),
+    blocks: page.blocks.map((block) => ({
+      ...block,
+      config: configRecord(block.config),
+      placement: blockPlacement(block.placement),
+    })),
   };
 
   return <PageEditor initialPage={initialPage} />;

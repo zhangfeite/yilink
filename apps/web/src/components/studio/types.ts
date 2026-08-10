@@ -2,6 +2,8 @@ export type StudioBlockType = 'LINK' | 'SOCIAL' | 'TEXT' | 'IMAGE' | 'WECHAT' | 
 
 export type StudioBlockSize = 'SM' | 'MD' | 'LG';
 
+export type StudioLayout = 'LIST' | 'GRID';
+
 export interface StudioBlock {
   id: string;
   type: StudioBlockType;
@@ -17,7 +19,8 @@ export interface StudioPageDraft {
   title: string;
   bio: string | null;
   avatarUrl: string | null;
-  layout: 'LIST' | 'GRID';
+  layout: StudioLayout;
+  bentoVersion: number | null;
   themeId: string;
   themeConfig: unknown;
   seoTitle: string | null;

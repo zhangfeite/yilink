@@ -184,7 +184,60 @@
     },
     "layouts": {
       "list": "List",
-      "grid": "Grid"
+      "grid": "Grid",
+      "bento": "Free layout (Beta)"
+    },
+    "bento": {
+      "undo": "Undo",
+      "redo": "Redo",
+      "shuffle": "Shuffle layout",
+      "tidy": "Tidy",
+      "guardrails": {
+        "ADJACENT_FULL": "Consecutive large cards can feel crowded; mix in a smaller card for breathing room",
+        "NO_FOCUS": "The first screen has no focal card, so visitors may not know where to look first",
+        "BOTTOM_HOLE": "There is an empty space at the bottom; Tidy can close it",
+        "blocking": "The {type} card is cropped too tightly to use. Enlarge it before publishing"
+      },
+      "canvas": {
+        "title": "Free-layout canvas",
+        "hint": "Drag cards or handles on desktop. Arrow keys move; Shift + arrows resize.",
+        "card": "{type} card",
+        "position": "Column {column}, row {row}, width {width}, height {height}",
+        "resize": {
+          "x": "Resize card width",
+          "y": "Resize card height",
+          "xy": "Resize card width and height"
+        }
+      },
+      "mobile": {
+        "title": "Choose card layout",
+        "sizes": {
+          "banner": "Full-width strip 4×1",
+          "full": "Full-width standard 4×4",
+          "half": "Half-width standard 2×4",
+          "halfTall": "Half-width tall 2×8",
+          "fullTall": "Full-width tall 4×8",
+          "smallImage": "Small image 1×4"
+        },
+        "nudge": {
+          "up": "Move up one cell",
+          "down": "Move down one cell",
+          "left": "Move left one cell",
+          "right": "Move right one cell"
+        }
+      },
+      "conversion": {
+        "title": "Convert to free layout",
+        "description": "Compare the current page with the converted arrangement. This preview is generated locally and is not saved until you apply it.",
+        "current": "Current",
+        "after": "Converted preview",
+        "safe": "Switch back to list or grid at any time. Your content and saved placements remain intact.",
+        "cancel": "Cancel",
+        "apply": "Apply free layout",
+        "applying": "Applying…",
+        "applied": "Converted to free layout.",
+        "failed": "Conversion failed. Check the page content and try again."
+      }
     },
     "ctaTypes": {
       "wechat": "Copy WeChat ID",

@@ -184,7 +184,60 @@
     },
     "layouts": {
       "list": "列表",
-      "grid": "网格"
+      "grid": "网格",
+      "bento": "自由布局（Beta）"
+    },
+    "bento": {
+      "undo": "撤销",
+      "redo": "重做",
+      "shuffle": "换个排法",
+      "tidy": "一键整理",
+      "guardrails": {
+        "ADJACENT_FULL": "大卡片连着放会显得拥挤，中间穿插小卡片更有呼吸感",
+        "NO_FOCUS": "第一屏没有重点，访客可能不知道先看哪",
+        "BOTTOM_HOLE": "底部有个空缺，可以一键整理",
+        "blocking": "{type}卡片被裁到无法完整操作，请先增大卡片再发布"
+      },
+      "canvas": {
+        "title": "自由布局画布",
+        "hint": "桌面拖动卡片或把手；方向键移动，Shift + 方向键调整尺寸。",
+        "card": "{type}卡片",
+        "position": "第 {column} 列第 {row} 行，宽 {width} 高 {height}",
+        "resize": {
+          "x": "调整卡片宽度",
+          "y": "调整卡片高度",
+          "xy": "调整卡片宽度和高度"
+        }
+      },
+      "mobile": {
+        "title": "选择卡片排版",
+        "sizes": {
+          "banner": "通栏薄条 4×1",
+          "full": "通栏标准 4×4",
+          "half": "半宽标准 2×4",
+          "halfTall": "半宽高块 2×8",
+          "fullTall": "通栏高块 4×8",
+          "smallImage": "小图 1×4"
+        },
+        "nudge": {
+          "up": "向上移动一格",
+          "down": "向下移动一格",
+          "left": "向左移动一格",
+          "right": "向右移动一格"
+        }
+      },
+      "conversion": {
+        "title": "转换为自由布局",
+        "description": "先比较当前效果和转换后的排法。转换预览只在本机生成，点击应用前不会保存。",
+        "current": "当前效果",
+        "after": "转换后预览",
+        "safe": "可随时切回列表或网格，内容不会丢失，排版位置也会为下次保留。",
+        "cancel": "取消",
+        "apply": "应用自由布局",
+        "applying": "应用中…",
+        "applied": "已转换为自由布局。",
+        "failed": "转换失败，请检查内容后重试。"
+      }
     },
     "ctaTypes": {
       "wechat": "复制微信号",
