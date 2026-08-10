@@ -96,7 +96,20 @@ pnpm exec wrangler d1 execute yilink-db-restore --remote --command \
 ```
 
 核对导入后的用户、主页和订单行数与备份时记录一致后，才将恢复库的 `database_id` 切入
-`wrangler.jsonc` 并部署。恢复演练由验收方在 staging 执行并记录恢复时间、行数校验和结论。
+`wrangler.jsonc` 并部署。
+
+### 演练记录（2026-08-06，首次）
+
+| 项 | 结果 |
+|---|---|
+| 备份来源 | `wrangler d1 export yilink-db --remote`，36 KB |
+| 恢复目标 | 新建空库 `yilink-db-restore`（演练后已删除） |
+| 行数校验 | 生产 5 users / 7 pages / 0 orders → 恢复库完全一致（另核 24 blocks） |
+| 导入统计 | 8 张表、315 行写入 |
+| 端到端耗时 | 约 1 分钟（RTO 参考值；RPO ≤ 24h，由每日 scheduled.yml 决定） |
+| **注意事项** | **新建 D1 库后立即导入可能因就绪时序失败一次，重试即成功**——脚本化恢复流程需带一次重试 |
+
+结论：备份可恢复、行数无损。下次演练建议在 schema 变更后立即执行。
 
 ## 关键实现约定（改代码前必读）
 
