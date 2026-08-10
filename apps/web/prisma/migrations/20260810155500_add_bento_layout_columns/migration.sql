@@ -1,0 +1,2 @@
+ALTER TABLE "Page" ADD COLUMN "bentoVersion" INTEGER;
+ALTER TABLE "Block" ADD COLUMN "placement" JSONB;

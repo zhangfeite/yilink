@@ -69,20 +69,36 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     return apiError(422, 'MODERATION_BLOCKED', '内容未通过审核');
   }
 
-  // 批量事务形态（D1 不支持交互式事务，数组形式两端通用）
-  const operations: Prisma.PrismaPromise<unknown>[] = [
-    db.block.deleteMany({ where: { pageId } }),
-    db.block.createMany({
-      data: parsed.data.map((block, position) => ({
-        pageId,
-        type: block.type,
-        size: block.size,
-        isVisible: block.isVisible,
-        position,
-        config: block.config as Prisma.InputJsonValue,
-      })),
-    }),
-  ];
+  const existingBlocks = await db.block.findMany({ where: { pageId }, select: { id: true } });
+  const existingIds = new Set(existingBlocks.map((block) => block.id));
+  const requestedExistingIds = new Set(
+    parsed.data
+      .map((block) => block.id)
+      .filter((id): id is string => Boolean(id && !id.startsWith('draft-'))),
+  );
+  if ([...requestedExistingIds].some((id) => !existingIds.has(id))) {
+    return invalidInputResponse();
+  }
+
+  // D1-compatible batch transaction. Existing IDs are updated in place so click attribution remains valid.
+  const operations: Prisma.PrismaPromise<unknown>[] = [];
+  for (const [position, block] of parsed.data.entries()) {
+    const data = {
+      type: block.type,
+      size: block.size,
+      isVisible: block.isVisible,
+      position,
+      config: block.config as Prisma.InputJsonValue,
+      placement: block.placement ? (block.placement as Prisma.InputJsonValue) : Prisma.JsonNull,
+    };
+    if (block.id && !block.id.startsWith('draft-')) {
+      operations.push(db.block.update({ where: { id: block.id }, data }));
+    } else {
+      operations.push(db.block.create({ data: { pageId, ...data } }));
+    }
+  }
+  const deletedIds = [...existingIds].filter((id) => !requestedExistingIds.has(id));
+  if (deletedIds.length) operations.push(db.block.deleteMany({ where: { id: { in: deletedIds } } }));
   if (moderation) {
     operations.push(
       db.page.update({

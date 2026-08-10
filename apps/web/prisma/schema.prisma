@@ -162,6 +162,7 @@ model Page {
   bio          String?
   avatarUrl    String?
   layout       Layout     @default(LIST)
+  bentoVersion Int?                            // null=legacy renderer
   themeId      String     @default("minimal-light")
   themeConfig  Json?                          // 主题覆写（预留）
   seoTitle     String?
@@ -196,6 +197,7 @@ model Block {
   position  Int
   size      BlockSize @default(MD)            // 简化网格：SM/MD/LG（LIST 布局忽略）
   isVisible Boolean   @default(true)
+  placement Json?                              // {x,y,w,h}; null=legacy layout
   config    Json                              // 按 type 用 packages/shared 的 zod schema 校验
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

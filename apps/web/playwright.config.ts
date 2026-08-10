@@ -22,6 +22,7 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       DATABASE_URL: 'file:./data/yilink-e2e.db',
+      YILINK_FORCE_SQLITE: '1',
       AUTH_SECRET: 'yilink-e2e-secret-with-at-least-32-bytes',
       AUTH_URL: 'http://127.0.0.1:3000',
     },

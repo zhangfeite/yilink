@@ -37,6 +37,10 @@ interface ModerationResponse {
   page: { status: EditorStatus };
 }
 
+interface BlocksSaveResponse extends ModerationResponse {
+  blocks: StudioBlock[];
+}
+
 interface EditorMeta {
   avatarUrl: string;
   bio: string;
@@ -236,47 +240,40 @@ export function PageEditor({ initialPage }: { initialPage: StudioPageDraft }) {
     setIsSaving(true);
     setNotice(null);
     try {
-      const metadataResult = await studioApiRequest<ModerationResponse>(
+      const layoutResult = await studioApiRequest<BlocksSaveResponse>(
         fetch,
-        `/api/v1/pages/${initialPage.id}`,
+        `/api/v1/pages/${initialPage.id}/layout`,
         {
-          method: 'PATCH',
+          method: 'PUT',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({
             title: meta.title.trim(),
             bio: meta.bio.trim() || null,
             avatarUrl: meta.avatarUrl.trim() || null,
             layout: meta.layout,
+            bentoVersion: null,
             themeId: meta.themeId,
             seoTitle: meta.seoTitle.trim() || null,
             seoDesc: meta.seoDesc.trim() || null,
             ctaConfig: meta.ctaConfig,
             themeConfig: { ...recordValue(initialPage.themeConfig), role: meta.role.trim() },
-          }),
-        },
-      );
-      setStatus(metadataResult.page.status);
-      const blocksResult = await studioApiRequest<ModerationResponse>(
-        fetch,
-        `/api/v1/pages/${initialPage.id}/blocks`,
-        {
-          method: 'PUT',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(
-            blocks.map(({ type, size, isVisible, config }) => ({
+            blocks: blocks.map(({ id, type, size, isVisible, config, placement }) => ({
+              id,
               type,
               size,
               isVisible,
               config,
+              placement,
             })),
-          ),
+          }),
         },
       );
-      setStatus(blocksResult.page.status);
+      setStatus(layoutResult.page.status);
+      setBlocks(layoutResult.blocks);
       setIsDirty(false);
       if (announce) {
         setNotice(
-          blocksResult.page.status === 'REVIEW'
+          layoutResult.page.status === 'REVIEW'
             ? { kind: 'review', text: t('reviewPending') }
             : { kind: 'success', text: t('saved') },
         );

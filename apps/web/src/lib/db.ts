@@ -21,6 +21,12 @@ const globalForPrisma = globalThis as unknown as {
 type D1Like = ConstructorParameters<typeof PrismaD1>[0];
 
 function resolveD1Binding(): D1Like | null {
+  // E2E/基线测试用固定 SQLite 文件建数据，须强制走 DATABASE_URL 而非本地 D1 绑定
+  // （next dev 经 initOpenNextCloudflareForDev 会优先拿到 D1，压过 DATABASE_URL）
+  if (process.env.YILINK_FORCE_SQLITE === '1') {
+    return null;
+  }
+
   try {
     // Workers 运行时（及 initOpenNextCloudflareForDev 后的本地 next dev）可取到绑定；
     // 其他环境调用抛错 → 走 SQLite 分支

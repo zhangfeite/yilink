@@ -8,6 +8,7 @@ export interface StudioBlock {
   size: StudioBlockSize;
   isVisible: boolean;
   config: Record<string, unknown>;
+  placement?: { x: number; y: number; w: number; h: number } | null;
 }
 
 export interface StudioPageDraft {

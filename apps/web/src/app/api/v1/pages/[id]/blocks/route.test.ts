@@ -116,6 +116,42 @@ describe('/api/v1/pages/:id/blocks', () => {
     });
   });
 
+  it('keeps existing IDs, creates draft IDs, and deletes omitted blocks', async () => {
+    const page = await db.page.create({
+      data: { userId, slug: 'stable-block-ids', title: '稳定 ID' },
+    });
+    const retained = await db.block.create({
+      data: { pageId: page.id, type: 'LINK', size: 'MD', isVisible: true, position: 0, config: { title: '旧链接', url: 'https://old.example' } },
+    });
+    const removed = await db.block.create({
+      data: { pageId: page.id, type: 'DIVIDER', size: 'MD', isVisible: true, position: 1, config: {} },
+    });
+
+    const response = await PUT(
+      replaceRequest([
+        { id: retained.id, type: 'LINK', size: 'LG', isVisible: false, placement: { x: 0, y: 0, w: 4, h: 1 }, config: { title: '新链接', url: 'https://new.example' } },
+        { id: 'draft-new-link', type: 'TEXT', size: 'MD', isVisible: true, config: { markdown: '新块' } },
+      ]),
+      pageContext(page.id),
+    );
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({
+      blocks: [
+        { id: retained.id, position: 0, size: 'LG', isVisible: false, placement: { x: 0, y: 0, w: 4, h: 1 } },
+        { position: 1, type: 'TEXT' },
+      ],
+    });
+    await expect(db.block.findUnique({ where: { id: retained.id } })).resolves.toMatchObject({ config: { title: '新链接', url: 'https://new.example' } });
+    await expect(db.block.findUnique({ where: { id: removed.id } })).resolves.toBeNull();
+  });
+
+  it('rejects an ID belonging to no block on the owned page', async () => {
+    const page = await db.page.create({ data: { userId, slug: 'unknown-block-id', title: '未知 ID' } });
+    const response = await PUT(replaceRequest([{ id: 'cm_not_on_page', type: 'DIVIDER', size: 'MD', isVisible: true, config: {} }]), pageContext(page.id));
+    expect(response.status).toBe(400);
+  });
+
   it('rejects an invalid config without replacing persisted blocks', async () => {
     const page = await db.page.create({
       data: { userId, slug: 'invalid-blocks-page', title: '区块主页' },
