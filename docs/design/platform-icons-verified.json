@@ -29,7 +29,7 @@
         "公众号"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#1AAD19",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -43,7 +43,7 @@
         "视频号"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#FA9D3B",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -57,7 +57,7 @@
         "WeCom"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#0082EF",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -189,7 +189,7 @@
         "Jike"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#FFE411",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -250,7 +250,7 @@
         "JD"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#C81522",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -264,7 +264,7 @@
         "PDD"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#E02E24",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -278,7 +278,7 @@
         "Goofish"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#FFE60F",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -309,7 +309,7 @@
         "QQMusic"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#31C27C",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -323,7 +323,7 @@
         "小宇宙FM"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#24B6E1",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -337,7 +337,7 @@
         "喜马拉雅FM"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#FA2800",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -560,7 +560,7 @@
         "领英"
       ],
       "simpleIcon": null,
-      "stickerHex": null,
+      "stickerHex": "#0073B2",
       "needsCustomGlyph": true,
       "note": "需自绘（simple-icons 未收录或已下架）"
     },
@@ -661,6 +661,1143 @@
       },
       "stickerHex": "#000000",
       "needsCustomGlyph": false
+    },
+    {
+      "id": "mastodon",
+      "nameZh": "Mastodon",
+      "nameEn": "Mastodon",
+      "category": "social",
+      "aliases": [
+        "Mastodon",
+        "长毛象"
+      ],
+      "simpleIcon": {
+        "slug": "mastodon"
+      },
+      "stickerHex": "#6364FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "bluesky",
+      "nameZh": "Bluesky",
+      "nameEn": "Bluesky",
+      "category": "social",
+      "aliases": [
+        "Bluesky",
+        "蓝天"
+      ],
+      "simpleIcon": {
+        "slug": "bluesky"
+      },
+      "stickerHex": "#1185FE",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "reddit",
+      "nameZh": "Reddit",
+      "nameEn": "Reddit",
+      "category": "social",
+      "aliases": [
+        "Reddit"
+      ],
+      "simpleIcon": {
+        "slug": "reddit"
+      },
+      "stickerHex": "#FF4500",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "pinterest",
+      "nameZh": "Pinterest",
+      "nameEn": "Pinterest",
+      "category": "social",
+      "aliases": [
+        "Pinterest"
+      ],
+      "simpleIcon": {
+        "slug": "pinterest"
+      },
+      "stickerHex": "#BD081C",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "snapchat",
+      "nameZh": "Snapchat",
+      "nameEn": "Snapchat",
+      "category": "social",
+      "aliases": [
+        "Snapchat"
+      ],
+      "simpleIcon": {
+        "slug": "snapchat"
+      },
+      "stickerHex": "#FFFC00",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "vk",
+      "nameZh": "VK",
+      "nameEn": "VK",
+      "category": "social",
+      "aliases": [
+        "VK"
+      ],
+      "simpleIcon": {
+        "slug": "vk"
+      },
+      "stickerHex": "#0077FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "line",
+      "nameZh": "LINE",
+      "nameEn": "LINE",
+      "category": "social",
+      "aliases": [
+        "LINE"
+      ],
+      "simpleIcon": {
+        "slug": "line"
+      },
+      "stickerHex": "#00C300",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "kakaotalk",
+      "nameZh": "KakaoTalk",
+      "nameEn": "KakaoTalk",
+      "category": "social",
+      "aliases": [
+        "KakaoTalk"
+      ],
+      "simpleIcon": {
+        "slug": "kakaotalk"
+      },
+      "stickerHex": "#FFCD00",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "tumblr",
+      "nameZh": "Tumblr",
+      "nameEn": "Tumblr",
+      "category": "social",
+      "aliases": [
+        "Tumblr"
+      ],
+      "simpleIcon": {
+        "slug": "tumblr"
+      },
+      "stickerHex": "#36465D",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "quora",
+      "nameZh": "Quora",
+      "nameEn": "Quora",
+      "category": "social",
+      "aliases": [
+        "Quora"
+      ],
+      "simpleIcon": {
+        "slug": "quora"
+      },
+      "stickerHex": "#B92B27",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "vimeo",
+      "nameZh": "Vimeo",
+      "nameEn": "Vimeo",
+      "category": "video",
+      "aliases": [
+        "Vimeo"
+      ],
+      "simpleIcon": {
+        "slug": "vimeo"
+      },
+      "stickerHex": "#1AB7EA",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "dailymotion",
+      "nameZh": "Dailymotion",
+      "nameEn": "Dailymotion",
+      "category": "video",
+      "aliases": [
+        "Dailymotion"
+      ],
+      "simpleIcon": {
+        "slug": "dailymotion"
+      },
+      "stickerHex": "#0A0A0A",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "rumble",
+      "nameZh": "Rumble",
+      "nameEn": "Rumble",
+      "category": "video",
+      "aliases": [
+        "Rumble"
+      ],
+      "simpleIcon": {
+        "slug": "rumble"
+      },
+      "stickerHex": "#85C742",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "apple-music",
+      "nameZh": "Apple Music",
+      "nameEn": "Apple Music",
+      "category": "music",
+      "aliases": [
+        "Apple Music"
+      ],
+      "simpleIcon": {
+        "slug": "applemusic"
+      },
+      "stickerHex": "#FA243C",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "apple-podcasts",
+      "nameZh": "Apple Podcasts",
+      "nameEn": "Apple Podcasts",
+      "category": "music",
+      "aliases": [
+        "Apple Podcasts",
+        "苹果播客"
+      ],
+      "simpleIcon": {
+        "slug": "applepodcasts"
+      },
+      "stickerHex": "#9933CC",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "soundcloud",
+      "nameZh": "SoundCloud",
+      "nameEn": "SoundCloud",
+      "category": "music",
+      "aliases": [
+        "SoundCloud"
+      ],
+      "simpleIcon": {
+        "slug": "soundcloud"
+      },
+      "stickerHex": "#FF5500",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "bandcamp",
+      "nameZh": "Bandcamp",
+      "nameEn": "Bandcamp",
+      "category": "music",
+      "aliases": [
+        "Bandcamp"
+      ],
+      "simpleIcon": {
+        "slug": "bandcamp"
+      },
+      "stickerHex": "#408294",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "pocket-casts",
+      "nameZh": "Pocket Casts",
+      "nameEn": "Pocket Casts",
+      "category": "music",
+      "aliases": [
+        "Pocket Casts"
+      ],
+      "simpleIcon": {
+        "slug": "pocketcasts"
+      },
+      "stickerHex": "#F43E37",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "deezer",
+      "nameZh": "Deezer",
+      "nameEn": "Deezer",
+      "category": "music",
+      "aliases": [
+        "Deezer"
+      ],
+      "simpleIcon": {
+        "slug": "deezer"
+      },
+      "stickerHex": "#A238FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "tidal",
+      "nameZh": "TIDAL",
+      "nameEn": "TIDAL",
+      "category": "music",
+      "aliases": [
+        "TIDAL"
+      ],
+      "simpleIcon": {
+        "slug": "tidal"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "lastfm",
+      "nameZh": "Last.fm",
+      "nameEn": "Last.fm",
+      "category": "music",
+      "aliases": [
+        "Last.fm"
+      ],
+      "simpleIcon": {
+        "slug": "lastdotfm"
+      },
+      "stickerHex": "#D51007",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "medium",
+      "nameZh": "Medium",
+      "nameEn": "Medium",
+      "category": "content",
+      "aliases": [
+        "Medium"
+      ],
+      "simpleIcon": null,
+      "stickerHex": "#000000",
+      "needsCustomGlyph": true
+    },
+    {
+      "id": "substack",
+      "nameZh": "Substack",
+      "nameEn": "Substack",
+      "category": "content",
+      "aliases": [
+        "Substack"
+      ],
+      "simpleIcon": {
+        "slug": "substack"
+      },
+      "stickerHex": "#FF6719",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "ghost",
+      "nameZh": "Ghost",
+      "nameEn": "Ghost",
+      "category": "content",
+      "aliases": [
+        "Ghost"
+      ],
+      "simpleIcon": {
+        "slug": "ghost"
+      },
+      "stickerHex": "#15171A",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "wordpress",
+      "nameZh": "WordPress",
+      "nameEn": "WordPress",
+      "category": "content",
+      "aliases": [
+        "WordPress"
+      ],
+      "simpleIcon": {
+        "slug": "wordpress"
+      },
+      "stickerHex": "#21759B",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "blogger",
+      "nameZh": "Blogger",
+      "nameEn": "Blogger",
+      "category": "content",
+      "aliases": [
+        "Blogger"
+      ],
+      "simpleIcon": {
+        "slug": "blogger"
+      },
+      "stickerHex": "#FF5722",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "notion",
+      "nameZh": "Notion",
+      "nameEn": "Notion",
+      "category": "content",
+      "aliases": [
+        "Notion"
+      ],
+      "simpleIcon": {
+        "slug": "notion"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "hashnode",
+      "nameZh": "Hashnode",
+      "nameEn": "Hashnode",
+      "category": "content",
+      "aliases": [
+        "Hashnode"
+      ],
+      "simpleIcon": {
+        "slug": "hashnode"
+      },
+      "stickerHex": "#2962FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "devto",
+      "nameZh": "DEV",
+      "nameEn": "dev.to",
+      "category": "content",
+      "aliases": [
+        "DEV",
+        "dev.to"
+      ],
+      "simpleIcon": {
+        "slug": "devdotto"
+      },
+      "stickerHex": "#0A0A0A",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "behance",
+      "nameZh": "Behance",
+      "nameEn": "Behance",
+      "category": "design",
+      "aliases": [
+        "Behance"
+      ],
+      "simpleIcon": {
+        "slug": "behance"
+      },
+      "stickerHex": "#1769FF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "dribbble",
+      "nameZh": "Dribbble",
+      "nameEn": "Dribbble",
+      "category": "design",
+      "aliases": [
+        "Dribbble"
+      ],
+      "simpleIcon": {
+        "slug": "dribbble"
+      },
+      "stickerHex": "#EA4C89",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "figma",
+      "nameZh": "Figma",
+      "nameEn": "Figma",
+      "category": "design",
+      "aliases": [
+        "Figma"
+      ],
+      "simpleIcon": {
+        "slug": "figma"
+      },
+      "stickerHex": "#F24E1E",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "artstation",
+      "nameZh": "ArtStation",
+      "nameEn": "ArtStation",
+      "category": "design",
+      "aliases": [
+        "ArtStation"
+      ],
+      "simpleIcon": {
+        "slug": "artstation"
+      },
+      "stickerHex": "#13AFF0",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "deviantart",
+      "nameZh": "DeviantArt",
+      "nameEn": "DeviantArt",
+      "category": "design",
+      "aliases": [
+        "DeviantArt"
+      ],
+      "simpleIcon": {
+        "slug": "deviantart"
+      },
+      "stickerHex": "#05CC47",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "unsplash",
+      "nameZh": "Unsplash",
+      "nameEn": "Unsplash",
+      "category": "design",
+      "aliases": [
+        "Unsplash"
+      ],
+      "simpleIcon": {
+        "slug": "unsplash"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "flickr",
+      "nameZh": "Flickr",
+      "nameEn": "Flickr",
+      "category": "design",
+      "aliases": [
+        "Flickr"
+      ],
+      "simpleIcon": {
+        "slug": "flickr"
+      },
+      "stickerHex": "#0063DC",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "500px",
+      "nameZh": "500px",
+      "nameEn": "500px",
+      "category": "design",
+      "aliases": [
+        "500px"
+      ],
+      "simpleIcon": {
+        "slug": "500px"
+      },
+      "stickerHex": "#222222",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "pixiv",
+      "nameZh": "pixiv",
+      "nameEn": "pixiv",
+      "category": "design",
+      "aliases": [
+        "pixiv",
+        "P站"
+      ],
+      "simpleIcon": {
+        "slug": "pixiv"
+      },
+      "stickerHex": "#0096FA",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "gitlab",
+      "nameZh": "GitLab",
+      "nameEn": "GitLab",
+      "category": "dev",
+      "aliases": [
+        "GitLab"
+      ],
+      "simpleIcon": {
+        "slug": "gitlab"
+      },
+      "stickerHex": "#FC6D26",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "stack-overflow",
+      "nameZh": "Stack Overflow",
+      "nameEn": "Stack Overflow",
+      "category": "dev",
+      "aliases": [
+        "Stack Overflow"
+      ],
+      "simpleIcon": {
+        "slug": "stackoverflow"
+      },
+      "stickerHex": "#F58025",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "npm",
+      "nameZh": "npm",
+      "nameEn": "npm",
+      "category": "dev",
+      "aliases": [
+        "npm"
+      ],
+      "simpleIcon": {
+        "slug": "npm"
+      },
+      "stickerHex": "#CB3837",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "pypi",
+      "nameZh": "PyPI",
+      "nameEn": "PyPI",
+      "category": "dev",
+      "aliases": [
+        "PyPI"
+      ],
+      "simpleIcon": {
+        "slug": "pypi"
+      },
+      "stickerHex": "#3775A9",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "hugging-face",
+      "nameZh": "Hugging Face",
+      "nameEn": "Hugging Face",
+      "category": "dev",
+      "aliases": [
+        "Hugging Face",
+        "抱抱脸"
+      ],
+      "simpleIcon": {
+        "slug": "huggingface"
+      },
+      "stickerHex": "#FFD21E",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "kaggle",
+      "nameZh": "Kaggle",
+      "nameEn": "Kaggle",
+      "category": "dev",
+      "aliases": [
+        "Kaggle"
+      ],
+      "simpleIcon": {
+        "slug": "kaggle"
+      },
+      "stickerHex": "#20BEFF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "replit",
+      "nameZh": "Replit",
+      "nameEn": "Replit",
+      "category": "dev",
+      "aliases": [
+        "Replit"
+      ],
+      "simpleIcon": {
+        "slug": "replit"
+      },
+      "stickerHex": "#F26207",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "docker-hub",
+      "nameZh": "Docker Hub",
+      "nameEn": "Docker",
+      "category": "dev",
+      "aliases": [
+        "Docker Hub",
+        "Docker"
+      ],
+      "simpleIcon": {
+        "slug": "docker"
+      },
+      "stickerHex": "#2496ED",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "bitbucket",
+      "nameZh": "Bitbucket",
+      "nameEn": "Bitbucket",
+      "category": "dev",
+      "aliases": [
+        "Bitbucket"
+      ],
+      "simpleIcon": {
+        "slug": "bitbucket"
+      },
+      "stickerHex": "#0052CC",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "leetcode",
+      "nameZh": "LeetCode",
+      "nameEn": "LeetCode",
+      "category": "dev",
+      "aliases": [
+        "LeetCode",
+        "力扣"
+      ],
+      "simpleIcon": {
+        "slug": "leetcode"
+      },
+      "stickerHex": "#FFA116",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "etsy",
+      "nameZh": "Etsy",
+      "nameEn": "Etsy",
+      "category": "shopping",
+      "aliases": [
+        "Etsy"
+      ],
+      "simpleIcon": {
+        "slug": "etsy"
+      },
+      "stickerHex": "#F16521",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "shopify",
+      "nameZh": "Shopify",
+      "nameEn": "Shopify",
+      "category": "shopping",
+      "aliases": [
+        "Shopify"
+      ],
+      "simpleIcon": {
+        "slug": "shopify"
+      },
+      "stickerHex": "#7AB55C",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "ebay",
+      "nameZh": "eBay",
+      "nameEn": "eBay",
+      "category": "shopping",
+      "aliases": [
+        "eBay"
+      ],
+      "simpleIcon": {
+        "slug": "ebay"
+      },
+      "stickerHex": "#E53238",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "gumroad",
+      "nameZh": "Gumroad",
+      "nameEn": "Gumroad",
+      "category": "shopping",
+      "aliases": [
+        "Gumroad"
+      ],
+      "simpleIcon": {
+        "slug": "gumroad"
+      },
+      "stickerHex": "#FF90E8",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "patreon",
+      "nameZh": "Patreon",
+      "nameEn": "Patreon",
+      "category": "support",
+      "aliases": [
+        "Patreon"
+      ],
+      "simpleIcon": {
+        "slug": "patreon"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "ko-fi",
+      "nameZh": "Ko-fi",
+      "nameEn": "Ko-fi",
+      "category": "support",
+      "aliases": [
+        "Ko-fi"
+      ],
+      "simpleIcon": {
+        "slug": "kofi"
+      },
+      "stickerHex": "#FF6433",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "buy-me-a-coffee",
+      "nameZh": "Buy Me a Coffee",
+      "nameEn": "Buy Me A Coffee",
+      "category": "support",
+      "aliases": [
+        "Buy Me a Coffee",
+        "Buy Me A Coffee"
+      ],
+      "simpleIcon": {
+        "slug": "buymeacoffee"
+      },
+      "stickerHex": "#FFDD00",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "paypal",
+      "nameZh": "PayPal",
+      "nameEn": "PayPal",
+      "category": "support",
+      "aliases": [
+        "PayPal"
+      ],
+      "simpleIcon": {
+        "slug": "paypal"
+      },
+      "stickerHex": "#002991",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "stripe",
+      "nameZh": "Stripe",
+      "nameEn": "Stripe",
+      "category": "support",
+      "aliases": [
+        "Stripe"
+      ],
+      "simpleIcon": {
+        "slug": "stripe"
+      },
+      "stickerHex": "#635BFF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "open-collective",
+      "nameZh": "Open Collective",
+      "nameEn": "Open Collective",
+      "category": "support",
+      "aliases": [
+        "Open Collective"
+      ],
+      "simpleIcon": {
+        "slug": "opencollective"
+      },
+      "stickerHex": "#7FADF2",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "calendly",
+      "nameZh": "Calendly",
+      "nameEn": "Calendly",
+      "category": "booking",
+      "aliases": [
+        "Calendly"
+      ],
+      "simpleIcon": {
+        "slug": "calendly"
+      },
+      "stickerHex": "#006BFF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "cal-com",
+      "nameZh": "Cal.com",
+      "nameEn": "Cal.com",
+      "category": "booking",
+      "aliases": [
+        "Cal.com"
+      ],
+      "simpleIcon": {
+        "slug": "caldotcom"
+      },
+      "stickerHex": "#292929",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "zoom",
+      "nameZh": "Zoom",
+      "nameEn": "Zoom",
+      "category": "booking",
+      "aliases": [
+        "Zoom"
+      ],
+      "simpleIcon": {
+        "slug": "zoom"
+      },
+      "stickerHex": "#0B5CFF",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "steam",
+      "nameZh": "Steam",
+      "nameEn": "Steam",
+      "category": "game",
+      "aliases": [
+        "Steam"
+      ],
+      "simpleIcon": {
+        "slug": "steam"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "itch-io",
+      "nameZh": "itch.io",
+      "nameEn": "Itch.io",
+      "category": "game",
+      "aliases": [
+        "itch.io",
+        "Itch.io"
+      ],
+      "simpleIcon": {
+        "slug": "itchdotio"
+      },
+      "stickerHex": "#FA5C5C",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "epic-games",
+      "nameZh": "Epic Games",
+      "nameEn": "Epic Games",
+      "category": "game",
+      "aliases": [
+        "Epic Games"
+      ],
+      "simpleIcon": {
+        "slug": "epicgames"
+      },
+      "stickerHex": "#313131",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "roblox",
+      "nameZh": "Roblox",
+      "nameEn": "Roblox",
+      "category": "game",
+      "aliases": [
+        "Roblox"
+      ],
+      "simpleIcon": {
+        "slug": "roblox"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "playstation",
+      "nameZh": "PlayStation",
+      "nameEn": "PlayStation",
+      "category": "game",
+      "aliases": [
+        "PlayStation"
+      ],
+      "simpleIcon": {
+        "slug": "playstation"
+      },
+      "stickerHex": "#0070D1",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "goodreads",
+      "nameZh": "Goodreads",
+      "nameEn": "Goodreads",
+      "category": "life",
+      "aliases": [
+        "Goodreads"
+      ],
+      "simpleIcon": {
+        "slug": "goodreads"
+      },
+      "stickerHex": "#1E1914",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "letterboxd",
+      "nameZh": "Letterboxd",
+      "nameEn": "Letterboxd",
+      "category": "life",
+      "aliases": [
+        "Letterboxd"
+      ],
+      "simpleIcon": {
+        "slug": "letterboxd"
+      },
+      "stickerHex": "#202830",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "imdb",
+      "nameZh": "IMDb",
+      "nameEn": "IMDb",
+      "category": "life",
+      "aliases": [
+        "IMDb"
+      ],
+      "simpleIcon": {
+        "slug": "imdb"
+      },
+      "stickerHex": "#F5C518",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "strava",
+      "nameZh": "Strava",
+      "nameEn": "Strava",
+      "category": "life",
+      "aliases": [
+        "Strava"
+      ],
+      "simpleIcon": {
+        "slug": "strava"
+      },
+      "stickerHex": "#FC4C02",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "product-hunt",
+      "nameZh": "Product Hunt",
+      "nameEn": "Product Hunt",
+      "category": "life",
+      "aliases": [
+        "Product Hunt"
+      ],
+      "simpleIcon": {
+        "slug": "producthunt"
+      },
+      "stickerHex": "#DA552F",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "meetup",
+      "nameZh": "Meetup",
+      "nameEn": "Meetup",
+      "category": "life",
+      "aliases": [
+        "Meetup"
+      ],
+      "simpleIcon": {
+        "slug": "meetup"
+      },
+      "stickerHex": "#ED1C40",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "wikipedia",
+      "nameZh": "维基百科",
+      "nameEn": "Wikipedia",
+      "category": "life",
+      "aliases": [
+        "维基百科",
+        "Wikipedia"
+      ],
+      "simpleIcon": {
+        "slug": "wikipedia"
+      },
+      "stickerHex": "#000000",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "google-scholar",
+      "nameZh": "谷歌学术",
+      "nameEn": "Google Scholar",
+      "category": "academic",
+      "aliases": [
+        "谷歌学术",
+        "Google Scholar"
+      ],
+      "simpleIcon": {
+        "slug": "googlescholar"
+      },
+      "stickerHex": "#4285F4",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "orcid",
+      "nameZh": "ORCID",
+      "nameEn": "ORCID",
+      "category": "academic",
+      "aliases": [
+        "ORCID"
+      ],
+      "simpleIcon": {
+        "slug": "orcid"
+      },
+      "stickerHex": "#A6CE39",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "researchgate",
+      "nameZh": "ResearchGate",
+      "nameEn": "ResearchGate",
+      "category": "academic",
+      "aliases": [
+        "ResearchGate"
+      ],
+      "simpleIcon": {
+        "slug": "researchgate"
+      },
+      "stickerHex": "#00CCBB",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "signal",
+      "nameZh": "Signal",
+      "nameEn": "Signal",
+      "category": "contact",
+      "aliases": [
+        "Signal"
+      ],
+      "simpleIcon": {
+        "slug": "signal"
+      },
+      "stickerHex": "#3B45FD",
+      "needsCustomGlyph": false
+    },
+    {
+      "id": "amazon",
+      "nameZh": "亚马逊",
+      "nameEn": "Amazon",
+      "category": "shopping",
+      "aliases": [
+        "亚马逊",
+        "Amazon"
+      ],
+      "simpleIcon": null,
+      "stickerHex": "#FF6200",
+      "needsCustomGlyph": true
+    },
+    {
+      "id": "slack",
+      "nameZh": "Slack",
+      "nameEn": "Slack",
+      "category": "booking",
+      "aliases": [
+        "Slack"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true
+    },
+    {
+      "id": "codepen",
+      "nameZh": "CodePen",
+      "nameEn": "CodePen",
+      "category": "dev",
+      "aliases": [
+        "CodePen"
+      ],
+      "simpleIcon": null,
+      "stickerHex": null,
+      "needsCustomGlyph": true
+    },
+    {
+      "id": "xbox",
+      "nameZh": "Xbox",
+      "nameEn": "Xbox",
+      "category": "game",
+      "aliases": [
+        "Xbox"
+      ],
+      "simpleIcon": null,
+      "stickerHex": "#107B10",
+      "needsCustomGlyph": true
     }
   ]
 }
