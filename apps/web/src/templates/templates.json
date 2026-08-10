@@ -3,10 +3,17 @@
     "id": "illustrator-commission",
     "nameZh": "插画师 · 约稿",
     "persona": "自由插画师",
-    "scene": ["约稿", "作品展示"],
+    "scene": [
+      "约稿",
+      "作品展示"
+    ],
     "defaultTheme": "cream-paper",
     "layout": "GRID",
-    "cta": { "type": "wechat", "label": "加微信约稿", "value": "linxiaoman-draw" },
+    "cta": {
+      "type": "wechat",
+      "label": "加微信约稿",
+      "value": "linxiaoman-draw"
+    },
     "identity": {
       "title": "林小满",
       "role": "插画师 / 绘本作者",
@@ -19,6 +26,12 @@
         "config": {
           "url": "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1200&q=80&auto=format",
           "alt": "林小满的插画工作台与近期手稿"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 2,
+          "h": 8
         }
       },
       {
@@ -28,6 +41,12 @@
           "title": "作品集 · 2026 精选",
           "desc": "商插 / 绘本 / 品牌视觉，近三年 40+ 项目的完整案例",
           "url": "https://example.com/portfolio/linxiaoman"
+        },
+        "placement": {
+          "x": 2,
+          "y": 0,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -37,6 +56,12 @@
           "title": "约稿须知与价目",
           "desc": "头像 300 起 / 商插 1500 起，档期排至 9 月，定金 30%",
           "url": "https://example.com/commission/guide"
+        },
+        "placement": {
+          "x": 2,
+          "y": 6,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -44,10 +69,25 @@
         "size": "SM",
         "config": {
           "items": [
-            { "platform": "xiaohongshu", "url": "https://example.com/xhs/linxiaoman" },
-            { "platform": "bilibili", "url": "https://example.com/bili/linxiaoman" },
-            { "platform": "weibo", "url": "https://example.com/weibo/linxiaoman" }
+            {
+              "platform": "xiaohongshu",
+              "url": "https://example.com/xhs/linxiaoman"
+            },
+            {
+              "platform": "bilibili",
+              "url": "https://example.com/bili/linxiaoman"
+            },
+            {
+              "platform": "weibo",
+              "url": "https://example.com/weibo/linxiaoman"
+            }
           ]
+        },
+        "placement": {
+          "x": 0,
+          "y": 8,
+          "w": 2,
+          "h": 4
         }
       },
       {
@@ -55,18 +95,32 @@
         "size": "MD",
         "config": {
           "markdown": "「商稿请附用途与预算范围，个人练习不接急单。每月只接 3 单，约满即止。」"
+        },
+        "placement": {
+          "x": 2,
+          "y": 12,
+          "w": 2,
+          "h": 6
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   },
   {
     "id": "photographer-booking",
     "nameZh": "摄影师 · 约拍",
     "persona": "自由摄影师",
-    "scene": ["约拍", "客片展示"],
+    "scene": [
+      "约拍",
+      "客片展示"
+    ],
     "defaultTheme": "ink-dark",
     "layout": "GRID",
-    "cta": { "type": "wechat", "label": "加微信约拍", "value": "chenye-photo" },
+    "cta": {
+      "type": "wechat",
+      "label": "加微信约拍",
+      "value": "chenye-photo"
+    },
     "identity": {
       "title": "陈野",
       "role": "人像与婚礼摄影师",
@@ -79,6 +133,12 @@
         "config": {
           "url": "https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1200&q=80&auto=format",
           "alt": "陈野在户外拍摄的工作照"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 8
         }
       },
       {
@@ -88,6 +148,12 @@
           "title": "作品集 · 人像与婚礼",
           "desc": "160+ 组客片，点进去看完整相册，而不是九宫格",
           "url": "https://example.com/works/chenye"
+        },
+        "placement": {
+          "x": 0,
+          "y": 8,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -97,6 +163,12 @@
           "title": "约拍价格与档期",
           "desc": "单人写真 899 起 / 婚礼纪实 3800 起，周末档期提前 3 周约",
           "url": "https://example.com/booking/chenye"
+        },
+        "placement": {
+          "x": 0,
+          "y": 12,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -105,6 +177,12 @@
         "config": {
           "url": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200&q=80&auto=format",
           "alt": "常用器材：一台用了五年的全画幅相机"
+        },
+        "placement": {
+          "x": 1,
+          "y": 0,
+          "w": 3,
+          "h": 8
         }
       },
       {
@@ -112,10 +190,25 @@
         "size": "SM",
         "config": {
           "items": [
-            { "platform": "xiaohongshu", "url": "https://example.com/xhs/chenye" },
-            { "platform": "douyin", "url": "https://example.com/douyin/chenye" },
-            { "platform": "weibo", "url": "https://example.com/weibo/chenye" }
+            {
+              "platform": "xiaohongshu",
+              "url": "https://example.com/xhs/chenye"
+            },
+            {
+              "platform": "douyin",
+              "url": "https://example.com/douyin/chenye"
+            },
+            {
+              "platform": "weibo",
+              "url": "https://example.com/weibo/chenye"
+            }
           ]
+        },
+        "placement": {
+          "x": 0,
+          "y": 18,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -123,18 +216,32 @@
         "size": "MD",
         "config": {
           "markdown": "「先聊半小时再开机。底片全送，精修 20 张，一周内交付。」"
+        },
+        "placement": {
+          "x": 2,
+          "y": 12,
+          "w": 2,
+          "h": 6
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   },
   {
     "id": "podcaster-card",
     "nameZh": "播客主 · 节目名片",
     "persona": "播客主",
-    "scene": ["节目名片", "听友社群"],
+    "scene": [
+      "节目名片",
+      "听友社群"
+    ],
     "defaultTheme": "vermilion",
     "layout": "LIST",
-    "cta": { "type": "link", "label": "收听最新一期", "value": "https://example.com/podcast/latest" },
+    "cta": {
+      "type": "link",
+      "label": "收听最新一期",
+      "value": "https://example.com/podcast/latest"
+    },
     "identity": {
       "title": "周叙",
       "role": "《深夜通话》主播",
@@ -148,6 +255,12 @@
           "title": "最新一期 · Vol.200",
           "desc": "《县城咖啡馆生存报告》，和三位店主聊了一整夜，52 分钟",
           "url": "https://example.com/podcast/ep200"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -157,6 +270,12 @@
           "title": "代表单集 · 只听一期就听它",
           "desc": "Vol.132 对谈外卖骑手诗人，小宇宙 10w+ 播放的那期",
           "url": "https://example.com/podcast/ep132"
+        },
+        "placement": {
+          "x": 0,
+          "y": 4,
+          "w": 2,
+          "h": 8
         }
       },
       {
@@ -166,6 +285,12 @@
           "title": "听友来信与投稿",
           "desc": "每期读信，投稿邮箱常年开放，来信 100% 会回",
           "url": "https://example.com/podcast/letters"
+        },
+        "placement": {
+          "x": 2,
+          "y": 4,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -173,10 +298,25 @@
         "size": "SM",
         "config": {
           "items": [
-            { "platform": "xiaoyuzhou", "url": "https://example.com/xyz/shenye" },
-            { "platform": "ximalaya", "url": "https://example.com/xmly/shenye" },
-            { "platform": "netease-cloud-music", "url": "https://example.com/ncm/shenye" }
+            {
+              "platform": "xiaoyuzhou",
+              "url": "https://example.com/xyz/shenye"
+            },
+            {
+              "platform": "ximalaya",
+              "url": "https://example.com/xmly/shenye"
+            },
+            {
+              "platform": "netease-cloud-music",
+              "url": "https://example.com/ncm/shenye"
+            }
           ]
+        },
+        "placement": {
+          "x": 0,
+          "y": 16,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -184,18 +324,32 @@
         "size": "MD",
         "config": {
           "markdown": "「周更，每期一个具体的人和一件具体的事。不聊赛道，只聊生活。」"
+        },
+        "placement": {
+          "x": 2,
+          "y": 10,
+          "w": 2,
+          "h": 6
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   },
   {
     "id": "indie-developer",
     "nameZh": "独立开发者 · 产品页",
     "persona": "独立开发者",
-    "scene": ["产品推广", "开发日志"],
+    "scene": [
+      "产品推广",
+      "开发日志"
+    ],
     "defaultTheme": "minimal-light",
     "layout": "LIST",
-    "cta": { "type": "link", "label": "查看 GitHub", "value": "https://example.com/github/afeng" },
+    "cta": {
+      "type": "link",
+      "label": "查看 GitHub",
+      "value": "https://example.com/github/afeng"
+    },
     "identity": {
       "title": "阿枫",
       "role": "独立开发者 ·「有数」作者",
@@ -209,6 +363,12 @@
           "title": "主产品 · 记账 App「有数」",
           "desc": "iOS 效率榜前 50，3.2 万下载，终身买断 45 元",
           "url": "https://example.com/app/youshu"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -218,6 +378,12 @@
           "title": "开发日志 Newsletter",
           "desc": "每周一篇，写独立开发的收入、踩坑和决策，2700 人订阅",
           "url": "https://example.com/newsletter/afeng"
+        },
+        "placement": {
+          "x": 2,
+          "y": 4,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -227,6 +393,12 @@
           "title": "开源项目",
           "desc": "维护 3 个开源库，累计 4.6k Star，欢迎提 Issue",
           "url": "https://example.com/oss/afeng"
+        },
+        "placement": {
+          "x": 0,
+          "y": 10,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -234,10 +406,25 @@
         "size": "SM",
         "config": {
           "items": [
-            { "platform": "github", "url": "https://example.com/github/afeng" },
-            { "platform": "juejin", "url": "https://example.com/juejin/afeng" },
-            { "platform": "x", "url": "https://example.com/x/afeng" }
+            {
+              "platform": "github",
+              "url": "https://example.com/github/afeng"
+            },
+            {
+              "platform": "juejin",
+              "url": "https://example.com/juejin/afeng"
+            },
+            {
+              "platform": "x",
+              "url": "https://example.com/x/afeng"
+            }
           ]
+        },
+        "placement": {
+          "x": 2,
+          "y": 10,
+          "w": 2,
+          "h": 4
         }
       },
       {
@@ -245,18 +432,32 @@
         "size": "MD",
         "config": {
           "markdown": "「白天写代码，晚上也写代码，区别是晚上写的是自己的。」"
+        },
+        "placement": {
+          "x": 0,
+          "y": 4,
+          "w": 2,
+          "h": 6
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   },
   {
     "id": "creator-allinone",
     "nameZh": "全网同名博主 · 总名片",
     "persona": "内容创作者",
-    "scene": ["全网引流", "商务合作"],
+    "scene": [
+      "全网引流",
+      "商务合作"
+    ],
     "defaultTheme": "dopamine",
     "layout": "GRID",
-    "cta": { "type": "wechat", "label": "加微信合作", "value": "chaxiaowu-biz" },
+    "cta": {
+      "type": "wechat",
+      "label": "加微信合作",
+      "value": "chaxiaowu-biz"
+    },
     "identity": {
       "title": "茶小雾",
       "role": "生活方式博主，全网同名",
@@ -270,6 +471,12 @@
           "title": "置顶内容 · 年度视频",
           "desc": "《我在景德镇捏了 30 天瓷器》，全平台 800w 播放",
           "url": "https://example.com/video/jingdezhen"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -279,6 +486,12 @@
           "title": "商务合作报价",
           "desc": "图文 8k / 视频 2w 起，只接自己用过的东西，档期见详情",
           "url": "https://example.com/biz/chaxiaowu"
+        },
+        "placement": {
+          "x": 0,
+          "y": 4,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -288,6 +501,12 @@
           "title": "好物清单（持续更新）",
           "desc": "视频里出现过的所有东西，按分类整理好了，无广告位",
           "url": "https://example.com/list/chaxiaowu"
+        },
+        "placement": {
+          "x": 0,
+          "y": 10,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -295,11 +514,29 @@
         "size": "MD",
         "config": {
           "items": [
-            { "platform": "xiaohongshu", "url": "https://example.com/xhs/chaxiaowu" },
-            { "platform": "douyin", "url": "https://example.com/douyin/chaxiaowu" },
-            { "platform": "bilibili", "url": "https://example.com/bili/chaxiaowu" },
-            { "platform": "weibo", "url": "https://example.com/weibo/chaxiaowu" }
+            {
+              "platform": "xiaohongshu",
+              "url": "https://example.com/xhs/chaxiaowu"
+            },
+            {
+              "platform": "douyin",
+              "url": "https://example.com/douyin/chaxiaowu"
+            },
+            {
+              "platform": "bilibili",
+              "url": "https://example.com/bili/chaxiaowu"
+            },
+            {
+              "platform": "weibo",
+              "url": "https://example.com/weibo/chaxiaowu"
+            }
           ]
+        },
+        "placement": {
+          "x": 2,
+          "y": 4,
+          "w": 2,
+          "h": 4
         }
       },
       {
@@ -307,18 +544,32 @@
         "size": "MD",
         "config": {
           "markdown": "「全网同名 @茶小雾，哪个平台更新看哪个。不接美妆以外的恰饭。」"
+        },
+        "placement": {
+          "x": 2,
+          "y": 8,
+          "w": 2,
+          "h": 6
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   },
   {
     "id": "consultant-booking",
     "nameZh": "咨询顾问 · 预约",
     "persona": "咨询顾问",
-    "scene": ["预约转化", "专业展示"],
+    "scene": [
+      "预约转化",
+      "专业展示"
+    ],
     "defaultTheme": "business-blue",
     "layout": "LIST",
-    "cta": { "type": "link", "label": "预约咨询", "value": "https://example.com/booking/shen" },
+    "cta": {
+      "type": "link",
+      "label": "预约咨询",
+      "value": "https://example.com/booking/shen"
+    },
     "identity": {
       "title": "沈知远",
       "role": "职业咨询师 / 前大厂 HRD",
@@ -332,6 +583,12 @@
           "title": "预约 1 对 1 咨询",
           "desc": "职业转型 / 简历面试，50 分钟 680 元，本周还剩 4 个时段",
           "url": "https://example.com/booking/shen"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -341,6 +598,12 @@
           "title": "咨询前必读",
           "desc": "我的方法、过往案例，以及不适合找我的人，先看完再约",
           "url": "https://example.com/guide/shen"
+        },
+        "placement": {
+          "x": 0,
+          "y": 4,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -350,6 +613,12 @@
           "title": "免费专栏 · 转型笔记",
           "desc": "48 篇长文覆盖 80% 的常见问题，先看免费的",
           "url": "https://example.com/column/shen"
+        },
+        "placement": {
+          "x": 0,
+          "y": 10,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -357,10 +626,25 @@
         "size": "SM",
         "config": {
           "items": [
-            { "platform": "zhihu", "url": "https://example.com/zhihu/shen" },
-            { "platform": "linkedin", "url": "https://example.com/linkedin/shen" },
-            { "platform": "weibo", "url": "https://example.com/weibo/shen" }
+            {
+              "platform": "zhihu",
+              "url": "https://example.com/zhihu/shen"
+            },
+            {
+              "platform": "linkedin",
+              "url": "https://example.com/linkedin/shen"
+            },
+            {
+              "platform": "weibo",
+              "url": "https://example.com/weibo/shen"
+            }
           ]
+        },
+        "placement": {
+          "x": 2,
+          "y": 10,
+          "w": 2,
+          "h": 4
         }
       },
       {
@@ -368,6 +652,12 @@
         "size": "SM",
         "config": {
           "wechatId": "shenzhiyuan-pro"
+        },
+        "placement": {
+          "x": 2,
+          "y": 4,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -375,18 +665,32 @@
         "size": "MD",
         "config": {
           "markdown": "「咨询后 48 小时内给出书面行动清单，一个月内免费追问一次。」"
+        },
+        "placement": {
+          "x": 0,
+          "y": 16,
+          "w": 4,
+          "h": 3
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   },
   {
     "id": "shop-owner",
     "nameZh": "小店主 · 导购页",
     "persona": "小店主",
-    "scene": ["导购", "上新通知"],
+    "scene": [
+      "导购",
+      "上新通知"
+    ],
     "defaultTheme": "neon-gradient",
     "layout": "GRID",
-    "cta": { "type": "link", "label": "进店逛逛", "value": "https://example.com/shop/taotao" },
+    "cta": {
+      "type": "link",
+      "label": "进店逛逛",
+      "value": "https://example.com/shop/taotao"
+    },
     "identity": {
       "title": "桃桃",
       "role": "手作陶瓷店主",
@@ -399,6 +703,12 @@
         "config": {
           "url": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80&auto=format",
           "alt": "桃桃的店：货架上摆着刚出窑的陶瓷杯碗"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 2,
+          "h": 8
         }
       },
       {
@@ -408,6 +718,12 @@
           "title": "进店逛逛 · 淘宝店",
           "desc": "手作陶瓷杯碗，每周三晚 8 点上新，热门款常断货",
           "url": "https://example.com/shop/taotao"
+        },
+        "placement": {
+          "x": 2,
+          "y": 0,
+          "w": 2,
+          "h": 8
         }
       },
       {
@@ -417,6 +733,12 @@
           "title": "本周上新预览",
           "desc": "青花系列 12 件已出预览，点这里开开售提醒",
           "url": "https://example.com/shop/taotao/new"
+        },
+        "placement": {
+          "x": 0,
+          "y": 8,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -426,6 +748,12 @@
           "title": "实体店地址与营业时间",
           "desc": "杭州拱墅区丝联 166，周三至周日 13:00-20:00，店猫值班",
           "url": "https://example.com/shop/taotao/offline"
+        },
+        "placement": {
+          "x": 2,
+          "y": 8,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -433,10 +761,25 @@
         "size": "SM",
         "config": {
           "items": [
-            { "platform": "xiaohongshu", "url": "https://example.com/xhs/taotao" },
-            { "platform": "taobao", "url": "https://example.com/taobao/taotao" },
-            { "platform": "douyin", "url": "https://example.com/douyin/taotao" }
+            {
+              "platform": "xiaohongshu",
+              "url": "https://example.com/xhs/taotao"
+            },
+            {
+              "platform": "taobao",
+              "url": "https://example.com/taobao/taotao"
+            },
+            {
+              "platform": "douyin",
+              "url": "https://example.com/douyin/taotao"
+            }
           ]
+        },
+        "placement": {
+          "x": 0,
+          "y": 14,
+          "w": 2,
+          "h": 4
         }
       },
       {
@@ -444,18 +787,32 @@
         "size": "MD",
         "config": {
           "markdown": "「每窑只出 20 件，卖完等下一窑。支持定制刻字，周期 3 周。」"
+        },
+        "placement": {
+          "x": 2,
+          "y": 14,
+          "w": 2,
+          "h": 6
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   },
   {
     "id": "overseas-creator",
     "nameZh": "出海创作者 · Bio",
     "persona": "出海创作者",
-    "scene": ["海外涨粉", "链接聚合"],
+    "scene": [
+      "海外涨粉",
+      "链接聚合"
+    ],
     "defaultTheme": "bamboo-green",
     "layout": "LIST",
-    "cta": { "type": "link", "label": "Follow me", "value": "https://example.com/follow/suyuan" },
+    "cta": {
+      "type": "link",
+      "label": "Follow me",
+      "value": "https://example.com/follow/suyuan"
+    },
     "identity": {
       "title": "苏远",
       "role": "Video creator in China",
@@ -469,6 +826,12 @@
           "title": "Latest video on YouTube",
           "desc": "\"Why Chinese cities feel safer at night\" · 1.2M views in 2 weeks",
           "url": "https://example.com/youtube/suyuan/latest"
+        },
+        "placement": {
+          "x": 0,
+          "y": 0,
+          "w": 2,
+          "h": 8
         }
       },
       {
@@ -478,6 +841,12 @@
           "title": "Newsletter · China, explained",
           "desc": "Weekly essays on everyday China, 12k subscribers, free forever",
           "url": "https://example.com/newsletter/suyuan"
+        },
+        "placement": {
+          "x": 2,
+          "y": 0,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -487,6 +856,12 @@
           "title": "Press & speaking",
           "desc": "TEDx、BBC 采访与合作记录，商务请直接邮件，48h 内回复",
           "url": "https://example.com/press/suyuan"
+        },
+        "placement": {
+          "x": 2,
+          "y": 6,
+          "w": 2,
+          "h": 6
         }
       },
       {
@@ -494,11 +869,29 @@
         "size": "MD",
         "config": {
           "items": [
-            { "platform": "youtube", "url": "https://example.com/youtube/suyuan" },
-            { "platform": "instagram", "url": "https://example.com/ig/suyuan" },
-            { "platform": "tiktok", "url": "https://example.com/tiktok/suyuan" },
-            { "platform": "x", "url": "https://example.com/x/suyuan" }
+            {
+              "platform": "youtube",
+              "url": "https://example.com/youtube/suyuan"
+            },
+            {
+              "platform": "instagram",
+              "url": "https://example.com/ig/suyuan"
+            },
+            {
+              "platform": "tiktok",
+              "url": "https://example.com/tiktok/suyuan"
+            },
+            {
+              "platform": "x",
+              "url": "https://example.com/x/suyuan"
+            }
           ]
+        },
+        "placement": {
+          "x": 0,
+          "y": 12,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -506,8 +899,15 @@
         "size": "MD",
         "config": {
           "markdown": "「I answer every email. 中文合作请直接邮件，48 小时内回复。」"
+        },
+        "placement": {
+          "x": 0,
+          "y": 16,
+          "w": 4,
+          "h": 3
         }
       }
-    ]
+    ],
+    "bentoVersion": 1
   }
 ]

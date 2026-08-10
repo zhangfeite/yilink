@@ -43,16 +43,24 @@ describe('createPageFromTemplate', () => {
     );
   });
 
-  it('assembles visible template blocks for the PUT request', async () => {
+  it('writes layout, bento version and visible blocks in one atomic request', async () => {
     const fetcher = successfulFetcher();
     await createPageFromTemplate({ fetcher, slug: 'lin-xiaoman', template, title: '林小满' });
 
     const request = fetcher.mock.calls[1]?.[1] as RequestInit;
-    const blocks = JSON.parse(String(request.body)) as Array<{ isVisible: boolean }>;
-    expect(fetcher.mock.calls[1]?.[0]).toBe('/api/v1/pages/page-1/blocks');
+    const payload = JSON.parse(String(request.body)) as {
+      layout: string;
+      bentoVersion: number | null;
+      blocks: Array<{ isVisible: boolean; placement: unknown }>;
+    };
+    expect(fetcher.mock.calls[1]?.[0]).toBe('/api/v1/pages/page-1/layout');
     expect(request.method).toBe('PUT');
-    expect(blocks).toHaveLength(template.blocks.length);
-    expect(blocks.every((block) => block.isVisible)).toBe(true);
+    expect(payload.layout).toBe(template.layout);
+    expect(payload.bentoVersion).toBe(template.bentoVersion ?? null);
+    expect(payload.blocks).toHaveLength(template.blocks.length);
+    expect(payload.blocks.every((block) => block.isVisible)).toBe(true);
+    // 模板自带的 BENTO 坐标必须原样带上（缺省则显式 null，交由服务端兜底）
+    expect(payload.blocks.every((block) => block.placement !== undefined)).toBe(true);
   });
 
   it('assembles template page metadata for the PATCH request', async () => {
@@ -65,7 +73,6 @@ describe('createPageFromTemplate', () => {
       expect.objectContaining({
         method: 'PATCH',
         body: JSON.stringify({
-          layout: template.layout,
           themeId: template.defaultTheme,
           ctaConfig: template.cta,
           bio: template.identity.bio,

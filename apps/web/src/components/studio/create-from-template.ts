@@ -74,20 +74,25 @@ export async function createPageFromTemplate({
   );
   const pageId = created.page.id;
 
+  // 布局与区块一次事务写入（含模板自带的 BENTO placement），避免中间态
   await studioApiRequest(
     fetcher,
-    `/api/v1/pages/${pageId}/blocks`,
-    jsonRequest(
-      'PUT',
-      template.blocks.map((block) => ({ ...block, isVisible: true })),
-    ),
+    `/api/v1/pages/${pageId}/layout`,
+    jsonRequest('PUT', {
+      layout: template.layout,
+      bentoVersion: template.bentoVersion ?? null,
+      blocks: template.blocks.map((block) => ({
+        ...block,
+        isVisible: true,
+        placement: block.placement ?? null,
+      })),
+    }),
   );
 
   await studioApiRequest(
     fetcher,
     `/api/v1/pages/${pageId}`,
     jsonRequest('PATCH', {
-      layout: template.layout,
       themeId: template.defaultTheme,
       ctaConfig: template.cta,
       bio: template.identity.bio,

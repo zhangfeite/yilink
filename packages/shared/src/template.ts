@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { blockConfigSchemas } from './blocks';
 import { ctaConfigSchema } from './cta';
+import { bentoPlacementSchema } from './layout/bento';
 
 /** 场景模板（docs/design/template-system.md §二）：主题 × 版式 × 预置区块 × 文案骨架 × 默认 CTA。 */
 export const templateBlockSchema = z
@@ -9,6 +10,7 @@ export const templateBlockSchema = z
     type: z.enum(['LINK', 'SOCIAL', 'TEXT', 'IMAGE', 'WECHAT', 'QR', 'DIVIDER']),
     size: z.enum(['SM', 'MD', 'LG']).default('MD'),
     config: z.record(z.string(), z.unknown()),
+    placement: bentoPlacementSchema.optional(),
   })
   .superRefine((value, ctx) => {
     const schema = blockConfigSchemas[value.type];
@@ -31,6 +33,7 @@ export const sceneTemplateSchema = z.object({
   scene: z.array(z.string().min(2).max(8)).min(1).max(3),
   defaultTheme: z.string().min(1),
   layout: z.enum(['LIST', 'GRID']),
+  bentoVersion: z.literal(1).optional(),
   cta: ctaConfigSchema.nullable(),
   identity: z.object({
     title: z.string().min(1).max(20),

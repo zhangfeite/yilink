@@ -24,7 +24,8 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
   if (!page) {
     return notFoundResponse();
   }
-  if (page.deletedAt === null && page.status !== 'HIDDEN') {
+  // REVIEW 是人工审核队列的常态，必须可放行；否则待审页面永远卡住（spec-14 遗漏）
+  if (page.deletedAt === null && page.status !== 'HIDDEN' && page.status !== 'REVIEW') {
     return notFoundResponse();
   }
 
@@ -48,7 +49,13 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
         targetId: page.id,
         provider: 'manual',
         verdict: 'pass',
-        detail: { action: restoresDeletedPage ? 'restore-deleted' : 'restore-hidden' },
+        detail: {
+          action: restoresDeletedPage
+            ? 'restore-deleted'
+            : page.status === 'REVIEW'
+              ? 'approve-review'
+              : 'restore-hidden',
+        },
         reviewedBy: adminId,
       },
     }),

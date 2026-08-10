@@ -708,7 +708,80 @@
   margin: 0;
 }
 
-.bentoItem img {
+/* tile 内的图片链路：figure → a → img 全程撑满，否则高度塌成 0 */
+.bentoItem .imageCard a,
+.bentoItem figure > a {
   height: 100%;
+}
+
+.bentoItem img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
   object-fit: cover;
+}
+
+/* 文本类 tile：内容超出时优雅截断而不是露出半行 */
+.bentoItem .textCard,
+.bentoItem .wechatCard,
+.bentoItem .stickers {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.bentoItem .markdown,
+.bentoItem .linkText small {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.bentoItem .linkCard {
+  height: 100%;
+  align-items: center;
+}
+
+/* 半宽及更窄的 tile：链接卡改竖排，缩略图缩小、箭头隐藏，给标题让出整行宽度 */
+.bentoItem[style*='--b-w: 1'] .linkCard,
+.bentoItem[style*='--b-w:1'] .linkCard,
+.bentoItem[style*='--b-w: 2'] .linkCard,
+.bentoItem[style*='--b-w:2'] .linkCard {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+}
+
+.bentoItem[style*='--b-w: 2'] .linkThumb,
+.bentoItem[style*='--b-w:2'] .linkThumb,
+.bentoItem[style*='--b-w: 1'] .linkThumb,
+.bentoItem[style*='--b-w:1'] .linkThumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.bentoItem[style*='--b-w: 2'] .linkArrow,
+.bentoItem[style*='--b-w:2'] .linkArrow,
+.bentoItem[style*='--b-w: 1'] .linkArrow,
+.bentoItem[style*='--b-w:1'] .linkArrow {
+  display: none;
+}
+
+.bentoItem[style*='--b-w: 2'] .linkText small,
+.bentoItem[style*='--b-w:2'] .linkText small,
+.bentoItem[style*='--b-w: 1'] .linkText small,
+.bentoItem[style*='--b-w:1'] .linkText small {
+  white-space: normal;
+}
+
+.bentoItem .linkText strong {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
