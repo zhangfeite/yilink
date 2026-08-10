@@ -332,7 +332,8 @@ function WechatBlock({ block }: { block: PublicBlockData }) {
   const config = asRecord(block.config);
   const wechatId = textValue(config, 'wechatId');
   if (!wechatId) return null;
-  const note = textValue(config, 'note') ?? '点击复制微信号';
+  // 不给 note 默认值：默认句与下方说明是同一句，未配置时会把「点击复制微信号」渲染两遍（转化唯一性）
+  const note = textValue(config, 'note');
   const qrImageUrl = safeHttpUrl(config.qrImageUrl);
 
   return (
@@ -343,7 +344,7 @@ function WechatBlock({ block }: { block: PublicBlockData }) {
         </span>
         <span className={styles.wechatId}>
           {wechatId}
-          <small>{note}</small>
+          {note ? <small>{note}</small> : null}
         </span>
         <button
           aria-label={`复制微信号 ${wechatId}`}

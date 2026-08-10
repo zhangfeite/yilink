@@ -39,14 +39,14 @@
         "size": "LG",
         "config": {
           "title": "作品集 · 2026 精选",
-          "desc": "商插 / 绘本 / 品牌视觉，近三年 40+ 项目的完整案例",
+          "desc": "商插 / 绘本 / 品牌，40+ 完整案例",
           "url": "https://example.com/portfolio/linxiaoman"
         },
         "placement": {
           "x": 2,
           "y": 0,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -54,14 +54,14 @@
         "size": "MD",
         "config": {
           "title": "约稿须知与价目",
-          "desc": "头像 300 起 / 商插 1500 起，档期排至 9 月，定金 30%",
+          "desc": "头像 300 起，商插 1500 起，排至 9 月",
           "url": "https://example.com/commission/guide"
         },
         "placement": {
           "x": 2,
-          "y": 6,
+          "y": 7,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -87,20 +87,20 @@
           "x": 0,
           "y": 8,
           "w": 2,
-          "h": 4
+          "h": 5
         }
       },
       {
         "type": "TEXT",
         "size": "MD",
         "config": {
-          "markdown": "「商稿请附用途与预算范围，个人练习不接急单。每月只接 3 单，约满即止。」"
+          "markdown": "「商稿请附用途与预算。每月只接 3 单，约满即止。」"
         },
         "placement": {
-          "x": 2,
-          "y": 12,
-          "w": 2,
-          "h": 6
+          "x": 0,
+          "y": 14,
+          "w": 4,
+          "h": 5
         }
       }
     ],
@@ -146,14 +146,14 @@
         "size": "LG",
         "config": {
           "title": "作品集 · 人像与婚礼",
-          "desc": "160+ 组客片，点进去看完整相册，而不是九宫格",
+          "desc": "160+ 组客片，完整相册不是九宫格",
           "url": "https://example.com/works/chenye"
         },
         "placement": {
           "x": 0,
           "y": 8,
-          "w": 4,
-          "h": 4
+          "w": 2,
+          "h": 7
         }
       },
       {
@@ -161,14 +161,14 @@
         "size": "MD",
         "config": {
           "title": "约拍价格与档期",
-          "desc": "单人写真 899 起 / 婚礼纪实 3800 起，周末档期提前 3 周约",
+          "desc": "写真 899 起 / 婚礼 3800 起",
           "url": "https://example.com/booking/chenye"
         },
         "placement": {
-          "x": 0,
-          "y": 12,
+          "x": 2,
+          "y": 8,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -206,22 +206,22 @@
         },
         "placement": {
           "x": 0,
-          "y": 18,
+          "y": 15,
           "w": 4,
-          "h": 4
+          "h": 8
         }
       },
       {
         "type": "TEXT",
         "size": "MD",
         "config": {
-          "markdown": "「先聊半小时再开机。底片全送，精修 20 张，一周内交付。」"
+          "markdown": "「先聊半小时再开机。底片全送，精修 20 张。」"
         },
         "placement": {
-          "x": 2,
-          "y": 12,
-          "w": 2,
-          "h": 6
+          "x": 0,
+          "y": 23,
+          "w": 4,
+          "h": 4
         }
       }
     ],
@@ -253,7 +253,7 @@
         "size": "LG",
         "config": {
           "title": "最新一期 · Vol.200",
-          "desc": "《县城咖啡馆生存报告》，和三位店主聊了一整夜，52 分钟",
+          "desc": "《县城咖啡馆生存报告》，52 分钟",
           "url": "https://example.com/podcast/ep200"
         },
         "placement": {
@@ -283,14 +283,14 @@
         "size": "MD",
         "config": {
           "title": "听友来信与投稿",
-          "desc": "每期读信，投稿邮箱常年开放，来信 100% 会回",
+          "desc": "每期读信，来信 100% 会回",
           "url": "https://example.com/podcast/letters"
         },
         "placement": {
           "x": 2,
           "y": 4,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -314,22 +314,22 @@
         },
         "placement": {
           "x": 0,
-          "y": 16,
+          "y": 12,
           "w": 4,
-          "h": 4
+          "h": 8
         }
       },
       {
         "type": "TEXT",
         "size": "MD",
         "config": {
-          "markdown": "「周更，每期一个具体的人和一件具体的事。不聊赛道，只聊生活。」"
+          "markdown": "「周更，一个具体的人，一件具体的事。」"
         },
         "placement": {
-          "x": 2,
-          "y": 10,
-          "w": 2,
-          "h": 6
+          "x": 0,
+          "y": 20,
+          "w": 4,
+          "h": 4
         }
       }
     ],
@@ -361,7 +361,7 @@
         "size": "LG",
         "config": {
           "title": "主产品 · 记账 App「有数」",
-          "desc": "iOS 效率榜前 50，3.2 万下载，终身买断 45 元",
+          "desc": "iOS 效率榜前 50，终身买断 45 元",
           "url": "https://example.com/app/youshu"
         },
         "placement": {
@@ -376,14 +376,14 @@
         "size": "MD",
         "config": {
           "title": "开发日志 Newsletter",
-          "desc": "每周一篇，写独立开发的收入、踩坑和决策，2700 人订阅",
+          "desc": "每周一篇，收入与踩坑，2700 人订阅",
           "url": "https://example.com/newsletter/afeng"
         },
         "placement": {
           "x": 2,
           "y": 4,
           "w": 2,
-          "h": 6
+          "h": 8
         }
       },
       {
@@ -391,14 +391,14 @@
         "size": "MD",
         "config": {
           "title": "开源项目",
-          "desc": "维护 3 个开源库，累计 4.6k Star，欢迎提 Issue",
+          "desc": "3 个开源库，累计 4.6k Star",
           "url": "https://example.com/oss/afeng"
         },
         "placement": {
           "x": 0,
-          "y": 10,
+          "y": 4,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -421,23 +421,23 @@
           ]
         },
         "placement": {
-          "x": 2,
-          "y": 10,
-          "w": 2,
-          "h": 4
+          "x": 0,
+          "y": 12,
+          "w": 4,
+          "h": 8
         }
       },
       {
         "type": "TEXT",
         "size": "MD",
         "config": {
-          "markdown": "「白天写代码，晚上也写代码，区别是晚上写的是自己的。」"
+          "markdown": "「白天写代码，晚上也写，区别是晚上写自己的。」"
         },
         "placement": {
           "x": 0,
-          "y": 4,
-          "w": 2,
-          "h": 6
+          "y": 20,
+          "w": 4,
+          "h": 5
         }
       }
     ],
@@ -469,7 +469,7 @@
         "size": "LG",
         "config": {
           "title": "置顶内容 · 年度视频",
-          "desc": "《我在景德镇捏了 30 天瓷器》，全平台 800w 播放",
+          "desc": "《景德镇捏了 30 天瓷器》，800w 播放",
           "url": "https://example.com/video/jingdezhen"
         },
         "placement": {
@@ -484,14 +484,14 @@
         "size": "MD",
         "config": {
           "title": "商务合作报价",
-          "desc": "图文 8k / 视频 2w 起，只接自己用过的东西，档期见详情",
+          "desc": "图文 8k / 视频 2w 起，只接用过的",
           "url": "https://example.com/biz/chaxiaowu"
         },
         "placement": {
           "x": 0,
           "y": 4,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -499,14 +499,14 @@
         "size": "MD",
         "config": {
           "title": "好物清单（持续更新）",
-          "desc": "视频里出现过的所有东西，按分类整理好了，无广告位",
+          "desc": "视频里出现过的东西，已分类",
           "url": "https://example.com/list/chaxiaowu"
         },
         "placement": {
           "x": 0,
-          "y": 10,
-          "w": 2,
-          "h": 6
+          "y": 11,
+          "w": 4,
+          "h": 4
         }
       },
       {
@@ -536,20 +536,20 @@
           "x": 2,
           "y": 4,
           "w": 2,
-          "h": 4
+          "h": 7
         }
       },
       {
         "type": "TEXT",
         "size": "MD",
         "config": {
-          "markdown": "「全网同名 @茶小雾，哪个平台更新看哪个。不接美妆以外的恰饭。」"
+          "markdown": "「全网同名 @茶小雾。不接美妆以外的恰饭。」"
         },
         "placement": {
-          "x": 2,
-          "y": 8,
-          "w": 2,
-          "h": 6
+          "x": 0,
+          "y": 15,
+          "w": 4,
+          "h": 4
         }
       }
     ],
@@ -581,7 +581,7 @@
         "size": "LG",
         "config": {
           "title": "预约 1 对 1 咨询",
-          "desc": "职业转型 / 简历面试，50 分钟 680 元，本周还剩 4 个时段",
+          "desc": "职业转型 / 简历面试，50 分钟 680 元",
           "url": "https://example.com/booking/shen"
         },
         "placement": {
@@ -596,14 +596,14 @@
         "size": "MD",
         "config": {
           "title": "咨询前必读",
-          "desc": "我的方法、过往案例，以及不适合找我的人，先看完再约",
+          "desc": "方法、案例，以及不适合找我的人",
           "url": "https://example.com/guide/shen"
         },
         "placement": {
           "x": 0,
           "y": 4,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -611,14 +611,14 @@
         "size": "MD",
         "config": {
           "title": "免费专栏 · 转型笔记",
-          "desc": "48 篇长文覆盖 80% 的常见问题，先看免费的",
+          "desc": "48 篇长文覆盖 80% 常见问题",
           "url": "https://example.com/column/shen"
         },
         "placement": {
           "x": 0,
-          "y": 10,
+          "y": 11,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -642,9 +642,9 @@
         },
         "placement": {
           "x": 2,
-          "y": 10,
+          "y": 12,
           "w": 2,
-          "h": 4
+          "h": 5
         }
       },
       {
@@ -657,7 +657,7 @@
           "x": 2,
           "y": 4,
           "w": 2,
-          "h": 6
+          "h": 8
         }
       },
       {
@@ -668,9 +668,9 @@
         },
         "placement": {
           "x": 0,
-          "y": 16,
+          "y": 18,
           "w": 4,
-          "h": 3
+          "h": 5
         }
       }
     ],
@@ -731,7 +731,7 @@
         "size": "MD",
         "config": {
           "title": "本周上新预览",
-          "desc": "青花系列 12 件已出预览，点这里开开售提醒",
+          "desc": "青花系列 12 件已出预览",
           "url": "https://example.com/shop/taotao/new"
         },
         "placement": {
@@ -746,14 +746,14 @@
         "size": "MD",
         "config": {
           "title": "实体店地址与营业时间",
-          "desc": "杭州拱墅区丝联 166，周三至周日 13:00-20:00，店猫值班",
+          "desc": "杭州丝联 166，周三至周日 13:00-20:00",
           "url": "https://example.com/shop/taotao/offline"
         },
         "placement": {
           "x": 2,
           "y": 8,
           "w": 2,
-          "h": 6
+          "h": 8
         }
       },
       {
@@ -779,20 +779,20 @@
           "x": 0,
           "y": 14,
           "w": 2,
-          "h": 4
+          "h": 5
         }
       },
       {
         "type": "TEXT",
         "size": "MD",
         "config": {
-          "markdown": "「每窑只出 20 件，卖完等下一窑。支持定制刻字，周期 3 周。」"
+          "markdown": "「每窑只出 20 件，卖完等下一窑。可定制刻字。」"
         },
         "placement": {
-          "x": 2,
-          "y": 14,
-          "w": 2,
-          "h": 6
+          "x": 0,
+          "y": 19,
+          "w": 4,
+          "h": 5
         }
       }
     ],
@@ -839,14 +839,14 @@
         "size": "MD",
         "config": {
           "title": "Newsletter · China, explained",
-          "desc": "Weekly essays on everyday China, 12k subscribers, free forever",
+          "desc": "Weekly essays, 12k subscribers",
           "url": "https://example.com/newsletter/suyuan"
         },
         "placement": {
           "x": 2,
           "y": 0,
           "w": 2,
-          "h": 6
+          "h": 8
         }
       },
       {
@@ -854,14 +854,14 @@
         "size": "MD",
         "config": {
           "title": "Press & speaking",
-          "desc": "TEDx、BBC 采访与合作记录，商务请直接邮件，48h 内回复",
+          "desc": "TEDx、BBC 采访与合作记录",
           "url": "https://example.com/press/suyuan"
         },
         "placement": {
-          "x": 2,
-          "y": 6,
+          "x": 0,
+          "y": 8,
           "w": 2,
-          "h": 6
+          "h": 7
         }
       },
       {
@@ -888,10 +888,10 @@
           ]
         },
         "placement": {
-          "x": 0,
-          "y": 12,
-          "w": 4,
-          "h": 4
+          "x": 2,
+          "y": 8,
+          "w": 2,
+          "h": 7
         }
       },
       {
@@ -902,9 +902,9 @@
         },
         "placement": {
           "x": 0,
-          "y": 16,
+          "y": 15,
           "w": 4,
-          "h": 3
+          "h": 5
         }
       }
     ],

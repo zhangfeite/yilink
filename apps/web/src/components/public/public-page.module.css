@@ -785,3 +785,162 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+
+/* ── 内容自适配：任意 h/w 下内容都必须落在格子内 ──
+   不按行数算高度（标题行数随文案浮动，常数必然算错），而是让 flex 分配可用高度，
+   正文框自身等于剩余空间并裁切；文本短时淡出落在空白区（不可见），
+   长时在底部收住，读起来是「有意收住」而不是「被切掉半行」。 */
+
+/* 图片 tile：图吃剩余空间，图注永远留得下自己的一行 */
+.bentoItem .imageCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.bentoItem .imageCard > a,
+.bentoItem .imageCard > img {
+  flex: 1 1 0;
+  height: auto;
+  min-height: 0;
+}
+
+.bentoItem .imageCard figcaption {
+  flex: 0 0 auto;
+  margin-top: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 单列格（净宽约 60px）放不下任何有意义的图注，只会剩「陈野在…」这种残句 */
+.bentoItem[style*='--b-w:1'] .imageCard figcaption,
+.bentoItem[style*='--b-w: 1'] .imageCard figcaption {
+  display: none;
+}
+
+/* 贴纸 tile：标题与说明定高，贴纸网格吃剩余空间 */
+.bentoItem .stickers {
+  justify-content: flex-start;
+}
+
+/* align-content 必须是 flex-start：居中时溢出会同时向上跑，图标会从格子顶部漏出去 */
+.bentoItem .stickerGrid {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  align-content: flex-start;
+  padding-top: 2px;
+}
+
+.bentoItem .stickers .caption {
+  flex: 0 0 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 半宽格（净宽约 133px）：56px 贴纸每行只放得下 2 个，且标题两行 + 说明一行后
+   网格只剩 50px。故窄格里标题压一行、隐去说明（图标自带 aria-label），贴纸缩到 36px。 */
+.bentoItem[style*='--b-w:2'] .stickerGrid,
+.bentoItem[style*='--b-w: 2'] .stickerGrid,
+.bentoItem[style*='--b-w:1'] .stickerGrid,
+.bentoItem[style*='--b-w: 1'] .stickerGrid {
+  max-width: none;
+  gap: 8px;
+}
+
+.bentoItem[style*='--b-w:2'] .sticker,
+.bentoItem[style*='--b-w: 2'] .sticker,
+.bentoItem[style*='--b-w:2'] .fallbackSticker,
+.bentoItem[style*='--b-w: 2'] .fallbackSticker {
+  width: 36px;
+  height: 36px;
+}
+
+.bentoItem[style*='--b-w:2'] .stickers .sectionTitle,
+.bentoItem[style*='--b-w: 2'] .stickers .sectionTitle,
+.bentoItem[style*='--b-w:1'] .stickers .sectionTitle,
+.bentoItem[style*='--b-w: 1'] .stickers .sectionTitle {
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bentoItem[style*='--b-w:2'] .stickers .caption,
+.bentoItem[style*='--b-w: 2'] .stickers .caption,
+.bentoItem[style*='--b-w:1'] .stickers .caption,
+.bentoItem[style*='--b-w: 1'] .stickers .caption {
+  display: none;
+}
+
+/* 窄格里「图标 + 微信号 + 复制按钮」横排只剩 20 来像素给微信号，会碎成「s…」；改竖排 */
+.bentoItem[style*='--b-w:2'] .wechatRow,
+.bentoItem[style*='--b-w: 2'] .wechatRow,
+.bentoItem[style*='--b-w:1'] .wechatRow,
+.bentoItem[style*='--b-w: 1'] .wechatRow {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  text-align: center;
+}
+
+.bentoItem[style*='--b-w:2'] .wechatRow .contactIcon,
+.bentoItem[style*='--b-w: 2'] .wechatRow .contactIcon,
+.bentoItem[style*='--b-w:1'] .wechatRow .contactIcon,
+.bentoItem[style*='--b-w: 1'] .wechatRow .contactIcon {
+  align-self: center;
+}
+
+.bentoItem[style*='--b-w:2'] .wechatId,
+.bentoItem[style*='--b-w: 2'] .wechatId,
+.bentoItem[style*='--b-w:1'] .wechatId,
+.bentoItem[style*='--b-w: 1'] .wechatId {
+  flex: none;
+  white-space: nowrap;
+}
+
+.bentoItem[style*='--b-w:1'] .sticker,
+.bentoItem[style*='--b-w: 1'] .sticker,
+.bentoItem[style*='--b-w:1'] .fallbackSticker,
+.bentoItem[style*='--b-w: 1'] .fallbackSticker {
+  width: 32px;
+  height: 32px;
+}
+
+/* 正文：可用高度由 flex 给，line-clamp 只留作上限。
+   横排卡必须 stretch——align-items:center 时 .linkText 高度是内容高，
+   里面 flex-basis:0 的描述行会塌成 0（表现为恒定差一行，加多少高都没用）。 */
+.bentoItem .linkCard,
+.bentoItem .linkText {
+  min-height: 0;
+}
+
+.bentoItem .linkCard {
+  align-items: stretch;
+}
+
+.bentoItem .linkThumb {
+  align-self: center;
+  flex: none;
+}
+
+.bentoItem .linkText {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.bentoItem .linkText strong {
+  flex: 0 0 auto;
+}
+
+.bentoItem .linkText small,
+.bentoItem .markdown {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  /* 不加底部淡出蒙版：文本恰好填满格子时它会把最后一行一起淡掉，
+     看起来像没渲染完。溢出交给 overflow 裁切 + line-clamp 的省略号。 */
+  -webkit-line-clamp: 6;
+}
