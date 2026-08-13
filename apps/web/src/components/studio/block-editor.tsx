@@ -1,6 +1,7 @@
 'use client';
 
-import { getPlatformIcon, platformIconIds } from '@yilink/icons';
+// 只引 meta 轻量入口：完整 registry 带全部 SVG 路径（~130KB），下拉框只需要 id/名称
+import { platformMetaList } from '@yilink/icons/meta';
 import { blockConfigSchemas } from '@yilink/shared';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -23,6 +24,32 @@ interface TextFieldProps {
   type?: 'text' | 'url';
   value: string;
 }
+
+/** 平台下拉框按类目分组：123 个平台平铺不可用，常用类目（社交/视频）排前。 */
+const PLATFORM_CATEGORY_LABELS: Record<string, string> = {
+  social: '社交',
+  video: '视频',
+  content: '内容与写作',
+  music: '音频与音乐',
+  contact: '联系方式',
+  shopping: '电商',
+  support: '赞助与收款',
+  booking: '预约与协作',
+  dev: '开发',
+  design: '设计',
+  game: '游戏',
+  life: '生活',
+  academic: '学术',
+  other: '其他',
+};
+
+const PLATFORM_GROUPS = Object.keys(PLATFORM_CATEGORY_LABELS)
+  .map((category) => ({
+    category,
+    label: PLATFORM_CATEGORY_LABELS[category],
+    platforms: platformMetaList.filter((platform) => platform.category === category),
+  }))
+  .filter((group) => group.platforms.length > 0);
 
 function stringValue(value: unknown): string {
   return typeof value === 'string' ? value : '';
@@ -148,10 +175,14 @@ export function SortableBlockEditor({
                     onChange={(event) => updateItem(index, { platform: event.target.value })}
                     value={stringValue(item.platform) || 'website'}
                   >
-                    {platformIconIds.map((id) => (
-                      <option key={id} value={id}>
-                        {getPlatformIcon(id).nameZh}
-                      </option>
+                    {PLATFORM_GROUPS.map((group) => (
+                      <optgroup key={group.category} label={group.label}>
+                        {group.platforms.map((platform) => (
+                          <option key={platform.id} value={platform.id}>
+                            {platform.nameZh}
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                 </label>

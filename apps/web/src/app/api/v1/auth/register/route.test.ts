@@ -1,6 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { db } from '@/lib/db';
+import { REGISTER_RULE, resetRateLimit } from '@/lib/rate-limit';
 
 import { POST } from './route';
 
@@ -33,9 +34,29 @@ describe('POST /api/v1/auth/register', () => {
   beforeEach(async () => {
     await clearDatabase();
     delete process.env.INVITE_CODES;
+    // 测试请求不带 IP 头，全部归并到同一个限流主体，必须逐用例清零
+    resetRateLimit();
   });
 
   afterAll(restoreInviteCodes);
+
+  it('rate limits repeated attempts from one subject before parsing anything', async () => {
+    for (let attempt = 0; attempt < REGISTER_RULE.limit; attempt += 1) {
+      await POST(registerRequest({ email: `probe-${attempt}@example.com`, password: 'password-with-8-chars' }));
+    }
+
+    const response = await POST(
+      registerRequest({ email: 'over-limit@example.com', password: 'password-with-8-chars' }),
+    );
+
+    expect(response.status).toBe(429);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: 'RATE_LIMITED' },
+    });
+    // 被限的请求连用户都不该建出来
+    const blockedUser = await db.user.findUnique({ where: { email: 'over-limit@example.com' } });
+    expect(blockedUser).toBeNull();
+  });
 
   it('keeps registration open when no invitation table is configured', async () => {
     const response = await POST(

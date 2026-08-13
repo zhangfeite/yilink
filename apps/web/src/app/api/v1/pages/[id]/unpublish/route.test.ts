@@ -53,6 +53,29 @@ describe('/api/v1/pages/:id/unpublish', () => {
     expect(revalidateTagMock).toHaveBeenCalledWith('page:published-page', { expire: 0 });
   });
 
+  it('refuses to move a HIDDEN page to DRAFT (blocks the hide-wash path)', async () => {
+    // 管理员隐藏的页面若可转 DRAFT，所有者就能经 DRAFT→publish 洗白重新上线
+    const page = await db.page.create({
+      data: {
+        userId,
+        slug: 'hidden-page',
+        title: '被隐藏主页',
+        status: 'HIDDEN',
+        hiddenReason: 'manual',
+      },
+    });
+
+    const response = await POST(new Request('http://localhost'), pageContext(page.id));
+
+    expect(response.status).toBe(409);
+    await expect(response.json()).resolves.toMatchObject({
+      error: { code: 'PAGE_HIDDEN' },
+    });
+    const untouched = await db.page.findUniqueOrThrow({ where: { id: page.id } });
+    expect(untouched.status).toBe('HIDDEN');
+    expect(revalidateTagMock).not.toHaveBeenCalled();
+  });
+
   it('returns 404 and does not invalidate cache for another user page', async () => {
     const otherUser = await db.user.create({
       data: { id: 'unpublish-other', email: 'unpublish-other@example.com' },

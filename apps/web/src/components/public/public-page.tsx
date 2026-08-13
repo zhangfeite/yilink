@@ -479,6 +479,8 @@ export function PublicPageRenderer({
   const theme = getTheme(page.themeId);
   const cta = parseCta(page.ctaConfig);
   const role = textValue(asRecord(page.themeConfig), 'role');
+  // 与所有区块 URL 同一道闸：历史数据可能在 schema 收紧前入库，渲染端必须再兜一次
+  const avatarUrl = safeHttpUrl(page.avatarUrl);
   const blocks =
     cta?.type === 'wechat' ? page.blocks.filter((block) => block.type !== 'WECHAT') : page.blocks;
 
@@ -497,7 +499,7 @@ export function PublicPageRenderer({
         >
           <div className={styles.avatar}>
             <span aria-hidden="true">{avatarInitial(page.title)}</span>
-            {page.avatarUrl ? <img alt={`${page.title}的头像`} src={page.avatarUrl} /> : null}
+            {avatarUrl ? <img alt={`${page.title}的头像`} src={avatarUrl} /> : null}
           </div>
           <div className={styles.nameZone}>
             <h1 id="public-page-title">{page.title}</h1>

@@ -5,6 +5,7 @@ import GitHub from 'next-auth/providers/github';
 
 import { credentialsSchema } from './auth-validation';
 import { db } from './db';
+import { allowAttempt, LOGIN_EMAIL_RULE, LOGIN_RULE, rateLimitSubject } from './rate-limit';
 
 const providers: NextAuthConfig['providers'] = [
   Credentials({
@@ -12,9 +13,18 @@ const providers: NextAuthConfig['providers'] = [
       email: { label: 'Email', type: 'email' },
       password: { label: 'Password', type: 'password' },
     },
-    async authorize(rawCredentials) {
+    async authorize(rawCredentials, request) {
       const parsed = credentialsSchema.safeParse(rawCredentials);
       if (!parsed.success) {
+        return null;
+      }
+
+      // 限流在 bcrypt 之前：被限的请求不消耗哈希计算，也不产生用户存在性信号
+      const ip = rateLimitSubject(request?.headers);
+      if (
+        !allowAttempt('login-ip', ip, LOGIN_RULE) ||
+        !allowAttempt('login-email', parsed.data.email, LOGIN_EMAIL_RULE)
+      ) {
         return null;
       }
 

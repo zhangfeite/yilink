@@ -1,3 +1,5 @@
+import { timingSafeEqual } from 'node:crypto';
+
 import { NextResponse } from 'next/server';
 
 import { db } from '../../../../lib/db';
@@ -14,7 +16,10 @@ export async function POST(request: Request): Promise<NextResponse> {
   const cronSecret = process.env.CRON_SECRET?.trim();
   if (!cronSecret) return unavailableResponse();
 
-  if (request.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+  // 常数时间比较：长度不同直接拒绝（timingSafeEqual 要求等长，长度本身不是秘密）
+  const received = Buffer.from(request.headers.get('authorization') ?? '');
+  const expected = Buffer.from(`Bearer ${cronSecret}`);
+  if (received.length !== expected.length || !timingSafeEqual(received, expected)) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 

@@ -1,4 +1,5 @@
-import { platformIconIds } from '@yilink/icons';
+// meta 轻量入口：schema 会被客户端编辑器传染引入，绝不能拖上完整字形注册表（~130KB）
+import { platformMetaIds } from '@yilink/icons/meta';
 import { z } from 'zod';
 
 const optionalHttpUrl = z.string().url().optional();
@@ -14,7 +15,7 @@ export const socialBlockSchema = z.object({
   items: z
     .array(
       z.object({
-        platform: z.enum(platformIconIds),
+        platform: z.enum(platformMetaIds),
         url: z.string().url(),
       }),
     )

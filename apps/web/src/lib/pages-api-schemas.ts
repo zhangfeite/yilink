@@ -8,7 +8,13 @@ import {
 import { z } from 'zod';
 
 const pageTitleSchema = z.string().trim().min(1).max(120);
-const nullableUrlSchema = z.string().url().nullable();
+// 只收 http(s)：z.string().url() 会放行 javascript:/data: 等任意协议，
+// 头像最终进 <img src> 与 og:image，协议必须在入库前就掐死
+const nullableUrlSchema = z
+  .string()
+  .url()
+  .refine((value) => /^https?:\/\//i.test(value), '仅支持 http/https 链接')
+  .nullable();
 const nullableShortTextSchema = z.string().trim().max(500).nullable();
 
 export const pageIdSchema = z.string().trim().min(1).max(64);

@@ -89,7 +89,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       isVisible: block.isVisible,
       position,
       config: block.config as Prisma.InputJsonValue,
-      placement: block.placement ? (block.placement as Prisma.InputJsonValue) : Prisma.JsonNull,
+      // DbNull 与 /layout 端点一致：读侧两种空值都表现为 null，但写侧统一成数据库 NULL
+      placement: block.placement ? (block.placement as Prisma.InputJsonValue) : Prisma.DbNull,
     };
     if (block.id && !block.id.startsWith('draft-')) {
       operations.push(db.block.update({ where: { id: block.id }, data }));

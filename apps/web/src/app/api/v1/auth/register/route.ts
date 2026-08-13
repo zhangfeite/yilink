@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 import { credentialsSchema } from '@/lib/auth-validation';
 import { db } from '@/lib/db';
 import { validateInviteCode } from '@/lib/invite';
+import { allowAttempt, rateLimitSubject, REGISTER_RULE } from '@/lib/rate-limit';
 
 function errorResponse(status: number, code: string, message: string) {
   return NextResponse.json(
@@ -19,6 +20,11 @@ function errorResponse(status: number, code: string, message: string) {
 }
 
 export async function POST(request: Request) {
+  // 注册限流挡在解析之前：邀请码枚举与批量建号共用这道闸
+  if (!allowAttempt('register-ip', rateLimitSubject(request.headers), REGISTER_RULE)) {
+    return errorResponse(429, 'RATE_LIMITED', '尝试过于频繁，请稍后再试');
+  }
+
   const payload: unknown = await request.json().catch(() => null);
   const parsed = credentialsSchema.safeParse(payload);
 
