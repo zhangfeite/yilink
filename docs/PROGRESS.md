@@ -1,12 +1,29 @@
-# 进度存档（2026-08-10）
+# 进度存档（2026-08-14）
 
 > 下次开工先读这份。工作区干净、全部已推送 GitHub；本地无未完成的后台任务。
 
 ## 一句话现状
 
-产品已上线 https://yilink.app（邀请制公测），BENTO 自由布局 P0→P2 全部完成并合入，
-8 个模板真机视觉评审已过（合身零溢出、护栏零违规），基线 9/9、236 测试全绿。
-剩余是发布动作与两个未通电的外部依赖。
+产品已上线 https://yilink.app（邀请制公测），BENTO 布局 P0→P2、图标 123 平台、
+全面安全审计（bd8df0b：洗白路径/限流/安全头/协议闸/包体传染 5 类修复）均已完成并部署，
+基线 9/9、250 测试全绿。剩余是发布动作与两个未通电的外部依赖。
+
+## 安全审计结论（2026-08-14 自查，修复已上线）
+
+已修：HIDDEN→unpublish→publish 洗白路径（409 闭合）；登录/注册进程内滑窗限流；
+全站安全响应头（nosniff/Referrer-Policy/HSTS/frame-ancestors，公开页 'self' 供首页
+iframe 预览）；avatarUrl 协议闸（schema+渲染双层）；CRON 常数时间比较；
+图标 meta 轻量入口（字形不再传染进非编辑器客户端 bundle）。
+
+已核对无问题：全部路由所有权/角色校验、webhook HMAC 验签与幂等、/api/e 防伪层次、
+SafeMarkdown 与区块 URL 协议闸、revalidateTag 覆盖、D1 事务形态、CSRF（SameSite=Lax）。
+
+**已知残留（按风险排序）**：
+1. 进程内限流在 Workers 上按 isolate 计数，真机 11 连发未触发 429（isolate 轮换）。
+   生产级防线要在 Cloudflare 控制台配 WAF Rate Limiting 规则（对 `/api/v1/auth/*` 与
+   `/api/auth/callback/credentials`，如 10 req/min/IP）——控制台操作，需用户执行。
+2. 建页数量上限存在读-写竞态（并发建页可少量超限），公测规模无实际影响。
+3. 事件端点 /api/e 每次落一读一写 D1，极端刷量下的成本上限依赖 Cloudflare 限频。
 
 ## 已完成（近期）
 
