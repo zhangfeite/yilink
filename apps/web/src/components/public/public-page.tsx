@@ -29,6 +29,8 @@ export interface PublicPageData {
   themeConfig: unknown;
   ctaConfig: unknown;
   totalViews: number;
+  /** 页面主人的套餐；付费档关掉品牌页脚（首页「水印可关」承诺）。缺省按免费档处理。 */
+  user?: { plan: 'FREE' | 'PRO_MINI' | 'PRO' } | null;
   blocks: PublicBlockData[];
 }
 
@@ -521,9 +523,21 @@ export function PublicPageRenderer({
           <ContentFlow blocks={blocks} layout={page.layout} uaClass={uaClass} />
         )}
 
+        {/* 品牌署名对免费档是可点的回站入口——被转发出去的每张主页都该能把访客带回来，
+            这是产品最天然的传播回路。付费档隐藏它，兑现首页「水印可关」的承诺。
+            举报入口与套餐无关，任何情况下都必须留着。 */}
         <footer className={classNames(styles.caption, styles.footer)}>
-          Powered by 一链 YiLink
-          <span aria-hidden="true"> · </span>
+          {(page.user?.plan ?? 'FREE') === 'FREE' ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages --
+                  公开页的硬纪律是零框架 JS（内联脚本 ≤5KB 有 e2e 守着）。
+                  next/link 会把客户端路由运行时带进来，为一个页脚链接不值得。 */}
+              <a href="/" rel="noopener">
+                Powered by 一链 YiLink
+              </a>
+              <span aria-hidden="true"> · </span>
+            </>
+          ) : null}
           <a href={`mailto:${reportEmail}`}>举报</a>
         </footer>
         {cta ? <ConversionBar cta={cta} totalViews={page.totalViews} /> : null}

@@ -9,7 +9,9 @@ coverage/
 playwright-report/
 test-results/
 *.tsbuildinfo
-data/
+# 不要用裸的 data/：它匹配任意深度的同名目录，曾把整个 apps/web/src/app/studio/data
+# 路由静默排除在版本库之外（本地跑得好好的，clone 下来却没有这个页面）。
+# 真正要忽略的两个数据目录在下面有精确规则。
 *.log
 .DS_Store
 

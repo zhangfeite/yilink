@@ -38,21 +38,34 @@ export async function studioApiRequest<T>(
   return body;
 }
 
-interface CreatedPage {
+export interface CreatedPage {
   id: string;
   slug: string;
   title: string;
 }
 
+/**
+ * 建页成功但模板内容写入失败。页面已经建出来并占了 slug——调用方必须把这件事
+ * 告诉用户，否则他原样重试只会撞上「地址已被占用」，然后合理地认定产品坏了。
+ */
+export class TemplateApplyError extends StudioApiError {
+  readonly createdPage: CreatedPage;
+
+  constructor(cause: StudioApiError, createdPage: CreatedPage) {
+    super(cause.status, cause.code, cause.message);
+    this.name = 'TemplateApplyError';
+    this.createdPage = createdPage;
+  }
+}
+
 interface CreatePageFromTemplateOptions {
   fetcher?: Fetcher;
-  persistRole?: (pageId: string, role: string) => Promise<void>;
   slug: string;
   template: SceneTemplate;
   title: string;
 }
 
-function jsonRequest(method: 'POST' | 'PUT' | 'PATCH', body: unknown): RequestInit {
+function jsonRequest(method: 'POST' | 'PUT', body: unknown): RequestInit {
   return {
     method,
     headers: { 'content-type': 'application/json' },
@@ -62,7 +75,6 @@ function jsonRequest(method: 'POST' | 'PUT' | 'PATCH', body: unknown): RequestIn
 
 export async function createPageFromTemplate({
   fetcher = fetch,
-  persistRole,
   slug,
   template,
   title,
@@ -74,31 +86,37 @@ export async function createPageFromTemplate({
   );
   const pageId = created.page.id;
 
-  // 布局与区块一次事务写入（含模板自带的 BENTO placement），避免中间态
-  await studioApiRequest(
-    fetcher,
-    `/api/v1/pages/${pageId}/layout`,
-    jsonRequest('PUT', {
-      layout: template.layout,
-      bentoVersion: template.bentoVersion ?? null,
-      blocks: template.blocks.map((block) => ({
-        ...block,
-        isVisible: true,
-        placement: block.placement ?? null,
-      })),
-    }),
-  );
+  // 模板携带的一切在一个事务里写入：身份文案、主题、转化动作、区块与 BENTO 坐标。
+  // /layout 的 schema 是 .strict() 全键必填——曾经这里只发 3 个键，
+  // 被 mock 掉 fetcher 的单测放过，生产上 8/8 模板建页全部 400。
+  try {
+    await studioApiRequest(
+      fetcher,
+      `/api/v1/pages/${pageId}/layout`,
+      jsonRequest('PUT', {
+        title,
+        bio: template.identity.bio,
+        avatarUrl: null,
+        layout: template.layout,
+        bentoVersion: template.bentoVersion ?? null,
+        themeId: template.defaultTheme,
+        seoTitle: null,
+        seoDesc: null,
+        ctaConfig: template.cta,
+        themeConfig: { role: template.identity.role },
+        blocks: template.blocks.map((block) => ({
+          type: block.type,
+          size: block.size,
+          config: block.config,
+          isVisible: true,
+          placement: block.placement ?? null,
+        })),
+      }),
+    );
+  } catch (error) {
+    if (error instanceof StudioApiError) throw new TemplateApplyError(error, created.page);
+    throw error;
+  }
 
-  await studioApiRequest(
-    fetcher,
-    `/api/v1/pages/${pageId}`,
-    jsonRequest('PATCH', {
-      themeId: template.defaultTheme,
-      ctaConfig: template.cta,
-      bio: template.identity.bio,
-    }),
-  );
-
-  await persistRole?.(pageId, template.identity.role);
   return created.page;
 }

@@ -56,7 +56,24 @@ export async function registerAction(
     return { error: t('unexpectedError') };
   }
 
-  redirect('/login?registered=1');
+  // 注册成功直接建会话，不再跳登录页要求重敲一遍邮箱密码。
+  // 邀请制样本本就稀少，这一步纯属白送的流失。
+  try {
+    await signIn('credentials', {
+      email: parsed.data.email,
+      password: parsed.data.password,
+      redirectTo: safeCallbackUrl(formData.get('callbackUrl')),
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      // 账号确实建成了，只是自动登录没成——退回登录页而不是报注册失败，
+      // 否则用户会以为要重注册，再撞上「邮箱已注册」。
+      redirect('/login?registered=1');
+    }
+    throw error; // NEXT_REDIRECT 等框架信号必须重抛
+  }
+
+  return { error: null };
 }
 
 export async function loginAction(

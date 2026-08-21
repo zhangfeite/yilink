@@ -6,9 +6,13 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { persistPageRole } from '@/app/studio/actions';
 
-import { createPageFromTemplate, studioApiRequest, StudioApiError } from './create-from-template';
+import {
+  createPageFromTemplate,
+  studioApiRequest,
+  StudioApiError,
+  TemplateApplyError,
+} from './create-from-template';
 import { studioThemes } from './theme-options';
 
 interface PageSummary {
@@ -126,14 +130,20 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
     setCreateError(null);
     try {
       const page = await createPageFromTemplate({
-        persistRole: persistPageRole,
         slug: normalizedSlug,
         template: selectedTemplate,
         title: title.trim(),
       });
       router.push(`/studio/pages/${page.id}`);
     } catch (error) {
-      setCreateError(t(`errors.${errorKey(error)}`));
+      if (error instanceof TemplateApplyError) {
+        // 页面已经建成并占了 slug：刷新列表让它出现，提示里说清楚去哪找它，
+        // 否则用户原样重试会撞「地址已被占用」并认定产品坏了
+        void loadPages();
+        setCreateError(t('errors.templateApplyFailed'));
+      } else {
+        setCreateError(t(`errors.${errorKey(error)}`));
+      }
       setIsCreating(false);
     }
   }

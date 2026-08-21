@@ -94,6 +94,32 @@ export default async function StudioSettingsPage() {
       </section>
       <p className="mt-3 text-center text-xs leading-5 text-slate-500">{PLAN_QUOTA_NOTE_ZH}</p>
 
+      <section className="mt-8" aria-labelledby="data-export-heading">
+        <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] sm:flex sm:items-center sm:justify-between sm:gap-8">
+          <div>
+            <p className="text-sm font-semibold tracking-wide text-blue-700">
+              {t('dataExportEyebrow')}
+            </p>
+            <h2
+              className="mt-1 text-2xl font-extrabold tracking-tight text-slate-950"
+              id="data-export-heading"
+            >
+              {t('dataExportTitle')}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+              {t('dataExportDescription')}
+            </p>
+          </div>
+          <a
+            className="mt-5 inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 sm:mt-0"
+            download
+            href="/api/v1/me/export"
+          >
+            {t('dataExportAction')}
+          </a>
+        </article>
+      </section>
+
       <section className="mt-8" aria-labelledby="orders-heading">
         <div className="flex items-end justify-between gap-4">
           <div>

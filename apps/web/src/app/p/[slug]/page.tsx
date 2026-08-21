@@ -12,6 +12,7 @@ import {
 } from '@/components/public/public-page';
 import { WechatShare } from '@/components/public/wechat-share';
 import { db } from '@/lib/db';
+import { requestOrigin } from '@/lib/origin';
 import { getTheme, isDarkTheme } from '@/lib/themes';
 import { classifyUserAgent } from '@/lib/ua';
 import { getWechatJssdkConfig, wechatJssdkEnabled } from '@/lib/wechat-jssdk';
@@ -39,6 +40,8 @@ async function queryPublicPage(slug: string) {
       seoDesc: true,
       status: true,
       ctaConfig: true,
+      // 首页信任承诺写着「水印可关」，兑现它需要知道页面主人的套餐档位
+      user: { select: { plan: true } },
       blocks: {
         where: { isVisible: true },
         orderBy: { position: 'asc' },
@@ -92,26 +95,6 @@ function reportEmail(): string {
     : 'report@yilink.app';
 }
 
-function forwardedHeader(value: string | null): string | null {
-  return value?.split(',')[0]?.trim() || null;
-}
-
-async function requestOrigin(): Promise<string> {
-  const requestHeaders = await headers();
-  const host =
-    forwardedHeader(requestHeaders.get('x-forwarded-host')) ??
-    requestHeaders.get('host') ??
-    'localhost:3000';
-  const forwardedProto = forwardedHeader(requestHeaders.get('x-forwarded-proto'));
-  const protocol =
-    forwardedProto === 'http' || forwardedProto === 'https'
-      ? forwardedProto
-      : host.startsWith('localhost') || host.startsWith('127.0.0.1')
-        ? 'http'
-        : 'https';
-
-  return `${protocol}://${host}`;
-}
 
 async function absoluteImageUrl(value: string | null): Promise<string | undefined> {
   if (!value) return undefined;
