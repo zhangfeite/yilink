@@ -1,12 +1,13 @@
-# 进度存档（2026-08-14）
+# 进度存档（2026-08-19）
 
 > 下次开工先读这份。工作区干净、全部已推送 GitHub；本地无未完成的后台任务。
 
 ## 一句话现状
 
-产品已上线 https://yilink.app（邀请制公测），BENTO 布局 P0→P2、图标 123 平台、
-全面安全审计（bd8df0b：洗白路径/限流/安全头/协议闸/包体传染 5 类修复）均已完成并部署，
-基线 9/9、250 测试全绿。剩余是发布动作与两个未通电的外部依赖。
+产品已上线 https://yilink.app（邀请制公测）。发布前的 P0（从仪表盘选模板建页 100% 失败）与
+发布链路硬伤（首页零 og、无 sitemap、注册后二次登录、iframe 刷量、「水印可关」空承诺、统计/导出无入口）
+已在 25a68cd 一并修复上线；生产 D1 的 DateTime 脏数据已修。E2E 11/11（含黄金路径）、单测 256。
+**现在唯一没做的事是发帖。**
 
 ## 安全审计结论（2026-08-14 自查，修复已上线）
 
@@ -35,15 +36,27 @@ SafeMarkdown 与区块 URL 协议闸、revalidateTag 覆盖、D1 事务形态、
 | BENTO P2 | 8 模板 BENTO 坐标注入、建页走原子端点、admin restore 支持 REVIEW |
 | BENTO P2 视觉评审 | 8 模板逐个真机过；6 类渲染缺陷修复 + 坐标/文案按实测重排；新增合身体检脚本；详见 `docs/design/bento-templates.md` §五 |
 
-## 下次开工的候选（按建议优先级）
+## 迭代路线（2026-08-19 裁决，依据 docs/launch-fact-check.md + 三角度提案 + Codex 独立判断）
 
-1. **发布动作**（物料已备好在 `docs/launch-posts.md`）：V2EX 邀请制公测帖 → 掘金长文 → 即刻。
-   邀请码在 `~/.config/yilink/invite-codes.txt`（20 个，600 权限）。
-2. **补齐 pending 平台图标**：小宇宙 / 喜马拉雅 / 即刻 / QQ音乐 / 京东 等在 `packages/icons` 里
-   仍是 `source: "pending"`，渲染成灰底文字占位。播客模板受影响最明显（三个平台里两个是占位）。
-   注册表由 `scripts/generate.ts` 从 `docs/design/platform-icons-verified.json` 生成，不要直接改 generated。
-3. **BENTO 剩余打磨**：移动端点选面板的真机手感；P3 效率功能（多选/对齐/布局历史）。
-4. LemonSqueezy 开户后填 env 通电收款；公众号 AppID 配好后微信转发卡片满血。
+**阶段 0 · 发帖前（≤1 天）**
+- 注册页邀请码零说明 → 加「去哪拿」说明 + `?invite=` URL 预填 + 首页「免费开始」改为如实的「申请公测」（fact-check #12）
+- Cloudflare 控制台配 WAF 限流（用户操作；代码层限流在 Workers 上按 isolate 计数，不够）
+- **只发 V2EX**，留 24–48h 观察窗再发下一渠道（否则分不清哪个渠道有效）。文案用 `docs/launch-posts-v2.md`
+
+**阶段 1 · 有用户的第一周（按真实阻断排序，预留 2 天修 bug 容量）**
+- 激活漏斗：注册 → 建页 → 发布 → 分发 四个里程碑 + 渠道字段，后台按渠道看转化（不搭通用埋点）
+- 邀请码可核销（哈希 + 次数/有效期 + 渠道），与漏斗共用一次 migration
+- 工作台「反馈问题」入口；生产只读巡检 workflow（health/首页/注册/演示页）
+
+**阶段 2 · 第 2–3 周（有信号再做）**
+- `/templates` 公开画廊：三份提案唯一共同点，发帖当天可贴、注册前可验证、又是可索引资产
+- 首页转化骨架：导航注册按钮、免费档可点、页尾 CTA、恢复手机端定价锚点
+- 叙事从「又一个聚合主页」收窄为「一页成交页」（纯文案层，不建新模块）
+
+**阶段 3 · LemonSqueezy 通电后**：收款上线 → 预约/表单区块作为第一个增值点
+
+**明确不做（直到有信号）**：自定义域名、活码、Media kit、统计地域/设备/时段、多页面、AI 生成、团队版、
+BENTO 多选/对齐/历史、图片上传（带存储与审核成本，收款未通电前不装）。
 
 ## 需要用户操作的外部依赖（未完成）
 
@@ -79,7 +92,8 @@ SafeMarkdown 与区块 URL 协议闸、revalidateTag 覆盖、D1 事务形态、
 
 ## 测试与验收基线
 
-- `pnpm test` → 236 测试（moderation 16 / icons 16 / shared 41 / web 163）
+- `pnpm test` → 256 测试（moderation 16 / icons 21 / shared 41 / web 178）
+- `cd apps/web && pnpm exec playwright test` → 11/11；其中 `activation.spec.ts` 是黄金路径（注册→建页→发布→公开页），**改建页/发布/认证后必跑**
 - `cd apps/web && pnpm exec playwright test layout-baseline.spec.ts` → 9/9，**存量页面零 diff 的凭据，改布局后必跑**
 - `cd apps/web && node scripts/bento-preview.mjs` 建 8 个预览页 → `node scripts/bento-fit-check.mjs`
   体检合身度（溢出 / 截断 / 空洞），**改模板坐标或文案后必跑**
