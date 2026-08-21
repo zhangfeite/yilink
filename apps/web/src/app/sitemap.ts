@@ -24,7 +24,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       orderBy: { publishedAt: 'desc' },
       take: MAX_PAGE_ENTRIES,
     })
-    .catch(() => []);
+    .catch((error: unknown) => {
+      // 不能静默：这里曾吞掉 D1 的 DateTime 转换错，线上 sitemap 空了好几天没人知道。
+      // 但也不能让整张 sitemap 500——爬虫拿到首页总好过拿到错误页。记日志、回落。
+      console.error('[sitemap] failed to list published pages', error);
+      return [];
+    });
 
   return staticEntries.concat(
     pages.map((page) => ({

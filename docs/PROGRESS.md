@@ -69,6 +69,11 @@ SafeMarkdown 与区块 URL 协议闸、revalidateTag 覆盖、D1 事务形态、
   ```
   正常路径应当走应用自身的接口（发布 / 审核放行都会调 `revalidateTag`），只有在手工改库时才需要这招。
 - macOS 没有 `setsid`；要让 dev server 活过后台任务，用 `nohup … & disown`
+- **绝不把本地 SQLite 的 SQL 导出直接灌进 D1**：Prisma 原生 SQLite 引擎把 DateTime 存成 integer 毫秒，
+  D1 适配器存 ISO 文本。混入 integer 行后，任何 select 到 DateTime 列、扫到这些行的查询都会整条抛
+  转换错（2026-08-19 线上三张 demo 页让 sitemap 空了多日）。种子数据走应用 API 或 Prisma+D1 适配器写入；
+  已混入的用 `strftime('%Y-%m-%dT%H:%M:%fZ', col/1000.0, 'unixepoch')` + `WHERE typeof(col)='integer'` 修。
+- **不要用 `.catch(() => [])` 吞数据层错误**：上面那个问题就是被它藏住的。至少 console.error，让 wrangler tail 看得见。
 - schema 变更后：`pnpm --filter @yilink/web db:migrate` + 对本地/远端 D1 各执行一次 migration SQL
 - 给 codex 派重活必须：`-c model_reasoning_effort=medium` + spec 内写死「分段落盘 + 进度信标」（否则会挂死）
 
