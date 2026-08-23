@@ -71,20 +71,18 @@ function TextField({
 }: TextFieldProps) {
   const t = useTranslations('Studio');
   return (
-    <label className="block text-xs font-semibold text-slate-700">
+    <label className="block text-caption font-semibold text-ink">
       {label}
       <input
         aria-invalid={invalid}
-        className={`mt-1.5 w-full rounded-xl border bg-white px-3 py-2.5 text-sm font-normal text-slate-950 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-600/10 ${
-          invalid ? 'border-rose-400' : 'border-slate-200'
-        }`}
+        className="mt-1.5 w-full rounded-control border border-hairline bg-card px-3 py-2.5 text-body font-normal text-ink outline-none transition"
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         type={type}
         value={value}
       />
       {invalid ? (
-        <span className="mt-1 block font-normal text-rose-600">{t('errors.fieldInvalid')}</span>
+        <span className="mt-1 block font-normal text-accent">{t('errors.fieldInvalid')}</span>
       ) : null}
     </label>
   );
@@ -165,13 +163,13 @@ export function SortableBlockEditor({
           <div className="space-y-3">
             {items.map((item, index) => (
               <div
-                className="grid gap-2 rounded-xl bg-slate-50 p-3 sm:grid-cols-[10rem_1fr_auto]"
+                className="grid gap-2 rounded-control bg-card-muted p-3 sm:grid-cols-[10rem_1fr_auto]"
                 key={index}
               >
-                <label className="text-xs font-semibold text-slate-700">
+                <label className="text-caption font-semibold text-ink">
                   {t('fields.platform')}
                   <select
-                    className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-2 py-2 text-sm font-normal"
+                    className="mt-1.5 w-full rounded-control border border-hairline bg-card px-2 py-2 text-body font-normal text-ink"
                     onChange={(event) => updateItem(index, { platform: event.target.value })}
                     value={stringValue(item.platform) || 'website'}
                   >
@@ -195,7 +193,7 @@ export function SortableBlockEditor({
                 />
                 <button
                   aria-label={t('blocks.removeSocial')}
-                  className="self-end rounded-lg px-3 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50"
+                  className="self-end rounded-full px-3 py-2 text-caption font-semibold text-accent hover:bg-accent-soft"
                   onClick={() =>
                     updateConfig({ items: items.filter((_, itemIndex) => itemIndex !== index) })
                   }
@@ -207,10 +205,10 @@ export function SortableBlockEditor({
             ))}
           </div>
           {hasIssue('items') ? (
-            <p className="mt-2 text-xs text-rose-600">{t('errors.socialRequired')}</p>
+            <p className="mt-2 text-caption text-accent">{t('errors.socialRequired')}</p>
           ) : null}
           <button
-            className="mt-3 rounded-full border border-slate-300 px-4 py-2 text-xs font-semibold text-slate-700 hover:border-blue-500 hover:text-blue-700"
+            className="mt-3 rounded-full border border-hairline bg-card px-4 py-2 text-caption font-semibold text-ink hover:bg-accent-soft"
             onClick={() =>
               updateConfig({
                 items: [...items, { platform: 'website', url: 'https://example.com' }],
@@ -226,18 +224,16 @@ export function SortableBlockEditor({
 
     if (block.type === 'TEXT') {
       return (
-        <label className="block text-xs font-semibold text-slate-700">
+        <label className="block text-caption font-semibold text-ink">
           {t('fields.markdown')}
           <textarea
             aria-invalid={hasIssue('markdown')}
-            className={`mt-1.5 min-h-32 w-full resize-y rounded-xl border bg-white px-3 py-2.5 text-sm font-normal leading-6 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/10 ${
-              hasIssue('markdown') ? 'border-rose-400' : 'border-slate-200'
-            }`}
+            className="mt-1.5 min-h-32 w-full resize-y rounded-control border border-hairline bg-card px-3 py-2.5 text-body font-normal outline-none"
             onChange={(event) => updateConfig({ markdown: event.target.value })}
             value={stringValue(block.config.markdown)}
           />
           {hasIssue('markdown') ? (
-            <span className="mt-1 block font-normal text-rose-600">{t('errors.fieldInvalid')}</span>
+            <span className="mt-1 block font-normal text-accent">{t('errors.fieldInvalid')}</span>
           ) : null}
         </label>
       );
@@ -312,37 +308,35 @@ export function SortableBlockEditor({
       );
     }
 
-    return <p className="text-sm text-slate-500">{t('blocks.dividerHint')}</p>;
+    return <p className="text-body text-muted">{t('blocks.dividerHint')}</p>;
   }
 
   return (
     <article
-      className={`rounded-2xl border bg-white shadow-sm transition ${
-        isDragging ? 'z-20 border-blue-400 opacity-80 shadow-xl' : 'border-slate-200'
-      }`}
+      className={`py-5 transition ${isDragging ? 'z-20 bg-card opacity-80 shadow-card' : ''}`}
       ref={setNodeRef}
       style={style}
     >
-      <header className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-3 py-3">
+      <header className="flex flex-wrap items-center gap-2 px-1 pb-4">
         <button
           aria-label={t('blocks.drag', { type: t(`blockTypes.${block.type}`) })}
-          className="cursor-grab rounded-lg px-2 py-1 text-lg leading-none text-slate-400 hover:bg-slate-100 hover:text-slate-700 active:cursor-grabbing"
+          className="cursor-grab rounded-control px-2 py-1 text-section leading-none text-muted hover:bg-card-muted hover:text-ink active:cursor-grabbing"
           type="button"
           {...attributes}
           {...listeners}
         >
           ⠿
         </button>
-        <strong className="mr-auto text-sm text-slate-900">{t(`blockTypes.${block.type}`)}</strong>
+        <strong className="mr-auto text-body text-ink">{t(`blockTypes.${block.type}`)}</strong>
         {!validation.success ? (
-          <span className="rounded-full bg-rose-50 px-2 py-1 text-[11px] font-semibold text-rose-700">
+          <span className="rounded-full bg-accent-soft px-2 py-1 text-caption font-semibold text-accent">
             {t('blocks.needsAttention')}
           </span>
         ) : null}
         <button
           aria-pressed={block.isVisible}
-          className={`rounded-full px-3 py-1.5 text-xs font-semibold ${
-            block.isVisible ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'
+          className={`rounded-full px-3 py-1.5 text-caption font-semibold ${
+            block.isVisible ? 'bg-accent-soft text-accent' : 'bg-card-muted text-muted'
           }`}
           onClick={() => onChange({ ...block, isVisible: !block.isVisible })}
           type="button"
@@ -350,7 +344,7 @@ export function SortableBlockEditor({
           {block.isVisible ? t('visible') : t('hidden')}
         </button>
         <button
-          className="rounded-full px-3 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50"
+          className="rounded-full px-3 py-1.5 text-caption font-semibold text-accent hover:bg-accent-soft"
           onClick={() => onRemove(block.id)}
           type="button"
         >
@@ -358,19 +352,19 @@ export function SortableBlockEditor({
         </button>
       </header>
 
-      <div className="p-4">
+      <div className="px-1">
         {layout === 'GRID' ? (
           <fieldset className="mb-4 flex items-center gap-2">
-            <legend className="mr-1 inline text-xs font-semibold text-slate-600">
+            <legend className="mr-1 inline text-caption font-semibold text-muted">
               {t('blocks.gridSize')}
             </legend>
             {(['SM', 'MD', 'LG'] as StudioBlockSize[]).map((size) => (
               <button
                 aria-pressed={block.size === size}
-                className={`rounded-lg px-3 py-1.5 text-xs font-bold ${
+                className={`rounded-control px-3 py-1.5 text-caption font-bold ${
                   block.size === size
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-accent-soft text-ink'
+                    : 'bg-card-muted text-muted'
                 }`}
                 key={size}
                 onClick={() => onChange({ ...block, size })}
