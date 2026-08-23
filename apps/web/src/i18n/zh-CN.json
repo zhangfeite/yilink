@@ -117,12 +117,15 @@
     "hasAccount": "已有账号？",
     "loginLink": "返回登录"
   },
+  "Admin": { "activation": "激活", "firstOnly": "只记首次" },
   "Navigation": {
     "home": "我的主页",
     "data": "数据",
     "settings": "设置"
   },
   "Studio": {
+    "feedback": "反馈问题",
+    "feedbackSubject": "一链反馈",
     "eyebrow": "创作者工作台",
     "title": "我的主页",
     "description": "用场景模板快速起步，再把每一处内容调整成你的样子。",

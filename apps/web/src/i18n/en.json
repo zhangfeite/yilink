@@ -117,12 +117,15 @@
     "hasAccount": "Already have an account?",
     "loginLink": "Back to login"
   },
+  "Admin": { "activation": "Activation", "firstOnly": "First occurrences only" },
   "Navigation": {
     "home": "My page",
     "data": "Analytics",
     "settings": "Settings"
   },
   "Studio": {
+    "feedback": "Send feedback",
+    "feedbackSubject": "YiLink feedback",
     "eyebrow": "Creator studio",
     "title": "My page",
     "description": "Start with a scene template, then shape every detail into your own page.",

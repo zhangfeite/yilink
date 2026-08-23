@@ -124,6 +124,8 @@ model Setting {
   key   String @id  // multiUser | moderationProviders | pagesHost …实例级配置
   value Json
 }
+
+
 */
 
 // Active Prisma representation of the frozen architecture block above.
@@ -142,6 +144,7 @@ model User {
   updatedAt    DateTime @updatedAt
   pages        Page[]
   orders       Order[]
+  inviteRedemptions InviteRedemption[]
 }
 enum Plan {
   FREE
@@ -275,4 +278,46 @@ model Order {
 model Setting {
   key   String @id  // multiUser | moderationProviders | pagesHost …实例级配置
   value Json
+}
+
+model ActivationEvent {
+  id        String         @id @default(cuid())
+  userId    String
+  kind      ActivationKind
+  channel   String?
+  pageId    String?
+  createdAt DateTime       @default(now())
+
+  @@unique([userId, kind])
+  @@index([userId, kind])
+  @@index([kind, createdAt])
+}
+
+enum ActivationKind {
+  REGISTERED
+  PAGE_CREATED
+  PAGE_PUBLISHED
+  PAGE_SHARED
+}
+
+model InviteCode {
+  id          String             @id @default(cuid())
+  codeHash    String             @unique
+  channel     String?
+  maxUses     Int                @default(1)
+  usedCount   Int                @default(0)
+  expiresAt   DateTime?
+  createdAt   DateTime           @default(now())
+  redemptions InviteRedemption[]
+}
+
+model InviteRedemption {
+  id        String     @id @default(cuid())
+  codeId    String
+  code      InviteCode @relation(fields: [codeId], references: [id])
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+
+  @@unique([codeId, userId])
 }

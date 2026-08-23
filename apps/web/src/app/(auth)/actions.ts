@@ -8,8 +8,9 @@ import { redirect } from 'next/navigation';
 
 import { signIn } from '@/lib/auth';
 import { credentialsSchema } from '@/lib/auth-validation';
+import { normalizeChannel, recordRegistered } from '@/lib/activation';
 import { db } from '@/lib/db';
-import { validateInviteCode } from '@/lib/invite';
+import { redeemInviteCode } from '@/lib/invite';
 
 export interface AuthFormState {
   error: string | null;
@@ -38,23 +39,29 @@ export async function registerAction(
     return { error: passwordIssue ? t('shortPassword') : t('invalidEmail') };
   }
 
-  if (!validateInviteCode(formData.get('inviteCode'))) {
-    return { error: t('invalidInvite') };
-  }
-
+  let userId: string;
   try {
-    await db.user.create({
+    const user = await db.user.create({
       data: {
         email: parsed.data.email,
         passwordHash: await hash(parsed.data.password, 10),
       },
+      select: { id: true },
     });
+    userId = user.id;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       return { error: t('duplicateEmail') };
     }
     return { error: t('unexpectedError') };
   }
+
+  const redeemed = await redeemInviteCode(formData.get('inviteCode'), userId);
+  if (!redeemed.ok) {
+    await db.user.delete({ where: { id: userId } });
+    return { error: t('invalidInvite') };
+  }
+  await recordRegistered(userId, normalizeChannel(formData.get('ref')) ?? redeemed.channel);
 
   // 注册成功直接建会话，不再跳登录页要求重敲一遍邮箱密码。
   // 邀请制样本本就稀少，这一步纯属白送的流失。

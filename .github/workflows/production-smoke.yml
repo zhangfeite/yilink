@@ -1,0 +1,25 @@
+name: Production smoke
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://yilink.app
+    steps:
+      - name: Verify public read-only routes
+        run: |
+          set -euo pipefail
+          for path in /api/health / /register /p/demo-photographer /sitemap.xml; do
+            curl --fail --silent --show-error --output /tmp/response "${BASE_URL}${path}"
+            test "$(curl --silent --output /dev/null --write-out '%{http_code}' "${BASE_URL}${path}")" = 200
+          done
+          curl --fail --silent --show-error "${BASE_URL}/" | grep -qi 'og:image'
+          test "$(curl --fail --silent --show-error "${BASE_URL}/sitemap.xml" | grep -o '<loc>' | wc -l | tr -d ' ')" -ge 2

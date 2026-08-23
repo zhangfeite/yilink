@@ -9,6 +9,7 @@ import {
   notFoundResponse,
 } from '../../../../../../lib/api';
 import { db } from '../../../../../../lib/db';
+import { recordPagePublished } from '../../../../../../lib/activation';
 import { moderatePageContent, pageModerationRecordData } from '../../../../../../lib/moderation';
 import { pageIdSchema } from '../../../../../../lib/pages-api-schemas';
 
@@ -68,6 +69,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
     db.moderationRecord.create({ data: moderationRecord }),
   ]);
   revalidateTag(pageCacheTag(page.slug), { expire: 0 });
+  await recordPagePublished(userId, page.id);
 
   return NextResponse.json({
     page: publishedPage,
