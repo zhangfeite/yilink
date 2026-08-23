@@ -3,8 +3,9 @@ import { hash } from 'bcryptjs';
 import { NextResponse } from 'next/server';
 
 import { credentialsSchema } from '@/lib/auth-validation';
+import { normalizeChannel, recordRegistered } from '@/lib/activation';
 import { db } from '@/lib/db';
-import { validateInviteCode } from '@/lib/invite';
+import { redeemInviteCode } from '@/lib/invite';
 import { allowAttempt, rateLimitSubject, REGISTER_RULE } from '@/lib/rate-limit';
 
 function errorResponse(status: number, code: string, message: string) {
@@ -36,10 +37,6 @@ export async function POST(request: Request) {
     typeof payload === 'object' && payload !== null
       ? (payload as Record<string, unknown>).inviteCode
       : undefined;
-  if (!validateInviteCode(inviteCode)) {
-    return errorResponse(403, 'INVITE_INVALID', '邀请码无效');
-  }
-
   const existingUser = await db.user.findUnique({
     where: { email: parsed.data.email },
     select: { id: true },
@@ -61,6 +58,14 @@ export async function POST(request: Request) {
       },
     });
 
+    const redeemed = await redeemInviteCode(inviteCode, user.id);
+    if (!redeemed.ok) {
+      await db.user.delete({ where: { id: user.id } });
+      return errorResponse(403, 'INVITE_INVALID', '邀请码无效');
+    }
+
+    const ref = typeof payload === 'object' && payload !== null ? (payload as Record<string, unknown>).ref : undefined;
+    await recordRegistered(user.id, normalizeChannel(ref) ?? redeemed.channel);
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {

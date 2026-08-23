@@ -3,6 +3,7 @@ import { PLAN_LIMITS } from '@yilink/shared';
 import { NextResponse } from 'next/server';
 
 import { apiError, currentUserId, invalidInputResponse, requestJson } from '../../../../lib/api';
+import { recordPageCreated } from '../../../../lib/activation';
 import { db } from '../../../../lib/db';
 import { pageCreateSchema } from '../../../../lib/pages-api-schemas';
 
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
         userId,
       },
     });
+    await recordPageCreated(userId, page.id);
 
     return NextResponse.json({ page }, { status: 201 });
   } catch (error) {
