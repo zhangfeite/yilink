@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/lib/auth';
 import { credentialsSchema } from '@/lib/auth-validation';
 import { db } from '@/lib/db';
-import { validateInviteCode } from '@/lib/invite';
+import { isInviteRequired, validateInviteCode } from '@/lib/invite';
 
 export interface AuthFormState {
   error: string | null;
@@ -38,7 +38,12 @@ export async function registerAction(
     return { error: passwordIssue ? t('shortPassword') : t('invalidEmail') };
   }
 
-  if (!validateInviteCode(formData.get('inviteCode'))) {
+  const inviteCode = formData.get('inviteCode');
+  if (isInviteRequired() && (typeof inviteCode !== 'string' || !inviteCode.trim())) {
+    return { error: t('missingInvite') };
+  }
+
+  if (!validateInviteCode(inviteCode)) {
     return { error: t('invalidInvite') };
   }
 

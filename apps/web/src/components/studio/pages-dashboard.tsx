@@ -3,9 +3,10 @@
 import { RESERVED_SLUGS, SLUG_PATTERN, type SceneTemplate } from '@yilink/shared';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { PublicPageRenderer, type PublicPageData } from '@/components/public/public-page';
 
 import {
   createPageFromTemplate,
@@ -20,14 +21,9 @@ interface PageSummary {
   slug: string;
   title: string;
   status: 'DRAFT' | 'PUBLISHED' | 'HIDDEN';
+  themeId: string;
   updatedAt: string;
   _count: { blocks: number };
-}
-
-function statusClass(status: PageSummary['status']): string {
-  if (status === 'PUBLISHED') return 'bg-emerald-50 text-emerald-700 ring-emerald-600/20';
-  if (status === 'HIDDEN') return 'bg-rose-50 text-rose-700 ring-rose-600/20';
-  return 'bg-amber-50 text-amber-700 ring-amber-600/20';
 }
 
 function errorKey(error: unknown): string {
@@ -38,8 +34,28 @@ function errorKey(error: unknown): string {
   return 'unexpected';
 }
 
+function templatePage(template: SceneTemplate): PublicPageData {
+  return {
+    avatarUrl: null,
+    bentoVersion: template.bentoVersion,
+    bio: template.identity.bio,
+    blocks: template.blocks.map((block, index) => ({
+      ...block,
+      id: `empty-preview-${index}`,
+    })),
+    ctaConfig: template.cta,
+    layout: template.layout,
+    slug: template.id,
+    themeConfig: { role: template.identity.role },
+    themeId: template.defaultTheme,
+    title: template.identity.title,
+    totalViews: 108116,
+  };
+}
+
 export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
   const t = useTranslations('Studio');
+  const locale = useLocale();
   const router = useRouter();
   const [pages, setPages] = useState<PageSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,9 +71,12 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
   const selectedTemplate =
     templates.find((template) => template.id === selectedId) ?? templates[0] ?? null;
   const themeById = useMemo(() => new Map(studioThemes.map((theme) => [theme.id, theme])), []);
+  const dateFormatter = useMemo(
+    () => new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }),
+    [locale],
+  );
 
   const loadPages = useCallback(async () => {
-    await Promise.resolve();
     setIsLoading(true);
     setListError(false);
     try {
@@ -137,8 +156,6 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
       router.push(`/studio/pages/${page.id}`);
     } catch (error) {
       if (error instanceof TemplateApplyError) {
-        // 页面已经建成并占了 slug：刷新列表让它出现，提示里说清楚去哪找它，
-        // 否则用户原样重试会撞「地址已被占用」并认定产品坏了
         void loadPages();
         setCreateError(t('errors.templateApplyFailed'));
       } else {
@@ -150,39 +167,38 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
 
   return (
     <section className="mx-auto w-full max-w-5xl">
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-semibold tracking-wide text-blue-700">{t('eyebrow')}</p>
-          <h1
-            className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl"
-            data-testid="studio-heading"
-          >
+          <p className="text-caption font-semibold tracking-wide text-accent">{t('eyebrow')}</p>
+          <h1 className="mt-2 text-display text-ink" data-testid="studio-heading">
             {t('title')}
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{t('description')}</p>
+          <p className="mt-3 max-w-2xl text-body text-muted">{t('description')}</p>
         </div>
-        <button
-          className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-          onClick={openCreateFlow}
-          type="button"
-        >
-          {t('newPage')}
-        </button>
+        {!isLoading && !listError && pages.length > 0 ? (
+          <button
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-5 text-body font-semibold text-accent-on"
+            onClick={openCreateFlow}
+            type="button"
+          >
+            {t('newPage')}
+          </button>
+        ) : null}
       </header>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <div className="mt-10 grid gap-5">
         {isLoading
           ? [0, 1].map((item) => (
               <div
                 aria-hidden="true"
-                className="h-48 animate-pulse rounded-3xl border border-slate-200 bg-white"
+                className="h-32 animate-pulse rounded-card bg-card"
                 key={item}
               />
             ))
           : null}
 
         {!isLoading && listError ? (
-          <div className="col-span-full rounded-3xl border border-rose-200 bg-rose-50 p-6 text-sm text-rose-800">
+          <div className="rounded-card bg-danger-soft p-6 text-body text-danger">
             <p>{t('errors.loadPages')}</p>
             <button
               className="mt-3 font-semibold underline"
@@ -194,53 +210,74 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
           </div>
         ) : null}
 
-        {!isLoading && !listError && pages.length === 0 ? (
-          <button
-            className="col-span-full min-h-64 rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-left transition hover:border-blue-400 hover:bg-blue-50/40"
-            onClick={openCreateFlow}
-            type="button"
-          >
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-2xl font-light text-white">
-              +
-            </span>
-            <strong className="mt-6 block text-xl text-slate-950">{t('emptyTitle')}</strong>
-            <span className="mt-2 block max-w-md text-sm leading-6 text-slate-600">
-              {t('emptyDescription')}
-            </span>
-          </button>
+        {!isLoading && !listError && pages.length === 0 && templates[0] ? (
+          <section className="relative grid min-h-[420px] overflow-hidden rounded-card bg-card p-8 shadow-card sm:grid-cols-2 sm:items-center sm:gap-8 lg:p-12">
+            <div className="relative z-10">
+              <p className="text-caption font-semibold tracking-wide text-accent">
+                {t('emptyEyebrow')}
+              </p>
+              <h2 className="mt-2 text-display text-ink">{t('emptyTitle')}</h2>
+              <p className="mt-4 max-w-md text-body text-muted">{t('emptyDescription')}</p>
+              <button
+                className="mt-7 inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-5 text-body font-semibold text-accent-on"
+                onClick={openCreateFlow}
+                type="button"
+              >
+                {t('newPage')}
+              </button>
+            </div>
+            <div className="relative hidden h-[340px] sm:block" aria-hidden="true">
+              <div className="absolute inset-0 m-auto h-[440px] w-[250px] rotate-[-3deg] overflow-hidden rounded-card border border-hairline bg-card shadow-raised">
+                <div className="w-[375px] origin-top-left scale-[0.64]">
+                  <PublicPageRenderer page={templatePage(templates[0])} preview uaClass="browser" />
+                </div>
+              </div>
+            </div>
+          </section>
         ) : null}
 
         {!isLoading && !listError
-          ? pages.map((page) => (
-              <article
-                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"
-                key={page.id}
-              >
-                <div className="absolute right-0 top-0 h-24 w-24 -translate-y-8 translate-x-8 rounded-full bg-blue-100 transition group-hover:scale-125" />
-                <div className="relative">
-                  <span
-                    className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${statusClass(page.status)}`}
+          ? pages.map((page) => {
+              const theme = themeById.get(page.themeId);
+              return (
+                <article
+                  className="group flex flex-col gap-5 rounded-card bg-card p-6 shadow-card transition hover:shadow-raised sm:flex-row sm:items-center"
+                  key={page.id}
+                >
+                  <div
+                    className="grid h-14 w-14 flex-none place-items-center rounded-control border border-hairline text-section font-extrabold"
+                    style={{ backgroundColor: theme?.neutral.pageBg, color: theme?.accent }}
                   >
-                    {t(`status.${page.status.toLowerCase()}`)}
-                  </span>
-                  <h2 className="mt-5 truncate text-2xl font-extrabold tracking-tight text-slate-950">
-                    {page.title}
-                  </h2>
-                  <p className="mt-2 truncate text-sm text-slate-500">/p/{page.slug}</p>
-                  <div className="mt-8 flex items-center justify-between gap-4 border-t border-slate-100 pt-4">
-                    <span className="text-xs text-slate-500">
-                      {t('blockCount', { count: page._count.blocks })}
-                    </span>
-                    <Link
-                      className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-blue-600 hover:text-white"
-                      href={`/studio/pages/${page.id}`}
-                    >
-                      {t('editPage')}
-                    </Link>
+                    {page.title.trim().charAt(0)}
                   </div>
-                </div>
-              </article>
-            ))
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <h2 className="truncate text-section text-ink">{page.title}</h2>
+                      <span
+                        className={`text-caption font-semibold ${
+                          page.status === 'PUBLISHED' ? 'text-accent' : 'text-muted'
+                        } ${page.status === 'HIDDEN' ? 'italic' : ''}`}
+                      >
+                        {t(`status.${page.status.toLowerCase()}`)}
+                      </span>
+                    </div>
+                    <p className="mt-1 truncate text-caption text-muted">/p/{page.slug}</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-caption text-muted sm:justify-end">
+                    <span>{t('blockCount', { count: page._count.blocks })}</span>
+                    <span>
+                      {t('updatedAt', { date: dateFormatter.format(new Date(page.updatedAt)) })}
+                    </span>
+                  </div>
+                  <Link
+                    className="inline-flex min-h-10 flex-none items-center justify-center rounded-full border border-hairline bg-card px-4 text-body font-semibold text-ink group-hover:border-accent"
+                    href={`/studio/pages/${page.id}`}
+                  >
+                    {t('editPage')}
+                  </Link>
+                </article>
+              );
+            })
           : null}
       </div>
 
@@ -248,22 +285,22 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
         <div
           aria-labelledby="create-page-title"
           aria-modal="true"
-          className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/45 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-page/95 p-4 backdrop-blur-sm"
           role="dialog"
         >
-          <div className="my-auto w-full max-w-3xl rounded-[2rem] bg-white p-5 shadow-2xl sm:p-8">
-            <div className="flex items-start justify-between gap-4">
+          <div className="my-auto w-full max-w-3xl rounded-card bg-card shadow-raised">
+            <div className="flex items-start justify-between gap-4 p-6 sm:p-8">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
+                <p className="text-caption font-semibold tracking-wide text-accent">
                   {t('createStep', { current: step === 'template' ? 1 : 2, total: 2 })}
                 </p>
-                <h2 className="mt-2 text-2xl font-extrabold tracking-tight" id="create-page-title">
+                <h2 className="mt-2 text-section text-ink" id="create-page-title">
                   {step === 'template' ? t('chooseTemplate') : t('pageDetails')}
                 </h2>
               </div>
               <button
                 aria-label={t('close')}
-                className="grid h-10 w-10 place-items-center rounded-full bg-slate-100 text-xl text-slate-600 hover:bg-slate-200"
+                className="grid h-10 w-10 place-items-center rounded-full bg-card-muted text-section text-muted"
                 disabled={isCreating}
                 onClick={() => setIsOpen(false)}
                 type="button"
@@ -274,44 +311,46 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
 
             {step === 'template' ? (
               <>
-                <p className="mt-3 text-sm leading-6 text-slate-600">{t('chooseTemplateHint')}</p>
-                <div className="mt-6 grid max-h-[55vh] gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
-                  {templates.map((template) => {
-                    const theme = themeById.get(template.defaultTheme);
-                    const selected = template.id === selectedId;
-                    return (
-                      <button
-                        aria-pressed={selected}
-                        className={`rounded-2xl border p-4 text-left transition ${
-                          selected
-                            ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-600/15'
-                            : 'border-slate-200 hover:border-slate-400'
-                        }`}
-                        key={template.id}
-                        onClick={() => setSelectedId(template.id)}
-                        type="button"
-                      >
-                        <span className="flex items-center justify-between gap-3">
-                          <strong className="text-base text-slate-950">{template.nameZh}</strong>
-                          <span
-                            aria-label={theme?.nameZh ?? template.defaultTheme}
-                            className="h-5 w-5 flex-none rounded-full border-2 border-white shadow ring-1 ring-slate-200"
-                            style={{ background: theme?.accent ?? '#1c1c1a' }}
-                          />
-                        </span>
-                        <span className="mt-2 block text-xs font-semibold text-blue-700">
-                          {template.persona}
-                        </span>
-                        <span className="mt-3 block text-sm leading-5 text-slate-600">
-                          {template.identity.bio}
-                        </span>
-                      </button>
-                    );
-                  })}
+                <div className="px-6 pb-6 sm:px-8">
+                  <p className="text-body text-muted">{t('chooseTemplateHint')}</p>
+                  <div className="mt-6 grid max-h-[55vh] gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
+                    {templates.map((template) => {
+                      const theme = themeById.get(template.defaultTheme);
+                      const selected = template.id === selectedId;
+                      return (
+                        <button
+                          aria-pressed={selected}
+                          className={`rounded-control border p-4 text-left transition ${
+                            selected
+                              ? 'border-accent bg-accent-soft'
+                              : 'border-hairline bg-card hover:bg-card-muted'
+                          }`}
+                          key={template.id}
+                          onClick={() => setSelectedId(template.id)}
+                          type="button"
+                        >
+                          <span className="flex items-center justify-between gap-3">
+                            <strong className="text-section text-ink">{template.nameZh}</strong>
+                            <span
+                              aria-label={theme?.nameZh ?? template.defaultTheme}
+                              className="h-5 w-5 flex-none rounded-full border border-hairline"
+                              style={{ backgroundColor: theme?.accent }}
+                            />
+                          </span>
+                          <span className="mt-2 block text-caption font-semibold text-accent">
+                            {template.persona}
+                          </span>
+                          <span className="mt-3 block text-body text-muted">
+                            {template.identity.bio}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="mt-6 flex justify-end">
+                <div className="flex justify-end border-t border-hairline p-5 sm:px-8">
                   <button
-                    className="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
+                    className="rounded-full bg-accent px-6 py-3 text-body font-semibold text-accent-on disabled:opacity-40"
                     disabled={!selectedTemplate}
                     onClick={continueToDetails}
                     type="button"
@@ -321,59 +360,60 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
                 </div>
               </>
             ) : (
-              <form className="mt-6" onSubmit={submitCreate}>
-                <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
-                  {t('selectedTemplate')}:{' '}
-                  <strong className="text-slate-950">{selectedTemplate?.nameZh}</strong>
-                </div>
-                <label
-                  className="mt-5 block text-sm font-semibold text-slate-800"
-                  htmlFor="new-page-slug"
-                >
-                  {t('slugLabel')}
-                </label>
-                <div className="mt-2 flex rounded-xl border border-slate-300 bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-600/15">
-                  <span className="flex items-center border-r border-slate-200 px-3 text-sm text-slate-500">
-                    /p/
-                  </span>
-                  <input
-                    autoComplete="off"
-                    className="min-w-0 flex-1 rounded-r-xl px-3 py-3 text-sm outline-none"
-                    id="new-page-slug"
-                    maxLength={30}
-                    onChange={(event) => setSlug(event.target.value.toLowerCase())}
-                    placeholder={t('slugPlaceholder')}
-                    value={slug}
-                  />
-                </div>
-                <p className="mt-2 text-xs text-slate-500">{t('slugHint')}</p>
-
-                <label
-                  className="mt-5 block text-sm font-semibold text-slate-800"
-                  htmlFor="new-page-title"
-                >
-                  {t('pageTitleLabel')}
-                </label>
-                <input
-                  className="mt-2 w-full rounded-xl border border-slate-300 px-3 py-3 text-sm outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15"
-                  id="new-page-title"
-                  maxLength={120}
-                  onChange={(event) => setTitle(event.target.value)}
-                  value={title}
-                />
-
-                {createError ? (
-                  <p
-                    className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700"
-                    role="alert"
+              <form onSubmit={submitCreate}>
+                <div className="px-6 pb-8 sm:px-8">
+                  <div className="rounded-control bg-card-muted p-4 text-body text-muted">
+                    {t('selectedTemplate')}:{' '}
+                    <strong className="text-ink">{selectedTemplate?.nameZh}</strong>
+                  </div>
+                  <label
+                    className="mt-6 block text-caption font-semibold text-ink"
+                    htmlFor="new-page-slug"
                   >
-                    {createError}
-                  </p>
-                ) : null}
+                    {t('slugLabel')}
+                  </label>
+                  <div className="mt-2 flex rounded-control border border-hairline bg-card focus-within:border-accent">
+                    <span className="flex items-center border-r border-hairline px-3 text-caption text-muted">
+                      yilink.app/p/
+                    </span>
+                    <input
+                      autoComplete="off"
+                      className="min-w-0 flex-1 rounded-control bg-card px-3 py-3 text-body text-ink outline-none"
+                      id="new-page-slug"
+                      maxLength={30}
+                      onChange={(event) => setSlug(event.target.value.toLowerCase())}
+                      placeholder={t('slugPlaceholder')}
+                      value={slug}
+                    />
+                  </div>
+                  <p className="mt-2 text-caption text-muted">{t('slugHint')}</p>
 
-                <div className="mt-7 flex items-center justify-between gap-4">
+                  <label
+                    className="mt-6 block text-caption font-semibold text-ink"
+                    htmlFor="new-page-title"
+                  >
+                    {t('pageTitleLabel')}
+                  </label>
+                  <input
+                    className="mt-2 w-full rounded-control border border-hairline bg-card px-3 py-3 text-body text-ink outline-none"
+                    id="new-page-title"
+                    maxLength={120}
+                    onChange={(event) => setTitle(event.target.value)}
+                    value={title}
+                  />
+
+                  {createError ? (
+                    <p
+                      className="mt-4 rounded-control bg-danger-soft px-4 py-3 text-body text-danger"
+                      role="alert"
+                    >
+                      {createError}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="flex items-center justify-between gap-4 border-t border-hairline p-5 sm:px-8">
                   <button
-                    className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100"
+                    className="rounded-full border border-hairline bg-card px-4 py-2 text-body font-semibold text-ink"
                     disabled={isCreating}
                     onClick={() => setStep('template')}
                     type="button"
@@ -381,7 +421,7 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
                     {t('back')}
                   </button>
                   <button
-                    className="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white disabled:cursor-wait disabled:opacity-50"
+                    className="rounded-full bg-accent px-6 py-3 text-body font-semibold text-accent-on disabled:opacity-50"
                     disabled={isCreating}
                     type="submit"
                   >

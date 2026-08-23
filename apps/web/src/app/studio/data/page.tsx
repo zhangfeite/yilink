@@ -32,11 +32,15 @@ export default async function StudioDataPage({ searchParams }: StudioDataPagePro
   if (!selectedPage) {
     return (
       <section className="mx-auto w-full max-w-5xl">
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-950">{t('dataTitle')}</h1>
-        <div className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center">
-          <p className="text-sm leading-6 text-slate-600">{t('dataEmpty')}</p>
+        <header>
+          <p className="text-caption font-semibold tracking-wide text-accent">{t('dataEyebrow')}</p>
+          <h1 className="mt-2 text-display text-ink">{t('dataTitle')}</h1>
+          <p className="mt-3 text-body text-muted">{t('dataDescription')}</p>
+        </header>
+        <div className="mt-8 rounded-card bg-card p-8 text-center shadow-card">
+          <p className="text-body text-muted">{t('dataEmpty')}</p>
           <Link
-            className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-blue-700 px-5 text-sm font-semibold text-white transition hover:bg-blue-800"
+            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-5 text-body font-semibold text-accent-on"
             href="/studio"
           >
             {t('dataCreateFirst')}
@@ -58,15 +62,16 @@ export default async function StudioDataPage({ searchParams }: StudioDataPagePro
   return (
     <section className="mx-auto w-full max-w-5xl">
       <header>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-950">{t('dataTitle')}</h1>
-        <p className="mt-3 text-sm leading-6 text-slate-600">{t('dataDescription')}</p>
+        <p className="text-caption font-semibold tracking-wide text-accent">{t('dataEyebrow')}</p>
+        <h1 className="mt-2 text-display text-ink">{t('dataTitle')}</h1>
+        <p className="mt-3 text-body text-muted">{t('dataDescription')}</p>
       </header>
 
       <form action="/studio/data" className="mt-8 flex flex-wrap items-end gap-3" method="get">
-        <label className="min-w-60 flex-1 text-sm font-semibold text-slate-700">
+        <label className="min-w-60 flex-1 text-caption font-semibold text-ink">
           {t('dataSelectPage')}
           <select
-            className="mt-2 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100"
+            className="mt-2 min-h-11 w-full rounded-control border border-hairline bg-card px-3 text-body text-ink"
             defaultValue={selectedPage.id}
             name="pageId"
           >
@@ -78,7 +83,7 @@ export default async function StudioDataPage({ searchParams }: StudioDataPagePro
           </select>
         </label>
         <button
-          className="inline-flex min-h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"
+          className="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-5 text-body font-semibold text-accent-on"
           type="submit"
         >
           {t('dataShowPage')}
@@ -87,26 +92,18 @@ export default async function StudioDataPage({ searchParams }: StudioDataPagePro
 
       <section className="mt-6 grid gap-4 sm:grid-cols-3" aria-label={t('dataSummary')}>
         {summaries.map((summary) => (
-          <article
-            className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"
-            key={summary.label}
-          >
-            <p className="text-sm font-medium text-slate-500">{summary.label}</p>
-            <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">
-              {numberFormatter.format(summary.value)}
-            </p>
+          <article className="rounded-card bg-card p-6 shadow-card" key={summary.label}>
+            <p className="text-caption font-semibold text-muted">{summary.label}</p>
+            <p className="mt-3 text-display text-ink">{numberFormatter.format(summary.value)}</p>
           </article>
         ))}
       </section>
 
       <section
-        className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.05)] dark:border-slate-700 dark:bg-slate-950"
+        className="mt-6 rounded-card bg-card p-6 shadow-card"
         aria-labelledby="views-trend-heading"
       >
-        <h2
-          className="text-lg font-extrabold tracking-tight text-slate-950 dark:text-slate-50"
-          id="views-trend-heading"
-        >
+        <h2 className="text-section text-ink" id="views-trend-heading">
           {t('dataTrend')}
         </h2>
         <AnalyticsTrend

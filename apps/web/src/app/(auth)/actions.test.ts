@@ -66,6 +66,8 @@ describe('loginAction', () => {
 
   it('returns the localized invalid-invitation error before creating an account', async () => {
     process.env.INVITE_CODES = 'alpha';
+    const formData = registerFormData();
+    formData.set('inviteCode', 'wrong-code');
     getTranslationsMock.mockResolvedValue((key: string) => {
       if (key === 'invalidInvite') {
         return '邀请码无效';
@@ -73,8 +75,20 @@ describe('loginAction', () => {
       return key;
     });
 
-    await expect(registerAction({ error: null }, registerFormData())).resolves.toEqual({
+    await expect(registerAction({ error: null }, formData)).resolves.toEqual({
       error: '邀请码无效',
+    });
+  });
+
+  it('explains that an invitation is required when the field is empty', async () => {
+    process.env.INVITE_CODES = 'alpha';
+    getTranslationsMock.mockResolvedValue((key: string) => {
+      if (key === 'missingInvite') return '公测期需要邀请码';
+      return key;
+    });
+
+    await expect(registerAction({ error: null }, registerFormData())).resolves.toEqual({
+      error: '公测期需要邀请码',
     });
   });
 });
