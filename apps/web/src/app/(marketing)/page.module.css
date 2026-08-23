@@ -238,8 +238,9 @@
   --paper-scale: 0.5;
   position: absolute;
   z-index: 2;
-  top: -12px;
-  left: calc(50% - 252px);
+  /* 小纸只贴着主纸左缘（主纸左缘在 50% - 158px），不进姓名区：拼贴感靠旋转与错位给，不靠遮挡 */
+  top: 44px;
+  left: calc(50% - 352px);
   width: 188px;
   height: 232px;
   transform: rotate(4deg);

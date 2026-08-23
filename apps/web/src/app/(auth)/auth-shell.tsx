@@ -54,10 +54,10 @@ export function AuthShell({ children, description, eyebrow, title }: AuthShellPr
         </div>
 
         {template ? (
-          <div className="relative mt-10 hidden min-h-0 flex-1 lg:block" aria-hidden="true">
-            <div className="absolute inset-x-0 bottom-0 mx-auto h-[490px] w-[286px] rotate-[-2deg] overflow-hidden rounded-card border border-hairline bg-card shadow-card">
+          <div className="relative mt-8 hidden min-h-[360px] flex-1 overflow-hidden lg:block" aria-hidden="true">
+            <div className="absolute inset-x-0 top-2 mx-auto h-[490px] w-[286px] rotate-[-2deg] overflow-hidden rounded-card border border-hairline bg-card shadow-card">
               <div className="w-[375px] origin-top-left scale-[0.72]">
-                <PublicPageRenderer page={templatePage(template)} preview uaClass="browser" />
+                <PublicPageRenderer interactive={false} page={templatePage(template)} preview uaClass="browser" />
               </div>
             </div>
           </div>

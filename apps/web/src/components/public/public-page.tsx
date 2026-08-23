@@ -37,6 +37,11 @@ export interface PublicPageData {
 interface PublicPageRendererProps {
   page: PublicPageData;
   preview?: boolean;
+  /**
+   * 壳里当插图用时设为 false：营销首页一页要直出 10 份渲染器，
+   * 每份都带内联脚本与同名 id 会造成重复 id 与无谓体积。公开页保持默认。
+   */
+  interactive?: boolean;
   reportEmail?: string;
   uaClass: UaClass;
 }
@@ -475,6 +480,7 @@ function ConversionBar({ cta, totalViews }: { cta: CtaConfig; totalViews: number
 export function PublicPageRenderer({
   page,
   preview = false,
+  interactive = true,
   reportEmail = 'report@yilink.app',
   uaClass,
 }: PublicPageRendererProps) {
@@ -496,7 +502,7 @@ export function PublicPageRenderer({
     >
       <div className={classNames(styles.page, cta ? styles.hasCtaBar : undefined)}>
         <section
-          aria-labelledby="public-page-title"
+          aria-labelledby={interactive ? 'public-page-title' : undefined}
           className={classNames(styles.card, styles.identity)}
         >
           <div className={styles.avatar}>
@@ -504,7 +510,7 @@ export function PublicPageRenderer({
             {avatarUrl ? <img alt={`${page.title}的头像`} src={avatarUrl} /> : null}
           </div>
           <div className={styles.nameZone}>
-            <h1 id="public-page-title">{page.title}</h1>
+            <h1 id={interactive ? 'public-page-title' : undefined}>{page.title}</h1>
             {role ? <p className={styles.role}>{role}</p> : null}
           </div>
           {page.bio ? <p className={styles.bio}>{page.bio}</p> : null}
@@ -542,14 +548,18 @@ export function PublicPageRenderer({
         </footer>
         {cta ? <ConversionBar cta={cta} totalViews={page.totalViews} /> : null}
       </div>
-      <div
-        aria-live="polite"
-        className={styles.toast}
-        data-public-toast
-        data-visible="false"
-        role="status"
-      />
-      <script dangerouslySetInnerHTML={{ __html: PUBLIC_INTERACTION_SCRIPT }} />
+      {interactive ? (
+        <>
+          <div
+            aria-live="polite"
+            className={styles.toast}
+            data-public-toast
+            data-visible="false"
+            role="status"
+          />
+          <script dangerouslySetInnerHTML={{ __html: PUBLIC_INTERACTION_SCRIPT }} />
+        </>
+      ) : null}
     </main>
   );
 }

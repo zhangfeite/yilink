@@ -247,16 +247,16 @@ export function AdminConsole({
 
   return (
     <main className="mx-auto min-h-screen max-w-6xl p-6 sm:p-10">
-      <header className="border-b border-slate-200 pb-5">
-        <p className="text-sm font-medium text-slate-500">YiLink 内部管理</p>
+      <header className="border-b border-hairline pb-5">
+        <p className="text-sm font-medium text-muted">YiLink 内部管理</p>
         <h1 className="mt-1 text-3xl font-bold tracking-tight">审核与用户管理</h1>
         <nav aria-label="管理后台导航" className="mt-5 flex gap-2">
           <button
             aria-pressed={activeTab === 'moderation'}
             className={`rounded-md px-4 py-2 text-sm font-medium ${
               activeTab === 'moderation'
-                ? 'bg-slate-900 text-white'
-                : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
+                ? 'bg-accent text-white'
+                : 'bg-card text-ink ring-1 ring-hairline hover:bg-card-muted'
             }`}
             onClick={() => setActiveTab('moderation')}
             type="button"
@@ -267,8 +267,8 @@ export function AdminConsole({
             aria-pressed={activeTab === 'management'}
             className={`rounded-md px-4 py-2 text-sm font-medium ${
               activeTab === 'management'
-                ? 'bg-slate-900 text-white'
-                : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
+                ? 'bg-accent text-white'
+                : 'bg-card text-ink ring-1 ring-hairline hover:bg-card-muted'
             }`}
             onClick={() => setActiveTab('management')}
             type="button"
@@ -278,20 +278,20 @@ export function AdminConsole({
         </nav>
       </header>
 
-      {notice ? <p className="mt-5 rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">{notice}</p> : null}
-      {error ? <p className="mt-5 rounded-md bg-red-50 p-3 text-sm text-red-800">{error}</p> : null}
+      {notice ? <p className="mt-5 rounded-md bg-accent-soft p-3 text-sm text-accent">{notice}</p> : null}
+      {error ? <p className="mt-5 rounded-md bg-danger-soft p-3 text-sm text-danger">{error}</p> : null}
 
       {activeTab === 'moderation' ? (
         <section className="mt-8">
           <div className="flex items-baseline justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">待人工审核</h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-muted">
                 机审命中后页面保持不可公开，人工通过后才恢复展示。
               </p>
             </div>
             <button
-              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50"
+              className="rounded-md border border-hairline bg-card px-3 py-2 text-sm hover:bg-card-muted"
               onClick={() => {
                 setLoadingModeration(true);
                 void loadModeration();
@@ -302,9 +302,9 @@ export function AdminConsole({
             </button>
           </div>
 
-          <div className="mt-5 overflow-x-auto rounded-lg border border-slate-200 bg-white">
+          <div className="mt-5 overflow-x-auto rounded-lg border border-hairline bg-card">
             <table className="min-w-full text-left text-sm">
-              <thead className="bg-slate-50 text-slate-600">
+              <thead className="bg-card-muted text-muted">
                 <tr>
                   <th className="px-4 py-3 font-medium">页面</th>
                   <th className="px-4 py-3 font-medium">命中词</th>
@@ -314,15 +314,15 @@ export function AdminConsole({
               </thead>
               <tbody>
                 {loadingModeration ? (
-                  <tr><td className="px-4 py-5 text-slate-500" colSpan={4}>加载中…</td></tr>
+                  <tr><td className="px-4 py-5 text-muted" colSpan={4}>加载中…</td></tr>
                 ) : records.length === 0 ? (
-                  <tr><td className="px-4 py-5 text-slate-500" colSpan={4}>暂无待人审内容。</td></tr>
+                  <tr><td className="px-4 py-5 text-muted" colSpan={4}>暂无待人审内容。</td></tr>
                 ) : (
                   records.map((record) => {
                     const words = hitWords(record.detail);
                     const page = record.page;
                     return (
-                      <tr className="border-t border-slate-100 align-top" key={record.id}>
+                      <tr className="border-t border-hairline align-top" key={record.id}>
                         <td className="px-4 py-3">
                           {page ? (
                             <>
@@ -334,20 +334,20 @@ export function AdminConsole({
                               >
                                 {page.title}
                               </a>
-                              <p className="mt-1 text-xs text-slate-500">/{page.slug} · {page.user.email ?? '未设置邮箱'}</p>
+                              <p className="mt-1 text-xs text-muted">/{page.slug} · {page.user.email ?? '未设置邮箱'}</p>
                             </>
                           ) : (
-                            <span className="text-slate-500">原页面已删除</span>
+                            <span className="text-muted">原页面已删除</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-slate-700">{words.join('、') || '无'}</td>
-                        <td className="whitespace-nowrap px-4 py-3 text-slate-600">
+                        <td className="px-4 py-3 text-ink">{words.join('、') || '无'}</td>
+                        <td className="whitespace-nowrap px-4 py-3 text-muted">
                           {new Date(record.createdAt).toLocaleString('zh-CN')}
                         </td>
                         <td className="min-w-72 px-4 py-3">
                           <div className="flex flex-wrap items-center gap-2">
                             <button
-                              className="rounded-md bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700"
+                              className="rounded-md bg-accent px-3 py-2 text-white hover:bg-accent"
                               onClick={() => void resolveRecord(record.id)}
                               type="button"
                             >
@@ -362,7 +362,7 @@ export function AdminConsole({
                                 }}
                               >
                                 <input
-                                  className="min-w-40 rounded-md border border-slate-300 px-3 py-2"
+                                  className="min-w-40 rounded-md border border-hairline px-3 py-2"
                                   onChange={(event) =>
                                     setHideReasons((current) => ({
                                       ...current,
@@ -372,7 +372,7 @@ export function AdminConsole({
                                   placeholder="内部处理原因"
                                   value={hideReasons[page.id] ?? ''}
                                 />
-                                <button className="rounded-md bg-slate-900 px-3 py-2 text-white hover:bg-slate-700" type="submit">
+                                <button className="rounded-md bg-accent px-3 py-2 text-white hover:bg-accent-strong" type="submit">
                                   隐藏
                                 </button>
                               </form>
@@ -393,18 +393,18 @@ export function AdminConsole({
             <h2 className="text-xl font-semibold">页面检索</h2>
             <form className="mt-4 flex max-w-xl gap-2" onSubmit={submitPageSearch}>
               <input
-                className="min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2"
+                className="min-w-0 flex-1 rounded-md border border-hairline px-3 py-2"
                 onChange={(event) => setSlug(event.target.value)}
                 placeholder="按 slug 检索，例如 my-page"
                 value={slug}
               />
-              <button className="rounded-md bg-slate-900 px-4 py-2 text-white hover:bg-slate-700" type="submit">
+              <button className="rounded-md bg-accent px-4 py-2 text-white hover:bg-accent-strong" type="submit">
                 检索
               </button>
             </form>
-            <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200 bg-white">
+            <div className="mt-4 overflow-x-auto rounded-lg border border-hairline bg-card">
               <table className="min-w-full text-left text-sm">
-                <thead className="bg-slate-50 text-slate-600">
+                <thead className="bg-card-muted text-muted">
                   <tr>
                     <th className="px-4 py-3 font-medium">页面</th>
                     <th className="px-4 py-3 font-medium">状态</th>
@@ -413,22 +413,22 @@ export function AdminConsole({
                 </thead>
                 <tbody>
                   {loadingPages ? (
-                    <tr><td className="px-4 py-5 text-slate-500" colSpan={3}>检索中…</td></tr>
+                    <tr><td className="px-4 py-5 text-muted" colSpan={3}>检索中…</td></tr>
                   ) : pages.length === 0 ? (
-                    <tr><td className="px-4 py-5 text-slate-500" colSpan={3}>输入 slug 后检索页面。</td></tr>
+                    <tr><td className="px-4 py-5 text-muted" colSpan={3}>输入 slug 后检索页面。</td></tr>
                   ) : (
                     pages.map((page) => (
-                      <tr className="border-t border-slate-100 align-top" key={page.id}>
+                      <tr className="border-t border-hairline align-top" key={page.id}>
                         <td className="px-4 py-3">
                           <p className="font-medium">{page.title}</p>
-                          <p className="mt-1 text-xs text-slate-500">/{page.slug} · {page.user.email ?? '未设置邮箱'}</p>
-                          {page.hiddenReason ? <p className="mt-1 text-xs text-slate-500">原因：{page.hiddenReason}</p> : null}
+                          <p className="mt-1 text-xs text-muted">/{page.slug} · {page.user.email ?? '未设置邮箱'}</p>
+                          {page.hiddenReason ? <p className="mt-1 text-xs text-muted">原因：{page.hiddenReason}</p> : null}
                         </td>
                         <td className="px-4 py-3">{statusLabel(page.status)}</td>
                         <td className="min-w-72 px-4 py-3">
                           {page.status === 'HIDDEN' ? (
                             <button
-                              className="rounded-md bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700"
+                              className="rounded-md bg-accent px-3 py-2 text-white hover:bg-accent"
                               onClick={() => void restorePage(page.id)}
                               type="button"
                             >
@@ -443,7 +443,7 @@ export function AdminConsole({
                               }}
                             >
                               <input
-                                className="min-w-40 rounded-md border border-slate-300 px-3 py-2"
+                                className="min-w-40 rounded-md border border-hairline px-3 py-2"
                                 onChange={(event) =>
                                   setHideReasons((current) => ({
                                     ...current,
@@ -453,7 +453,7 @@ export function AdminConsole({
                                 placeholder="内部处理原因"
                                 value={hideReasons[page.id] ?? ''}
                               />
-                              <button className="rounded-md bg-slate-900 px-3 py-2 text-white hover:bg-slate-700" type="submit">
+                              <button className="rounded-md bg-accent px-3 py-2 text-white hover:bg-accent-strong" type="submit">
                                 隐藏
                               </button>
                             </form>
@@ -471,23 +471,23 @@ export function AdminConsole({
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h2 className="text-xl font-semibold">用户与信任分</h2>
-                <p className="mt-1 text-sm text-slate-600">信任分用于新账号的风险分级，范围为 0–100。</p>
+                <p className="mt-1 text-sm text-muted">信任分用于新账号的风险分级，范围为 0–100。</p>
               </div>
               <form className="flex gap-2" onSubmit={submitUserSearch}>
                 <input
-                  className="rounded-md border border-slate-300 px-3 py-2"
+                  className="rounded-md border border-hairline px-3 py-2"
                   onChange={(event) => setUserQuery(event.target.value)}
                   placeholder="按邮箱检索"
                   value={userQuery}
                 />
-                <button className="rounded-md border border-slate-300 bg-white px-4 py-2 hover:bg-slate-50" type="submit">
+                <button className="rounded-md border border-hairline bg-card px-4 py-2 hover:bg-card-muted" type="submit">
                   检索
                 </button>
               </form>
             </div>
-            <div className="mt-4 overflow-x-auto rounded-lg border border-slate-200 bg-white">
+            <div className="mt-4 overflow-x-auto rounded-lg border border-hairline bg-card">
               <table className="min-w-full text-left text-sm">
-                <thead className="bg-slate-50 text-slate-600">
+                <thead className="bg-card-muted text-muted">
                   <tr>
                     <th className="px-4 py-3 font-medium">邮箱</th>
                     <th className="px-4 py-3 font-medium">套餐</th>
@@ -497,19 +497,19 @@ export function AdminConsole({
                 </thead>
                 <tbody>
                   {loadingUsers ? (
-                    <tr><td className="px-4 py-5 text-slate-500" colSpan={4}>加载中…</td></tr>
+                    <tr><td className="px-4 py-5 text-muted" colSpan={4}>加载中…</td></tr>
                   ) : users.length === 0 ? (
-                    <tr><td className="px-4 py-5 text-slate-500" colSpan={4}>没有匹配的用户。</td></tr>
+                    <tr><td className="px-4 py-5 text-muted" colSpan={4}>没有匹配的用户。</td></tr>
                   ) : (
                     users.map((user) => (
-                      <tr className="border-t border-slate-100" key={user.id}>
+                      <tr className="border-t border-hairline" key={user.id}>
                         <td className="px-4 py-3">{user.email ?? '未设置邮箱'}</td>
                         <td className="px-4 py-3">{user.plan}</td>
                         <td className="px-4 py-3">{user._count.pages}</td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             <input
-                              className="w-20 rounded-md border border-slate-300 px-3 py-2"
+                              className="w-20 rounded-md border border-hairline px-3 py-2"
                               max="100"
                               min="0"
                               onChange={(event) =>
@@ -522,7 +522,7 @@ export function AdminConsole({
                               value={trustLevels[user.id] ?? String(user.trustLevel)}
                             />
                             <button
-                              className="rounded-md border border-slate-300 bg-white px-3 py-2 hover:bg-slate-50"
+                              className="rounded-md border border-hairline bg-card px-3 py-2 hover:bg-card-muted"
                               onClick={() => void updateTrustLevel(user.id)}
                               type="button"
                             >
@@ -537,10 +537,10 @@ export function AdminConsole({
               </table>
             </div>
             {userPagination ? (
-              <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-500">
+              <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted">
                 <p>第 {userPagination.page} 页，共 {userPagination.totalPages} 页，{userPagination.total} 位用户。</p>
                 <button
-                  className="rounded-md border border-slate-300 bg-white px-3 py-1.5 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-md border border-hairline bg-card px-3 py-1.5 disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={userPagination.page <= 1 || loadingUsers}
                   onClick={() => {
                     setLoadingUsers(true);
@@ -551,7 +551,7 @@ export function AdminConsole({
                   上一页
                 </button>
                 <button
-                  className="rounded-md border border-slate-300 bg-white px-3 py-1.5 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-md border border-hairline bg-card px-3 py-1.5 disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={userPagination.page >= userPagination.totalPages || loadingUsers}
                   onClick={() => {
                     setLoadingUsers(true);

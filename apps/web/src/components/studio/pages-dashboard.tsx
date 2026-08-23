@@ -229,7 +229,7 @@ export function PagesDashboard({ templates }: { templates: SceneTemplate[] }) {
             <div className="relative hidden h-[340px] sm:block" aria-hidden="true">
               <div className="absolute inset-0 m-auto h-[440px] w-[250px] rotate-[-3deg] overflow-hidden rounded-card border border-hairline bg-card shadow-raised">
                 <div className="w-[375px] origin-top-left scale-[0.64]">
-                  <PublicPageRenderer page={templatePage(templates[0])} preview uaClass="browser" />
+                  <PublicPageRenderer interactive={false} page={templatePage(templates[0])} preview uaClass="browser" />
                 </div>
               </div>
             </div>

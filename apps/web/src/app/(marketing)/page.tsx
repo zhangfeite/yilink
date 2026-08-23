@@ -72,7 +72,7 @@ function Paper({
   return (
     <div className={`${styles.paper} ${paperClass}`} inert>
       <div className={styles.paperCanvas}>
-        <PublicPageRenderer page={page} preview uaClass="browser" />
+        <PublicPageRenderer interactive={false} page={page} preview uaClass="browser" />
       </div>
     </div>
   );

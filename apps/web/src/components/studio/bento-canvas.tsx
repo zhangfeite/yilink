@@ -60,7 +60,7 @@ function BentoCard({ block, isShaking, onKeyboard, onResizeStart, onSelect }: Be
       {...attributes}
       {...listeners}
       aria-label={t('bento.canvas.card', { type: t(`blockTypes.${block.type}`) })}
-      className={`group relative flex min-h-0 cursor-grab items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white px-3 text-center text-xs font-bold text-slate-700 shadow-sm outline-none transition-[box-shadow,opacity] focus-visible:ring-2 focus-visible:ring-blue-600 ${
+      className={`group relative flex min-h-0 cursor-grab items-center justify-center overflow-hidden rounded-2xl border border-hairline bg-card px-3 text-center text-caption font-semibold text-ink shadow-sm outline-none transition-[box-shadow,opacity] focus-visible:ring-2 focus-visible:ring-accent ${
         isDragging ? 'z-20 opacity-70 shadow-xl' : ''
       } ${isShaking ? 'animate-[bounce_180ms_ease-in-out]' : ''}`}
       onKeyDown={(event) => onKeyboard(event, block)}
@@ -77,7 +77,7 @@ function BentoCard({ block, isShaking, onKeyboard, onResizeStart, onSelect }: Be
       {(['x', 'y', 'xy'] as const).map((axis) => (
         <button
           aria-label={t(`bento.canvas.resize.${axis}`)}
-          className={`absolute z-10 hidden touch-none bg-blue-600/80 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 lg:block ${
+          className={`absolute z-10 hidden touch-none bg-accent opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 lg:block ${
             axis === 'x'
               ? 'right-0 top-1/2 h-11 w-3 -translate-y-1/2 cursor-ew-resize rounded-l-full'
               : axis === 'y'
@@ -303,28 +303,28 @@ export function BentoCanvas({
   }
 
   return (
-    <section className="rounded-3xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+    <section className="rounded-3xl border border-hairline bg-card-muted p-4 sm:p-5">
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <div className="mr-auto">
-          <h2 className="text-sm font-extrabold text-slate-950">{t('bento.canvas.title')}</h2>
-          <p className="mt-0.5 text-[11px] text-slate-500">{t('bento.canvas.hint')}</p>
+          <h2 className="text-sm font-extrabold text-ink">{t('bento.canvas.title')}</h2>
+          <p className="mt-0.5 text-caption text-muted">{t('bento.canvas.hint')}</p>
         </div>
         <button
-          className="order-first rounded-full bg-blue-600 px-3 py-2 text-xs font-bold text-white sm:order-none"
+          className="order-first rounded-full border border-hairline bg-card px-3 py-2 text-caption font-semibold text-ink transition hover:bg-accent-soft sm:order-none"
           onClick={() => animateAction(onShuffle)}
           type="button"
         >
-          🎲 {t('bento.shuffle')}
+          {t('bento.shuffle')}
         </button>
         <button
-          className="order-first rounded-full bg-amber-100 px-3 py-2 text-xs font-bold text-amber-900 sm:order-none"
+          className="order-first rounded-full border border-hairline bg-card px-3 py-2 text-caption font-semibold text-ink transition hover:bg-accent-soft sm:order-none"
           onClick={() => animateAction(onTidy)}
           type="button"
         >
-          ✨ {t('bento.tidy')}
+          {t('bento.tidy')}
         </button>
         <button
-          className="rounded-full bg-white px-3 py-2 text-xs font-bold disabled:opacity-40"
+          className="rounded-full bg-card px-3 py-2 text-caption font-semibold disabled:opacity-40"
           disabled={!canUndo}
           onClick={onUndo}
           type="button"
@@ -332,7 +332,7 @@ export function BentoCanvas({
           ↶ {t('bento.undo')}
         </button>
         <button
-          className="rounded-full bg-white px-3 py-2 text-xs font-bold disabled:opacity-40"
+          className="rounded-full bg-card px-3 py-2 text-caption font-semibold disabled:opacity-40"
           disabled={!canRedo}
           onClick={onRedo}
           type="button"
@@ -348,7 +348,7 @@ export function BentoCanvas({
         sensors={sensors}
       >
         <div
-          className={`mx-auto grid w-full max-w-[480px] grid-cols-4 gap-1.5 overflow-hidden rounded-3xl border border-slate-200 bg-white p-2 transition-all duration-200 ${isShuffling ? 'scale-[0.985] opacity-75' : ''}`}
+          className={`mx-auto grid w-full max-w-[480px] grid-cols-4 gap-1.5 overflow-hidden rounded-3xl border border-hairline bg-card p-2 transition-all duration-200 ${isShuffling ? 'scale-[0.985] opacity-75' : ''}`}
           ref={canvasRef}
           style={{ gridAutoRows: `${ROW_PX}px`, minHeight: maxRow * ROW_PX + 16 }}
         >
@@ -367,7 +367,7 @@ export function BentoCanvas({
           {activeDraft?.placement && draft ? (
             <span
               aria-hidden="true"
-              className="rounded-2xl border border-dashed border-blue-500 bg-blue-500/10"
+              className="rounded-2xl border border-dashed border-accent bg-accent-soft"
               style={{
                 gridColumn: `${activeDraft.placement.x + 1} / span ${activeDraft.placement.w}`,
                 gridRow: `${activeDraft.placement.y + 1} / span ${activeDraft.placement.h}`,
@@ -380,15 +380,15 @@ export function BentoCanvas({
         {announcement}
       </p>
       {selected?.placement ? (
-        <div className="fixed inset-x-0 bottom-0 z-[65] rounded-t-3xl border border-slate-200 bg-white p-4 shadow-[0_-16px_50px_rgba(15,23,42,0.18)] lg:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-[65] rounded-t-3xl border border-hairline bg-card p-4 shadow-[0_-16px_50px_rgba(15,23,42,0.18)] lg:hidden">
           <div className="mx-auto max-w-lg">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h3 className="text-sm font-extrabold text-slate-950">{t('bento.mobile.title')}</h3>
-                <p className="text-[11px] text-slate-500">{t(`blockTypes.${selected.type}`)}</p>
+                <h3 className="text-sm font-extrabold text-ink">{t('bento.mobile.title')}</h3>
+                <p className="text-caption text-muted">{t(`blockTypes.${selected.type}`)}</p>
               </div>
               <button
-                className="rounded-full bg-slate-100 px-3 py-2 text-xs font-bold"
+                className="rounded-full bg-card-muted px-3 py-2 text-caption font-semibold"
                 onClick={() => setSelectedId(null)}
                 type="button"
               >
@@ -405,7 +405,7 @@ export function BentoCanvas({
                     aria-pressed={
                       selected.placement?.w === option.w && selected.placement?.h === option.h
                     }
-                    className="rounded-xl border border-slate-200 p-1.5 disabled:cursor-not-allowed disabled:opacity-30 aria-pressed:border-blue-600 aria-pressed:bg-blue-50"
+                    className="rounded-xl border border-hairline p-1.5 disabled:cursor-not-allowed disabled:opacity-30 aria-pressed:border-accent aria-pressed:bg-accent-soft"
                     disabled={disabled}
                     key={option.key}
                     onClick={() =>
@@ -417,9 +417,9 @@ export function BentoCanvas({
                     }
                     type="button"
                   >
-                    <span className="grid h-10 grid-cols-4 grid-rows-4 gap-px rounded bg-slate-100 p-1">
+                    <span className="grid h-10 grid-cols-4 grid-rows-4 gap-px rounded bg-card-muted p-1">
                       <span
-                        className="rounded-sm bg-blue-500"
+                        className="rounded-sm bg-accent"
                         style={{
                           gridColumn: `span ${option.w}`,
                           gridRow: `span ${Math.min(4, option.h)}`,
@@ -441,7 +441,7 @@ export function BentoCanvas({
               ).map(([direction, x, y, glyph]) => (
                 <button
                   aria-label={t(`bento.mobile.nudge.${direction}`)}
-                  className="rounded-xl bg-slate-100 px-4 py-3 text-lg font-bold text-slate-700 active:bg-blue-100"
+                  className="rounded-xl bg-card-muted px-4 py-3 text-lg font-bold text-ink active:bg-accent-soft"
                   key={direction}
                   onClick={() =>
                     mobileOperation(selected, {
