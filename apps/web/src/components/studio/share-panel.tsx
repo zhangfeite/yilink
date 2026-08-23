@@ -338,7 +338,7 @@ export function SharePanel({
   return (
     <>
       <button
-        className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-blue-300 hover:text-blue-700"
+        className="rounded-full border border-hairline bg-card px-4 py-2 text-caption font-semibold text-ink"
         onClick={() => {
           setCopyNotice(null);
           setPreview({ status: 'loading' });
@@ -355,7 +355,7 @@ export function SharePanel({
 
       {isOpen ? (
         <div
-          className="fixed inset-0 z-[100] flex items-end justify-center bg-slate-950/55 p-0 backdrop-blur-[2px] sm:items-center sm:p-6"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-page/90 p-0 backdrop-blur-sm sm:items-center sm:p-6"
           onMouseDown={(event) => {
             if (event.currentTarget === event.target) {
               setPanelState((current) => ({
@@ -369,23 +369,23 @@ export function SharePanel({
           <section
             aria-labelledby="share-panel-title"
             aria-modal="true"
-            className="max-h-[94dvh] w-full max-w-3xl overflow-y-auto rounded-t-[2rem] bg-slate-50 shadow-[0_24px_80px_rgba(15,23,42,0.28)] sm:rounded-[2rem]"
+            className="max-h-[94dvh] w-full max-w-3xl overflow-y-auto rounded-t-card bg-page shadow-card sm:rounded-card"
             role="dialog"
           >
-            <header className="sticky top-0 z-10 flex items-start gap-4 border-b border-slate-200 bg-slate-50/95 px-5 py-5 backdrop-blur sm:px-7">
+            <header className="sticky top-0 z-10 flex items-start gap-4 border-b border-hairline bg-page px-5 py-5 sm:px-7">
               <div className="min-w-0 flex-1">
                 <h2
-                  className="text-xl font-extrabold tracking-tight text-slate-950"
+                  className="text-section text-ink"
                   id="share-panel-title"
                 >
                   {text.shareTitle}
                 </h2>
-                <p className="mt-1 text-sm leading-5 text-slate-500">{text.shareHint}</p>
+                <p className="mt-1 text-body text-muted">{text.shareHint}</p>
               </div>
               <button
                 aria-label={text.close}
                 autoFocus
-                className="grid h-9 w-9 flex-none place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm hover:text-slate-950"
+                className="grid h-9 w-9 flex-none place-items-center rounded-full border border-hairline bg-card text-muted shadow-card hover:text-ink"
                 onClick={() =>
                   setPanelState((current) => ({
                     ...current,
@@ -399,18 +399,18 @@ export function SharePanel({
               </button>
             </header>
 
-            <div className="space-y-3 border-b border-slate-200 px-5 py-4 sm:px-7">
+            <div className="space-y-3 border-b border-hairline px-5 py-4 sm:px-7">
               {panelState.openedAfterPublish ? (
-                <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-extrabold text-emerald-800">
+                <p className="rounded-control bg-accent-soft px-4 py-3 text-body font-extrabold text-accent">
                   {text.publishedKicker}
                 </p>
               ) : null}
-              <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
-                <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">
+              <div className="rounded-card bg-card px-4 py-3 shadow-card">
+                <span className="block text-caption font-bold uppercase tracking-[0.12em] text-muted">
                   {text.publicPage}
                 </span>
                 <a
-                  className="mt-1 block break-all text-sm font-semibold text-blue-700 hover:underline"
+                  className="mt-1 block break-all text-body font-semibold text-accent hover:underline"
                   href={pageUrl}
                   rel="noreferrer"
                   target="_blank"
@@ -424,33 +424,33 @@ export function SharePanel({
               <div>
                 <div className="grid grid-cols-2 gap-3">
                   <button
-                    className="flex min-h-24 flex-col items-start justify-between rounded-2xl border border-slate-200 bg-white p-4 text-left text-sm font-bold text-slate-800 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:border-blue-300 hover:text-blue-700"
+                    className="flex min-h-24 flex-col items-start justify-between rounded-card border border-hairline bg-card p-4 text-left text-body font-bold text-ink shadow-card hover:bg-accent-soft"
                     onClick={() => void handleCopy('link')}
                     type="button"
                   >
-                    <span className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 text-slate-500">
+                    <span className="grid h-9 w-9 place-items-center rounded-full border border-hairline text-muted">
                       <CopyIcon />
                     </span>
                     {text.copyLink}
                   </button>
                   {qrReady ? (
                     <a
-                      className="flex min-h-24 flex-col items-start justify-between rounded-2xl border border-slate-200 bg-white p-4 text-left text-sm font-bold text-slate-800 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:border-blue-300 hover:text-blue-700"
+                      className="flex min-h-24 flex-col items-start justify-between rounded-card border border-hairline bg-card p-4 text-left text-body font-bold text-ink shadow-card hover:bg-accent-soft"
                       download
                       href={`/api/v1/pages/${encodeURIComponent(pageId)}/qr?format=png&size=512`}
                     >
-                      <span className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 text-slate-500">
+                      <span className="grid h-9 w-9 place-items-center rounded-full border border-hairline text-muted">
                         <QrIcon />
                       </span>
                       {text.downloadQr}
                     </a>
                   ) : (
                     <button
-                      className="flex min-h-24 cursor-not-allowed flex-col items-start justify-between rounded-2xl border border-slate-200 bg-white p-4 text-left text-sm font-bold text-slate-400 opacity-70"
+                      className="flex min-h-24 cursor-not-allowed flex-col items-start justify-between rounded-card border border-hairline bg-card p-4 text-left text-body font-bold text-muted opacity-70"
                       disabled
                       type="button"
                     >
-                      <span className="grid h-9 w-9 place-items-center rounded-full border border-slate-200">
+                      <span className="grid h-9 w-9 place-items-center rounded-full border border-hairline">
                         <QrIcon />
                       </span>
                       {text.downloadQr}
@@ -459,35 +459,35 @@ export function SharePanel({
                 </div>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
                   <button
-                    className="flex min-h-20 items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left text-xs font-bold leading-5 text-slate-800 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:border-blue-300 hover:text-blue-700"
+                    className="flex min-h-20 items-center gap-3 rounded-card border border-hairline bg-card p-4 text-left text-caption font-bold text-ink shadow-card hover:bg-accent-soft"
                     onClick={() => void handleCopy('xiaohongshu')}
                     type="button"
                   >
-                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full border border-slate-200 text-slate-500">
+                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full border border-hairline text-muted">
                       <CopyIcon />
                     </span>
                     {text.copyXiaohongshu}
                   </button>
                   <button
-                    className="flex min-h-20 items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left text-xs font-bold leading-5 text-slate-800 shadow-[0_8px_30px_rgba(15,23,42,0.04)] hover:border-blue-300 hover:text-blue-700"
+                    className="flex min-h-20 items-center gap-3 rounded-card border border-hairline bg-card p-4 text-left text-caption font-bold text-ink shadow-card hover:bg-accent-soft"
                     onClick={() => void handleCopy('moments')}
                     type="button"
                   >
-                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full border border-slate-200 text-slate-500">
+                    <span className="grid h-9 w-9 flex-none place-items-center rounded-full border border-hairline text-muted">
                       <CopyIcon />
                     </span>
                     {text.copyMoments}
                   </button>
                 </div>
-                <p aria-live="polite" className="mt-2 min-h-5 px-1 text-xs text-slate-500">
+                <p aria-live="polite" className="mt-2 min-h-5 px-1 text-caption text-muted">
                   {copyNotice ?? ''}
                 </p>
 
                 <div className="mt-6">
-                  <h3 className="text-base font-extrabold tracking-tight text-slate-950">
+                  <h3 className="text-section text-ink">
                     {text.posterTitle}
                   </h3>
-                  <p className="mt-1 text-xs leading-5 text-slate-500">{text.posterHint}</p>
+                  <p className="mt-1 text-caption text-muted">{text.posterHint}</p>
                   <div className="mt-4 grid gap-2">
                     {(
                       [
@@ -497,10 +497,10 @@ export function SharePanel({
                     ).map(([value, label, hint]) => (
                       <button
                         aria-pressed={size === value}
-                        className={`flex items-center gap-3 rounded-2xl border p-3 text-left transition-colors ${
+                        className={`flex items-center gap-3 rounded-control border p-3 text-left transition-colors ${
                           size === value
-                            ? 'border-blue-300 bg-blue-50 text-blue-950'
-                            : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                            ? 'border-hairline bg-accent-soft text-ink'
+                            : 'border-hairline bg-card text-muted'
                         }`}
                         key={value}
                         onClick={() => {
@@ -514,11 +514,11 @@ export function SharePanel({
                           aria-hidden="true"
                           className={`block w-7 flex-none rounded border-2 ${
                             value === 'portrait' ? 'aspect-[3/4]' : 'aspect-[9/16]'
-                          } ${size === value ? 'border-blue-500' : 'border-slate-300'}`}
+                          } border-hairline`}
                         />
                         <span>
-                          <strong className="block text-sm">{label}</strong>
-                          <small className="mt-0.5 block text-[11px] font-medium text-slate-500">
+                          <strong className="block text-body">{label}</strong>
+                          <small className="mt-0.5 block text-caption font-medium text-muted">
                             {hint}
                           </small>
                         </span>
@@ -528,24 +528,24 @@ export function SharePanel({
                 </div>
               </div>
 
-              <div className="flex min-h-[420px] flex-col rounded-3xl border border-slate-200 bg-white p-4 shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
-                <div className="grid flex-1 place-items-center overflow-hidden rounded-2xl bg-slate-100 p-4">
+              <div className="flex min-h-[420px] flex-col rounded-card bg-card p-4 shadow-card">
+                <div className="grid flex-1 place-items-center overflow-hidden rounded-control bg-card-muted p-4">
                   {preview.status === 'ready' ? (
                     <img
                       alt={text.previewAlt}
-                      className={`max-h-[520px] w-auto rounded-xl object-contain shadow-[0_16px_40px_rgba(15,23,42,0.16)] ${
+                      className={`max-h-[520px] w-auto rounded-control object-contain shadow-card ${
                         size === 'portrait' ? 'aspect-[3/4]' : 'aspect-[9/16]'
                       }`}
                       src={preview.url}
                     />
                   ) : preview.status === 'error' ? (
                     <div className="max-w-xs text-center">
-                      <span className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-slate-200 bg-white text-slate-400">
+                      <span className="mx-auto grid h-12 w-12 place-items-center rounded-full border border-hairline bg-card text-muted">
                         <QrIcon />
                       </span>
-                      <p className="mt-3 text-sm leading-6 text-slate-600">{preview.message}</p>
+                      <p className="mt-3 text-body text-muted">{preview.message}</p>
                       <button
-                        className="mt-3 text-xs font-bold text-blue-700 hover:underline"
+                        className="mt-3 text-caption font-bold text-accent hover:underline"
                         onClick={() => {
                           setPreview({ status: 'loading' });
                           setGeneration((current) => current + 1);
@@ -556,17 +556,16 @@ export function SharePanel({
                       </button>
                     </div>
                   ) : (
-                    <div className="text-center text-slate-500" role="status">
-                      <span className="mx-auto block h-7 w-7 animate-spin rounded-full border-2 border-slate-300 border-t-blue-600" />
-                      <p className="mt-3 text-xs">{text.generating}</p>
+                    <div className="text-center text-muted" role="status">
+                      <span className="mx-auto block h-7 w-7 animate-spin rounded-full border-2 border-hairline border-t-accent" />
+                      <p className="mt-3 text-caption">{text.generating}</p>
                     </div>
                   )}
                 </div>
                 <button
-                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold shadow-sm disabled:cursor-not-allowed disabled:opacity-45"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-body font-bold text-accent-on disabled:cursor-not-allowed disabled:opacity-45"
                   disabled={preview.status !== 'ready'}
                   onClick={downloadPoster}
-                  style={{ backgroundColor: theme.accent, color: theme.accentOn }}
                   type="button"
                 >
                   <DownloadIcon />
