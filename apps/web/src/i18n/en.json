@@ -15,12 +15,16 @@
     },
     "hero": {
       "eyebrow": "Open source · WeChat friendly · Your data",
-      "primaryCta": "Start free",
+      "primaryCta": "Apply for the beta",
       "demoCta": "View a real page",
       "caption": "The free plan stays free, starts with 3 pages, and takes no commission.",
-      "liveLabel": "Real page · Loaded live",
-      "previewTitle": "Live preview of the YiLink illustrator demo page",
-      "previewCaption": "This is the running public page, not a product screenshot."
+      "previewCaption": "Not a screenshot — a real template rendered by the public page renderer."
+    },
+    "gallery": {
+      "eyebrow": "Template gallery",
+      "title": "Start from a real scene.",
+      "description": "Eight scene templates, each rendered live below exactly as it ships — no mockups. Pick the closest one and make it yours.",
+      "scrollHint": "Scroll sideways to see every scene"
     },
     "features": {
       "eyebrow": "Three concrete advantages",
@@ -55,7 +59,7 @@
         "name": "Free",
         "billing": "Free forever · No commission",
         "description": "Build, publish, and use the core distribution tools before you decide to pay.",
-        "action": "No payment needed"
+        "action": "Apply for the beta"
       },
       "mini": {
         "name": "Lifetime Basic",
@@ -70,11 +74,17 @@
       "trustDescription": "Each scar left by the category should become a product principle users can verify.",
       "commitments": {
         "export": "Export your data at any time in an open format—a lesson from Bento shutting down and Milkshake offering no export.",
-        "free": "The free plan stays available, takes no commission, and lets you turn off branding—a lesson from Linktree's 12% fee.",
-        "price": "Existing customers always keep their price—a lesson from Linktree's 67% increase.",
+        "free": "The free plan stays available, takes no commission, and lets you turn off branding—a lesson from the 12% commission charged elsewhere in the category.",
+        "price": "Existing customers always keep their price—a lesson from a 67% price hike elsewhere in the category.",
         "moderation": "We hide first and provide human appeal; we never publicly shame a page with an “ACCOUNT BANNED” label.",
         "openSource": "Open source is the final promise: if the hosted service disappears, you can self-host and take everything with you."
       }
+    },
+    "finalCta": {
+      "title": "Make your next card a real page.",
+      "description": "Beta applications are open. The free plan stays free, your data exports at any time, and you can leave whenever you want—that is part of the promise.",
+      "action": "Apply for the beta",
+      "caption": "Beta access requires an invite code · Free plan stays free"
     },
     "footer": {
       "label": "Footer navigation",

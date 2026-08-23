@@ -1,6 +1,13 @@
-import { PLAN_LIMITS, PLAN_QUOTA_NOTE_ZH } from '@yilink/shared';
+/* eslint-disable @next/next/no-img-element -- 特性卡用真机裁切图，无需 next/image 优化管线 */
+import { PLAN_LIMITS, PLAN_QUOTA_NOTE_ZH, type SceneTemplate } from '@yilink/shared';
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
+
+import {
+  PublicPageRenderer,
+  type PublicPageData,
+} from '@/components/public/public-page';
+import { loadSceneTemplates } from '@/lib/templates';
 
 import styles from './page.module.css';
 
@@ -31,6 +38,55 @@ function checkoutUrl(value: string | undefined): string | null {
   return candidate && new URL(candidate).protocol === 'https:' ? candidate : null;
 }
 
+/** 首页不做「关于产品的图」，直接把产品本身（公开页渲染器 + 真实模板）端上来。 */
+function templateToPreviewPage(template: SceneTemplate): PublicPageData {
+  return {
+    slug: template.id,
+    title: template.identity.title,
+    bio: template.identity.bio,
+    avatarUrl: null,
+    layout: template.layout,
+    bentoVersion: template.bentoVersion ?? null,
+    themeId: template.defaultTheme,
+    themeConfig: { role: template.identity.role },
+    ctaConfig: template.cta,
+    totalViews: 0,
+    blocks: template.blocks.map((block, index) => ({
+      id: `tpl-${template.id}-${index}`,
+      type: block.type,
+      size: block.size,
+      config: block.config,
+      placement: block.placement,
+    })),
+  };
+}
+
+/** 一张「纸」：固定窗口里按比例缩放的真实公开页。inert 让装饰性预览不进 Tab 序。 */
+function Paper({
+  page,
+  paperClass,
+}: {
+  page: PublicPageData;
+  paperClass: string;
+}) {
+  return (
+    <div className={`${styles.paper} ${paperClass}`} inert>
+      <div className={styles.paperCanvas}>
+        <PublicPageRenderer page={page} preview uaClass="browser" />
+      </div>
+    </div>
+  );
+}
+
+type FeatureKey = 'template' | 'wechat' | 'openSource';
+
+/** 特性卡配图：readme 真机图的裁切位（object-position），彩色只许来自内容。 */
+const FEATURE_MEDIA: Record<FeatureKey, { src: string; position: string }> = {
+  template: { src: '/marketing/readme-wechat.png', position: 'center 14%' },
+  wechat: { src: '/marketing/readme-page.png', position: 'center 100%' },
+  openSource: { src: '/marketing/readme-editor.png', position: '28% 10%' },
+};
+
 export default async function MarketingPage() {
   const t = await getTranslations('Marketing');
   const locale = await getLocale();
@@ -46,6 +102,12 @@ export default async function MarketingPage() {
   const features = ['template', 'wechat', 'openSource'] as const;
   const commitments = ['export', 'free', 'price', 'moderation', 'openSource'] as const;
 
+  const templates = loadSceneTemplates();
+  const pickTemplate = (id: string): SceneTemplate =>
+    templates.find((template) => template.id === id) ?? templates[0];
+  const heroPage = templateToPreviewPage(pickTemplate('illustrator-commission'));
+  const heroMiniPage = templateToPreviewPage(pickTemplate('photographer-booking'));
+
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
@@ -59,6 +121,9 @@ export default async function MarketingPage() {
           <div className={styles.navLinks}>
             <a href="#pricing">{t('nav.pricing')}</a>
             <Link href="/login">{t('login')}</Link>
+            <Link className={styles.navRegister} href="/register">
+              {t('register')}
+            </Link>
           </div>
         </nav>
 
@@ -83,25 +148,34 @@ export default async function MarketingPage() {
             <p className={styles.caption}>{t('hero.caption')}</p>
           </div>
 
-          <div className={styles.phoneStage}>
-            <div className={styles.liveLabel}>
-              <span aria-hidden="true" />
-              {t('hero.liveLabel')}
-            </div>
-            <div className={styles.phoneShell}>
-              <span aria-hidden="true" className={styles.phoneSpeaker} />
-              <div className={styles.phoneScreen}>
-                <iframe
-                  className={styles.liveFrame}
-                  loading="lazy"
-                  src="/p/demo-illustrator"
-                  title={t('hero.previewTitle')}
-                />
-              </div>
-            </div>
+          <div className={styles.paperStage}>
+            <Paper page={heroPage} paperClass={styles.paperHero} />
+            <Paper page={heroMiniPage} paperClass={styles.paperMini} />
             <p className={styles.previewCaption}>{t('hero.previewCaption')}</p>
           </div>
         </div>
+      </section>
+
+      <section aria-labelledby="gallery-title" className={styles.gallery}>
+        <div className={styles.sectionInner}>
+          <div className={styles.sectionHeading}>
+            <p className={styles.eyebrow}>{t('gallery.eyebrow')}</p>
+            <h2 id="gallery-title">{t('gallery.title')}</h2>
+            <p>{t('gallery.description')}</p>
+          </div>
+        </div>
+        <ol className={styles.galleryStrip}>
+          {templates.map((template) => (
+            <li className={styles.galleryItem} key={template.id}>
+              <Paper page={templateToPreviewPage(template)} paperClass={styles.paperGallery} />
+              <p className={styles.galleryCaption}>
+                <strong>{template.nameZh}</strong>
+                <span>{template.persona}</span>
+              </p>
+            </li>
+          ))}
+        </ol>
+        <p className={`${styles.sectionInner} ${styles.galleryHint}`}>{t('gallery.scrollHint')}</p>
       </section>
 
       <section aria-labelledby="features-title" className={styles.features}>
@@ -112,9 +186,16 @@ export default async function MarketingPage() {
             <p>{t('features.description')}</p>
           </div>
           <div className={styles.featureGrid}>
-            {features.map((feature, index) => (
+            {features.map((feature) => (
               <article className={styles.featureCard} key={feature}>
-                <span className={styles.featureIndex}>{String(index + 1).padStart(2, '0')}</span>
+                <div className={styles.featureMedia}>
+                  <img
+                    alt=""
+                    loading="lazy"
+                    src={FEATURE_MEDIA[feature].src}
+                    style={{ objectPosition: FEATURE_MEDIA[feature].position }}
+                  />
+                </div>
                 <h3>{t(`features.${feature}.title`)}</h3>
                 <p>{t(`features.${feature}.description`)}</p>
               </article>
@@ -145,9 +226,9 @@ export default async function MarketingPage() {
                 {t('pricing.pageQuota', { count: PLAN_LIMITS.FREE.pages })}
               </p>
               <p className={styles.planDescription}>{t('pricing.free.description')}</p>
-              <span aria-disabled="true" className={styles.planButtonDisabled}>
-                {t('pricing.free.action')}
-              </span>
+              <Link className={styles.planButtonPrimary} href="/register">
+                {t('pricing.free.action')} <span aria-hidden="true">→</span>
+              </Link>
             </article>
 
             <article className={styles.planCard}>
@@ -216,6 +297,21 @@ export default async function MarketingPage() {
                 </li>
               ))}
             </ol>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="final-cta-title" className={styles.finalCta}>
+        <div className={styles.finalCtaInner}>
+          <div>
+            <h2 id="final-cta-title">{t('finalCta.title')}</h2>
+            <p>{t('finalCta.description')}</p>
+          </div>
+          <div className={styles.finalCtaAction}>
+            <Link className={styles.primaryCta} href="/register">
+              {t('finalCta.action')} <span aria-hidden="true">→</span>
+            </Link>
+            <p className={styles.caption}>{t('finalCta.caption')}</p>
           </div>
         </div>
       </section>
