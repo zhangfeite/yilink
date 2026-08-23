@@ -1,13 +1,14 @@
-# 进度存档（2026-08-19）
+# 进度存档（2026-08-23）
 
 > 下次开工先读这份。工作区干净、全部已推送 GitHub；本地无未完成的后台任务。
 
 ## 一句话现状
 
-产品已上线 https://yilink.app（邀请制公测）。发布前的 P0（从仪表盘选模板建页 100% 失败）与
-发布链路硬伤（首页零 og、无 sitemap、注册后二次登录、iframe 刷量、「水印可关」空承诺、统计/导出无入口）
-已在 25a68cd 一并修复上线；生产 D1 的 DateTime 脏数据已修。E2E 11/11（含黄金路径）、单测 256。
-**现在唯一没做的事是发帖。**
+产品已上线 https://yilink.app（邀请制公测）。2026-08-23 完成**壳设计系统重做**（spec-18：营销页/登录注册/
+工作台/编辑器全部与公开页同源，唯一 accent、两层海拔、大字立面；`src/app` + `src/components` 违禁色零命中）
+与**公测激活基础设施**（spec-19：激活里程碑 + 渠道归因、邀请码可核销、反馈组件、生产巡检），均已部署。
+阶段 0 的邀请码说明 + `?invite=` 预填 + 如实 CTA 也随本轮上线。E2E 11/11、单测 183+78。
+**现在真的只剩发帖。**
 
 ## 安全审计结论（2026-08-14 自查，修复已上线）
 
@@ -39,19 +40,19 @@ SafeMarkdown 与区块 URL 协议闸、revalidateTag 覆盖、D1 事务形态、
 ## 迭代路线（2026-08-19 裁决，依据 docs/launch-fact-check.md + 三角度提案 + Codex 独立判断）
 
 **阶段 0 · 发帖前（≤1 天）**
-- 注册页邀请码零说明 → 加「去哪拿」说明 + `?invite=` URL 预填 + 首页「免费开始」改为如实的「申请公测」（fact-check #12）
+- ~~注册页邀请码零说明 → 加「去哪拿」说明 + `?invite=` URL 预填 + 首页「免费开始」改为如实的「申请公测」~~ ✅ 已上线（08-23）
+- 用 `node apps/web/scripts/invites.mjs create --channel v2ex --count 30` 生成可核销邀请码（明文只打印一次），替代环境变量白名单
 - Cloudflare 控制台配 WAF 限流（用户操作；代码层限流在 Workers 上按 isolate 计数，不够）
 - **只发 V2EX**，留 24–48h 观察窗再发下一渠道（否则分不清哪个渠道有效）。文案用 `docs/launch-posts-v2.md`
 
 **阶段 1 · 有用户的第一周（按真实阻断排序，预留 2 天修 bug 容量）**
-- 激活漏斗：注册 → 建页 → 发布 → 分发 四个里程碑 + 渠道字段，后台按渠道看转化（不搭通用埋点）
-- 邀请码可核销（哈希 + 次数/有效期 + 渠道），与漏斗共用一次 migration
-- 工作台「反馈问题」入口；生产只读巡检 workflow（health/首页/注册/演示页）
+- ~~激活漏斗 / 邀请码核销 / 反馈组件 / 生产巡检~~ ✅ 基础设施已上线（08-23）。待接：`FeedbackLink` 组件接进工作台；`recordShared` 在分享面板接入
+- 按渠道分批发帖，`/admin` 的「激活」区块看 注册→建页→发布 的转化与耗时
 
 **阶段 2 · 第 2–3 周（有信号再做）**
-- `/templates` 公开画廊：三份提案唯一共同点，发帖当天可贴、注册前可验证、又是可索引资产
-- 首页转化骨架：导航注册按钮、免费档可点、页尾 CTA、恢复手机端定价锚点
-- 叙事从「又一个聚合主页」收窄为「一页成交页」（纯文案层，不建新模块）
+- ~~模板画廊 / 首页转化骨架~~ ✅ 已随壳重做上线（画廊放首页第二屏，未建 `/templates` 子路由）
+- 叙事从「又一个聚合主页」收窄为「一页成交页」（纯文案层，不建新模块）——仍待做
+- 壳的剩余打磨：编辑器移动端真机手感；「开源可自部署」特性卡换新壳截图
 
 **阶段 3 · LemonSqueezy 通电后**：收款上线 → 预约/表单区块作为第一个增值点
 
@@ -92,7 +93,8 @@ BENTO 多选/对齐/历史、图片上传（带存储与审核成本，收款未
 
 ## 测试与验收基线
 
-- `pnpm test` → 256 测试（moderation 16 / icons 21 / shared 41 / web 178）
+- `pnpm test` → 261 测试（moderation 16 / icons 21 / shared 41 / web 183）
+- `node apps/web/scripts/ui-audit.mjs` → 壳全界面截图，**改壳后必跑并看图**；违禁色：`grep -rlE "(slate|blue|amber|emerald|green|yellow|gray|zinc)-[0-9]" src/app src/components | grep -v 'test\|components/public'` 必须为空
 - `cd apps/web && pnpm exec playwright test` → 11/11；其中 `activation.spec.ts` 是黄金路径（注册→建页→发布→公开页），**改建页/发布/认证后必跑**
 - `cd apps/web && pnpm exec playwright test layout-baseline.spec.ts` → 9/9，**存量页面零 diff 的凭据，改布局后必跑**
 - `cd apps/web && node scripts/bento-preview.mjs` 建 8 个预览页 → `node scripts/bento-fit-check.mjs`
