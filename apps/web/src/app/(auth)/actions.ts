@@ -10,7 +10,7 @@ import { signIn } from '@/lib/auth';
 import { credentialsSchema } from '@/lib/auth-validation';
 import { normalizeChannel, recordRegistered } from '@/lib/activation';
 import { db } from '@/lib/db';
-import { redeemInviteCode } from '@/lib/invite';
+import { isInviteRequired, redeemInviteCode } from '@/lib/invite';
 
 export interface AuthFormState {
   error: string | null;
@@ -39,6 +39,12 @@ export async function registerAction(
     return { error: passwordIssue ? t('shortPassword') : t('invalidEmail') };
   }
 
+  // 「没填」和「填错」分开说：前者在建用户之前就拦下，后者要经核销（核销失败回滚用户）
+  const inviteCode = formData.get('inviteCode');
+  if (isInviteRequired() && (typeof inviteCode !== 'string' || !inviteCode.trim())) {
+    return { error: t('missingInvite') };
+  }
+
   let userId: string;
   try {
     const user = await db.user.create({
@@ -56,7 +62,7 @@ export async function registerAction(
     return { error: t('unexpectedError') };
   }
 
-  const redeemed = await redeemInviteCode(formData.get('inviteCode'), userId);
+  const redeemed = await redeemInviteCode(inviteCode, userId);
   if (!redeemed.ok) {
     await db.user.delete({ where: { id: userId } });
     return { error: t('invalidInvite') };

@@ -4,23 +4,31 @@ import { getTranslations } from 'next-intl/server';
 import { RegisterForm } from '@/components/register-form';
 import { isInviteRequired } from '@/lib/invite';
 
+import { AuthShell } from '../auth-shell';
+
 export const dynamic = 'force-dynamic';
 
-export default async function RegisterPage() {
+interface RegisterPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export default async function RegisterPage({ searchParams }: RegisterPageProps) {
   const t = await getTranslations('Register');
+  const params = await searchParams;
+  const invite = typeof params.invite === 'string' ? params.invite : '';
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 className="mb-6 text-2xl font-bold">{t('title')}</h1>
-        <RegisterForm inviteRequired={isInviteRequired()} />
-        <p className="mt-5 text-center text-sm text-slate-600">
-          {t('hasAccount')}{' '}
-          <Link className="font-medium text-slate-950 underline" href="/login">
-            {t('loginLink')}
-          </Link>
-        </p>
-      </div>
-    </main>
+    <AuthShell description={t('heroDescription')} eyebrow={t('eyebrow')} title={t('heroTitle')}>
+      <p className="text-caption font-semibold tracking-wide text-accent">{t('formEyebrow')}</p>
+      <h1 className="mt-2 text-display text-ink">{t('title')}</h1>
+      <p className="mb-8 mt-3 text-body text-muted">{t('formDescription')}</p>
+      <RegisterForm defaultInviteCode={invite} inviteRequired={isInviteRequired()} />
+      <p className="mt-6 text-center text-body text-muted">
+        {t('hasAccount')}{' '}
+        <Link className="font-semibold text-accent" href="/login">
+          {t('loginLink')}
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

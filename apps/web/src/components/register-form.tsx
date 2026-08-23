@@ -26,29 +26,30 @@ function passwordStrength(password: string): 'weak' | 'medium' | 'strong' {
 const initialState: AuthFormState = { error: null };
 
 interface RegisterFormProps {
+  defaultInviteCode: string;
   inviteRequired: boolean;
 }
 
-export function RegisterForm({ inviteRequired }: RegisterFormProps) {
+export function RegisterForm({ defaultInviteCode, inviteRequired }: RegisterFormProps) {
   const t = useTranslations('Register');
   const [state, formAction, isPending] = useActionState(registerAction, initialState);
   const [password, setPassword] = useState('');
   const strength = passwordStrength(password);
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="space-y-5">
       {state.error ? (
-        <p className="rounded-md bg-red-50 p-3 text-sm text-red-700" role="alert">
+        <p className="rounded-control bg-danger-soft p-3 text-body text-danger" role="alert">
           {state.error}
         </p>
       ) : null}
 
       <div className="space-y-1">
-        <label className="block text-sm font-medium" htmlFor="register-email">
+        <label className="block text-caption font-semibold text-ink" htmlFor="register-email">
           {t('email')}
         </label>
         <input
-          className="w-full rounded-md border border-slate-300 px-3 py-2"
+          className="mt-2 min-h-12 w-full rounded-control border border-hairline bg-card px-4 text-body text-ink"
           id="register-email"
           name="email"
           type="email"
@@ -58,11 +59,11 @@ export function RegisterForm({ inviteRequired }: RegisterFormProps) {
       </div>
 
       <div className="space-y-1">
-        <label className="block text-sm font-medium" htmlFor="register-password">
+        <label className="block text-caption font-semibold text-ink" htmlFor="register-password">
           {t('password')}
         </label>
         <input
-          className="w-full rounded-md border border-slate-300 px-3 py-2"
+          className="mt-2 min-h-12 w-full rounded-control border border-hairline bg-card px-4 text-body text-ink"
           id="register-password"
           name="password"
           type="password"
@@ -72,8 +73,8 @@ export function RegisterForm({ inviteRequired }: RegisterFormProps) {
           onChange={(event) => setPassword(event.target.value)}
           required
         />
-        <p className="text-xs text-slate-500">{t('passwordHint')}</p>
-        <p className="text-xs font-medium text-slate-700" aria-live="polite">
+        <p className="text-caption text-muted">{t('passwordHint')}</p>
+        <p className="text-caption font-semibold text-muted" aria-live="polite">
           {t(
             strength === 'strong'
               ? 'strengthStrong'
@@ -86,22 +87,38 @@ export function RegisterForm({ inviteRequired }: RegisterFormProps) {
 
       {inviteRequired ? (
         <div className="space-y-1">
-          <label className="block text-sm font-medium" htmlFor="register-invite-code">
+          <label
+            className="block text-caption font-semibold text-ink"
+            htmlFor="register-invite-code"
+          >
             {t('inviteCode')}
           </label>
           <input
-            className="w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-2 min-h-12 w-full rounded-control border border-hairline bg-card px-4 text-body text-ink"
+            defaultValue={defaultInviteCode}
             id="register-invite-code"
             name="inviteCode"
             type="text"
             autoComplete="off"
             required
           />
+          <p className="pt-1 text-caption text-muted">
+            {t('inviteHintBefore')}
+            <a
+              className="font-semibold text-accent"
+              href="https://github.com/zhangfeite/yilink/issues"
+              rel="noreferrer"
+              target="_blank"
+            >
+              {t('inviteHintLink')}
+            </a>
+            {t('inviteHintAfter')}
+          </p>
         </div>
       ) : null}
 
       <button
-        className="w-full rounded-md bg-slate-900 px-4 py-2 font-medium text-white disabled:opacity-60"
+        className="min-h-12 w-full rounded-full bg-accent px-5 text-body font-semibold text-accent-on disabled:opacity-60"
         type="submit"
         disabled={isPending}
       >

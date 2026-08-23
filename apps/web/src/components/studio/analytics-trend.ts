@@ -27,10 +27,7 @@ function formatChartDate(date: Date, locale: string, formatter: Intl.DateTimeFor
   return formatter.format(date);
 }
 
-export function fillRecentThirtyDays(
-  daily: DailyStatsPoint[],
-  today: Date,
-): DailyStatsPoint[] {
+export function fillRecentThirtyDays(daily: DailyStatsPoint[], today: Date): DailyStatsPoint[] {
   const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
   const byDate = new Map(daily.map((point) => [utcDayKey(point.date), point]));
 
@@ -54,8 +51,7 @@ export function AnalyticsTrend({
     return createElement(
       'p',
       {
-        className:
-          'mt-4 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300',
+        className: 'mt-4 rounded-control bg-card-muted p-8 text-center text-body text-muted',
       },
       noDataLabel,
     );
@@ -76,7 +72,7 @@ export function AnalyticsTrend({
     return createElement(
       'rect',
       {
-        className: 'fill-blue-600 dark:fill-blue-400',
+        className: 'fill-accent',
         height: point.views === 0 ? 0 : height,
         key: utcDayKey(point.date),
         rx: 3,
@@ -104,7 +100,7 @@ export function AnalyticsTrend({
     createElement(
       'figcaption',
       {
-        className: 'mt-2 flex justify-between text-xs text-slate-500 dark:text-slate-400',
+        className: 'mt-2 flex justify-between text-caption text-muted',
       },
       createElement('span', null, formatChartDate(points[0]!.date, locale, dateFormatter)),
       createElement(
